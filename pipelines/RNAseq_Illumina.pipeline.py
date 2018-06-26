@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os, argparse, sys, csv
-import pandas as pd
 
 header = """
   +--------------------------------------------------------+
@@ -45,18 +44,18 @@ header = """
 """ 
 
 
-description = "This application makes transcripts quantification and differential expression analysis on BAM files"
+description = "This application makes quality control, pre-processing, alignment, transcripts quantification and differential expression analysis on BAM files"
 
 usage_example = """
 Examples of usage:
- (1) Quantification and DEA analysis: 
-    <appname> -i input.csv -o working_directory -r_path R_script_directory
+ (1) RNA-Seq analysis: 
+    <appname> -i input.csv -o working_directory -r_path script_directory
 
 """
 
 print header, description, usage_example
 
-parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ Transcripts quantification and DEA analysis on BAM files ] \n", description = description)
+parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ RNA-Seq analysis: from BAM to DEA ] \n", description = description)
 parser.add_argument('-n', '--project-name', dest="project_name", help="Project name. \n No default option. \n", action="store", required=True)
 parser.add_argument('-pn', '--pool-name', dest="pool_name", help="Pool name. \n No default option. \n", action="store", required=True)
 parser.add_argument('-sn', '--sample-name', dest="sample_name", help="Sample names (',' sep). \n No default option. \n", action="store", required=True)
@@ -134,8 +133,8 @@ def checkArgs(args):
         if not os.path.isfile(r2[j]):
             print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
             sys.exit()
-    R_path1=args.R_path+"/RNAseq_Illumina.pipeline.sh"
-    R_path2=args.R_path+"/quant_v2.py"
+    R_path1=args.R_path+"/alignment.sh"
+    R_path2=args.R_path+"/quantification.py"
     if not os.path.isfile(R_path1) or not os.path.isfile(R_path2):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no scripts.\n\tExit\n" + '\033[0m')
         sys.exit()
@@ -171,15 +170,16 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     Run alignment script as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^Alignment script running^^^^^^^^^\n" + '\033[0m')
-    with open(output_dir+project_name+pool_name+'/input.csv', 'wb') as csvfile:
+    with open(output_dir+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
         csvfile.close()
     read1a=read1.split(",")
     read2a=read2.split(",")
     sample_name1=sample_name.split(",")
+    stype1=stype.split(",")
     for i in range(0, (len(read1a))):
-        cmd="bash "+R_path+"/RNAseq_Illumina.pipeline.sh "+project_name+" "+pool_name+" "+sample_name1[i]+" "+output_dir+" "+read1a[i]+" "+read2a[i]+" "+str(Threads)+" "+ref_bowtie+" "+ref_hisat2+" "+bed_file+" "+phix+" "+rib1+" "+rib2+" "+a_method+" "+GTF+" "+library_type+" "+stype
+        cmd="bash "+R_path+"/alignment.sh "+project_name+" "+pool_name+" "+sample_name1[i]+" "+output_dir+" "+read1a[i]+" "+read2a[i]+" "+str(Threads)+" "+ref_bowtie+" "+ref_hisat2+" "+bed_file+" "+phix+" "+rib1+" "+rib2+" "+a_method+" "+GTF+" "+library_type+" "+stype1[i]
         os.system(cmd)
 
 
@@ -188,10 +188,16 @@ def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,
     Run quantification script as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^Quantification script running^^^^^^^^^\n" + '\033[0m')
-    res_dir=output_dir+project_name+pool_name
-    input_file=pd.DataFrame.from_csv(res_dir+'/input.csv',sep=',',index_col=None)
-    cmd="python "+R_path+"/quant_v2.py -i "+input_file+" -o "+res_dir+"/Quantification"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
+    res_dir=output_dir+"/"+project_name+"/"+pool_name
+    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/input.csv'+" -o "+res_dir+"/Quantification"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
     os.system(cmd)
+    
+    
+def rminput(output_dir):
+    """
+    Remove input file
+    """
+    os.system("rm "+output_dir+'/input.csv')
         
 
 #########################################################################################
@@ -212,6 +218,9 @@ def main():
 
     # quantification
     quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen)
+    
+    # remove input file
+    rminput(args.output_dir)
     
 
 # sentinel

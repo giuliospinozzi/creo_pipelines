@@ -121,7 +121,7 @@ def runfeatureCounts(Threads,input_path,GTF,output_dir):
     Run featureCounts as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^featureCounts running^^^^^^^^^\n" + '\033[0m')
-    data=pd.DataFrame.from_csv(input_path,sep='\t',index_col=None)
+    data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
     BAM=" ".join((data['BAM_path']))
     cmd="featureCounts -T "+str(Threads)+" -p -a "+GTF+" -o "+output_dir+"/featureCounts_counts.txt "+BAM
     print cmd
@@ -133,7 +133,7 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
     Run Cufflinks as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^Cufflinks running^^^^^^^^^\n" + '\033[0m')
-    data=pd.DataFrame.from_csv(input_path,sep='\t',index_col=None)
+    data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
 
     print ('\033[0;32m' + "\n############## Cufflinks ###################\n" + '\033[0m')
     with open(output_dir+"/cufflinks.transcripts.allsamples.txt","w+") as f:

@@ -12,7 +12,7 @@ cuff_data <- readCufflinks(cuffdiff,rebuild = T)
 
 # PCA
 library(ggfortify)
-input_table <- read.csv(input,sep="\t")
+input_table <- read.csv(input,sep=",")
 DataGroups <- input_table$Type
 fpkm <- repFpkmMatrix(genes(cuff_data))
 pca <- rbind(fpkm,type=as.character(DataGroups))
