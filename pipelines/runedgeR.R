@@ -32,7 +32,7 @@ dgList <- DGEList(counts=countdata,group=factor(DataGroups),genes = lenth_genes)
 library(ggfortify)
 fpkm <- rpkm(dgList)
 pca <- rbind(fpkm,type=as.character(DataGroups))
-png("edgeR-pca.png")
+png("edgeR-pca.png", w=1000, h=1000, pointsize=20)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=4)+ 
   theme(plot.title = element_text(face="bold",hjust=0.5,size=20),legend.text=element_text(size=12),
         legend.title=element_blank(),axis.text = element_text(size=12))
@@ -86,14 +86,14 @@ library(gplots)
 library(RColorBrewer)
 library(genefilter)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 35 )
-png("edgeR-heatmap-topVarGenes.png")
+png("edgeR-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, scale="row", trace="none", dendrogram="column", col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
 dev.off()
 
 # Sample distance heatmap
 mycols <- brewer.pal(8, "Dark2")[1:length(unique(DataGroups))]
 sampleDists <- as.matrix(dist(t(fpkm)))
-png("edger-heatmap-samples.png", w=1000, h=1000, pointsize=20)
+png("edgeR-heatmap-samples.png", w=1000, h=1000, pointsize=20)
 heatmap.2(as.matrix(sampleDists), key=F, trace="none",
           col=colorpanel(100, "black", "white"),
           ColSideColors=mycols[DataGroups], RowSideColors=mycols[DataGroups],

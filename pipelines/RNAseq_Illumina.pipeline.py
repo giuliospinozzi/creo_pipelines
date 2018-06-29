@@ -44,7 +44,7 @@ header = """
 """ 
 
 
-description = "This application makes quality control, pre-processing, alignment, transcripts quantification and differential expression analysis on BAM files"
+description = "This application makes quality control, pre-processing, alignment, transcript quantification and differential expression analysis on BAM files"
 
 usage_example = """
 Examples of usage:
@@ -115,23 +115,35 @@ def checkArgs(args):
     print "DEA method =", args.dea_method, "\n"
     print "Script path =", args.R_path, "\n"
     print "Output directory =", args.output_dir, "\n"
-    if not os.path.isfile(args.bed_file) or not os.path.isfile(args.phix) or not os.path.isfile(args.rib1) or not os.path.isfile(args.rib2) or not os.path.isfile(args.GTF) or not os.path.isdir(args.output_dir):
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
+    if not os.path.isfile(args.bed_file):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for BED file.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isfile(args.phix):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for Phix genome.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isfile(args.rib1) or not os.path.isfile(args.rib2):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for ribosomal genome.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isfile(args.GTF):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for GTF.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isdir(args.output_dir):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for output dir.\n\tExit\n" + '\033[0m')
         sys.exit()
     b=args.ref_bowtie+".fa"
     h=args.ref_hisat2+".fa"
     if not os.path.isfile(b) or not os.path.isfile(h):
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for index genome (hisat or bowtie).\n\tExit\n" + '\033[0m')
         sys.exit()
     r1=args.read1.split(",")
     r2=args.read2.split(",")
     for i in range(0, (len(r1))):
         if not os.path.isfile(r1[i]):
-            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
+            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for read 1.\n\tExit\n" + '\033[0m')
             sys.exit()
     for j in range(0, (len(r2))):
         if not os.path.isfile(r2[j]):
-            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
+            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for read 2.\n\tExit\n" + '\033[0m')
             sys.exit()
     R_path1=args.R_path+"/alignment.sh"
     R_path2=args.R_path+"/quantification.py"

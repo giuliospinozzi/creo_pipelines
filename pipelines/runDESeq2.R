@@ -38,7 +38,7 @@ library(ggfortify)
 mcols(dds)$basepairs <- as.matrix(lenth_genes)
 fpkm <- fpkm(dds)
 pca_des <- rbind(fpkm,type=as.character(DataGroups))
-png("deseq2-pca.png")
+png("deseq2-pca.png", w=1000, h=1000, pointsize=20)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=4)+ 
   theme(plot.title = element_text(face="bold",hjust=0.5,size=20),legend.text=element_text(size=12),
         legend.title=element_blank(),axis.text = element_text(size=12))
@@ -80,7 +80,7 @@ library(genefilter)
 library(RColorBrewer)
 library(gplots)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 35 )
-png("deseq2-heatmap-topVarGenes.png")
+png("deseq2-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, scale="row", trace="none", dendrogram="column", col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
 dev.off()
 

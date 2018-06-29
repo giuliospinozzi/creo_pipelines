@@ -34,7 +34,7 @@ header = """
 """ 
 
 
-description = "This application makes transcripts quantification and differential expression analysis on BAM files"
+description = "This application makes transcript quantification and differential expression analysis on BAM files"
 
 usage_example = """
 Examples of usage:
@@ -45,7 +45,7 @@ Examples of usage:
 
 print header, description, usage_example
 
-parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ Transcripts quantification and DEA analysis on BAM files ] \n", description = description)
+parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ Transcript quantification and DEA analysis on BAM files ] \n", description = description)
 parser.add_argument('-t', '--threads', dest="Threads", help="Max thread number. \n Default: 12. \n", action="store", required=False, default=12)
 parser.add_argument('-i', '--input', dest="input_path", help="Input path dataframe. \n No default option. \n", action="store", required=True)
 parser.add_argument('-g', '--gtf', dest="GTF", help="GTF file path. \n Defaul: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf")
@@ -80,8 +80,17 @@ def checkArgs(args):
     print "reference_genome =", args.ref_gen
     print "DEA method =", args.dea_method
     print "R script path =", args.R_path
-    if not os.path.isfile(args.input_path) or not os.path.isfile(args.GTF) or not os.path.isdir(args.output_dir) or not os.path.isfile(args.ref_gen):
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths.\n\tExit\n" + '\033[0m')
+    if not os.path.isfile(args.input_path):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for input file.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isfile(args.GTF):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for GTF file.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isdir(args.output_dir):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for output directory.\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if not os.path.isfile(args.ref_gen):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for reference genome.\n\tExit\n" + '\033[0m')
         sys.exit()
     R_path1=args.R_path+"/runedgeR.R"
     R_path2=args.R_path+"/runDESeq2.R"
@@ -95,7 +104,7 @@ def checkFile(input_path):
     """
     Check case/control
     """
-    data=pd.DataFrame.from_csv(input_path,sep='\t',index_col=None)
+    data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
     if len(data.loc[data['Type']=='cntrl'])==0 or len(data.loc[data['Type']!='cntrl'])==0:
         print ('\033[0;31m' + "\n[AP]\tError while reading files: there must be at least one case and one control.\n\tExit\n" + '\033[0m')
         sys.exit()
@@ -124,7 +133,6 @@ def runfeatureCounts(Threads,input_path,GTF,output_dir):
     data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
     BAM=" ".join((data['BAM_path']))
     cmd="featureCounts -T "+str(Threads)+" -p -a "+GTF+" -o "+output_dir+"/featureCounts_counts.txt "+BAM
-    print cmd
     os.system(cmd)
 
 
@@ -155,6 +163,7 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
     cntrl=data.loc[data['Type']=='cntrl']
     treat=data.loc[data['Type']!='cntrl']
     treat = treat.reset_index(drop=True)
+    cntrl = cntrl.reset_index(drop=True)
     a=[]
     for t in range(1, (len(cntrl)+1)):
         c=output_dir+"/"+cntrl['sample_name'][t-1]+"/cuffquant/abundances.cxb"

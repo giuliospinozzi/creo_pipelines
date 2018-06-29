@@ -16,7 +16,7 @@ input_table <- read.csv(input,sep=",")
 DataGroups <- input_table$Type
 fpkm <- repFpkmMatrix(genes(cuff_data))
 pca <- rbind(fpkm,type=as.character(DataGroups))
-png("cummeRbund-pca.png")
+png("cummeRbund-pca.png", w=1000, h=1000, pointsize=20)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=4)+ 
   theme(plot.title = element_text(face="bold",hjust=0.5,size=20),legend.text=element_text(size=12),
         legend.title=element_blank(),axis.text = element_text(size=12))
@@ -71,7 +71,7 @@ fpkm <- as.matrix(fpkm)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 35 )
 rownames(diffGenesOutput1)=diffGenesOutput1$Row.names
 lab <- as.character(diffGenesOutput1[rownames(fpkm[ topVarGenes, ]),"Gene"])
-png("cummerbund-heatmap-topVarGenes.png")
+png("cummerbund-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, scale="row", trace="none", dendrogram="column", col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255),labRow = lab)
 dev.off()
 
