@@ -2,11 +2,12 @@
 description=$(zenity --forms --title="RNA-Seq project" --text="Assign experiment code (no spaces!)" --add-entry="PROJECT NAME" --add-entry="POOL NAME" --add-entry="SAMPLE NAMES (sep by ',')
 [cntrl7,cntrl8,actd10,actd11]" --add-entry="SAMPLE TYPE 
 (cntrl for control, sep by ',')
-[cntrl,cntrl,actd,actd]")
+[cntrl,cntrl,actd,actd]" --add-entry="Log name")
 pname=$(echo $description | cut -d'|' -f1)
 poolname=$(echo $description | cut -d'|' -f2)
 snames=$(echo $description | cut -d'|' -f3)
 stype=$(echo $description | cut -d'|' -f4)
+LOG=$(echo $description | cut -d'|' -f5)
 
 array=$(echo $snames | tr "," "\n")
 arr=($array)
@@ -55,10 +56,13 @@ zenity --info --title="Reference genome" --text="Select reference genome" --ok-l
 REF=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hg19.fa --title="***Reference genome***"  --text="Select reference genome")
 
 zenity --info --title="Script path" --text="Select script directory" --ok-label="OK" 
-R=$(zenity --file-selection --directory --title="***Scripts path***"  --text="Select script directory")
+R=$(zenity --file-selection --directory --filename /opt/applications/src/creo_pipelines/pipelines --title="***Scripts path***"  --text="Select script directory")
 
 zenity --info --title="Output directory" --text="Select output directory" --ok-label="OK" 
 OUT=$(zenity --file-selection --directory --title="***Output directory***"  --text="Select output directory")
+
+zenity --info --title="Log directory" --text="Select log directory" --ok-label="OK" 
+LOGF=$(zenity --file-selection --directory --filename /opt/ngs/logs --title="***Log directory***"  --text="Select log directory")
 
 library=$(zenity --list --text="Choose library-type" --radiolist --column "" --column "Library type" --hide-header --title="Library-type" TRUE "fr-firststrand" FALSE "fr-secondstrand")
 
@@ -78,7 +82,7 @@ threads=$(zenity --forms --title="THREADS" --text="Number of threads" --add-entr
 
 cd ${OUT}
 
-python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT
+python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT 2>&1 >> ${LOGF}/${LOG}.log
 
 
 # echo 'cd '${OUT} >> /Users/shadow/Desktop/prova.txt
@@ -106,4 +110,4 @@ python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $R
 # -r_path '$R'
 # -o '$OUT'' >> /Users/shadow/Desktop/prova.txt
 
-
+# echo ${LOGF}'/'${LOG}'.log' >> /Users/shadow/Desktop/prova.txt
