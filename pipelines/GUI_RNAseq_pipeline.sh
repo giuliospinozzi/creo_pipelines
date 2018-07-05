@@ -8,11 +8,25 @@ poolname=$(echo $description | cut -d'|' -f2)
 snames=$(echo $description | cut -d'|' -f3)
 stype=$(echo $description | cut -d'|' -f4)
 
-zenity --info --title="READ-1" --text="Select all read-1 files (multiple selection)" --ok-label="OK" 
-READ1=$(zenity --file-selection --multiple --separator=, --title="***READ-1***"  --text="Select read-1 files")
+array=$(echo $snames | tr "," "\n")
+arr=($array)
+READ1b=()
+READ2b=()
 
-zenity --info --title="READ-2" --text="Select all read-2 files (multiple selection)" --ok-label="OK" 
-READ2=$(zenity --file-selection --multiple --separator="," --title="***READ-2***"  --text="Select read-2 files")
+for sample in `seq 1 "${#arr[@]}"`; do
+	zenity --info --title="READ-1" --text="Select read-1 file for "${arr[$(($sample-1))]} --ok-label="OK";
+	READ1a=$(zenity --file-selection --title="***READ-1***"  --text="Select read-1 file");
+
+	zenity --info --title="READ-2" --text="Select read-2 files for "${arr[$(($sample-1))]} --ok-label="OK";
+	READ2a=$(zenity --file-selection --title="***READ-2***"  --text="Select read-2 file");
+
+	READ1b+=( ${READ1a} )
+	READ2b+=( ${READ2a} )
+done
+
+function join { local IFS="$1"; shift; echo "$*"; }
+READ1=$(join , ${READ1b[@]})
+READ2=$(join , ${READ2b[@]})
 
 zenity --info --title="Reference genome Bowtie" --text="Select reference genome for Bowtie" --ok-label="OK" 
 REF_BOWTIE=$(zenity --file-selection --filename /opt/genome/human/hg19/index/bowtie2/hg19.fa --title="***Reference genome Bowtie***"  --text="Select reference genome for Bowtie")
@@ -50,12 +64,17 @@ library=$(zenity --list --text="Choose library-type" --radiolist --column "" --c
 
 alignment=$(zenity --list --text="Choose alignment method" --radiolist --column "" --column "Alignment method" --hide-header --title="Alignment method" TRUE "hisat" FALSE "tophat")
 
-quant=$(zenity --list --text="Choose quantification method" --radiolist --column "" --column "Quantification method" --hide-header --title="Quantification method" TRUE "featureCounts" FALSE "Cufflinks")
+if [ ${alignment} = "hisat" ]; then
+	quant="featureCounts";
+	dea=$(zenity --list --text="Choose differential expression analysis method" --radiolist --column "" --column "DEA method" --hide-header --title="DEA method" TRUE "edgeR" FALSE "DESeq2");
+fi
 
-dea=$(zenity --list --text="Choose differential expression analysis method" --radiolist --column "" --column "DEA method" --hide-header --title="DEA method" TRUE "edgeR" FALSE "DESeq2" FALSE "cummeRbund")
+if [ ${alignment} = "tophat" ]; then
+	quant="Cufflinks";
+	dea="cummeRbund";
+fi
 
 threads=$(zenity --forms --title="THREADS" --text="Number of threads" --add-entry="THREADS")
-
 
 cd ${OUT}
 
