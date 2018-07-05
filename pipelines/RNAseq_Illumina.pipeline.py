@@ -181,7 +181,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     """
     Run alignment script as desired
     """
-    print ('\033[1;33m' + "\n^^^^^^^^^Alignment script running^^^^^^^^^\n" + '\033[0m')
+#    print ('\033[1;33m' + "\n^^^^^^^^^Alignment script running^^^^^^^^^\n" + '\033[0m')
     with open(output_dir+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
@@ -199,9 +199,9 @@ def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,
     """
     Run quantification script as desired
     """
-    print ('\033[1;33m' + "\n^^^^^^^^^Quantification script running^^^^^^^^^\n" + '\033[0m')
+#    print ('\033[1;33m' + "\n^^^^^^^^^Quantification script running^^^^^^^^^\n" + '\033[0m')
     res_dir=output_dir+"/"+project_name+"/"+pool_name
-    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/input.csv'+" -o "+res_dir+"/Quantification"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
+    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/input.csv'+" -o "+res_dir+"/Quantification_and_DEA"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
     os.system(cmd)
     
     

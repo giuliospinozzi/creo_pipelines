@@ -22,10 +22,9 @@ echo "
   |  Author:   Giulio Spinozzi, PhD                        |
   |  Date:     September 2017                              |
   |  Contact:  giulio.spinozzi@unipg.it                    |
-  |  Version:  1.0 - CREO - RNAseq                         |
+  |  Version:  1.0 - CREO - RNAseq alignment               |
   |                  No SAM, HiSeq optimized, Paired-End   |
   |                  TopHat2/HISAT2 - Bowtie2              |
-  |                  Cufflinks/featureCounts               |
   +--------------------------------------------------------+
 
   REQUIRED VARS and relative ORDER POSITION -> REMEMBER NO SPACES!!!!!!!!!
@@ -87,7 +86,7 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quality
-mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quantification
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quantification_and_DEA
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
 
@@ -141,7 +140,6 @@ R2_FASTQ="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BN
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}##### Ribosomal DNA Alignment #####${NC}\n"
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}
-mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}
 bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_hum5SrDNA} <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/hum5SrDNA.PE.bam &
 bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_humRibosomal} <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/humRibosomal.PE.bam &
 wait
@@ -186,8 +184,8 @@ if [ ${ANALYSIS_PROTOCOL} = "tophat" ]; then
 	junction_annotation.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	read_duplication.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	junction_saturation.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
-	bam_stat.py -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}_bam_stat.txt;
-	read_distribution.py -r ${BED_FILE} -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}_read_distribution.txt;
+	bam_stat.py -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}.bam_stat.txt;
+	read_distribution.py -r ${BED_FILE} -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}.read_distribution.txt;
 	geneBody_coverage.py -r ${BED_FILE}  -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	read_quality.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 
@@ -222,8 +220,8 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 	junction_annotation.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	read_duplication.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	junction_saturation.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
-	bam_stat.py -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}_bam_stat.txt;
-	read_distribution.py -r ${BED_FILE} -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}_read_distribution.txt;
+	bam_stat.py -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}.bam_stat.txt;
+	read_distribution.py -r ${BED_FILE} -i ${BAM} > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME}.read_distribution.txt;
 	geneBody_coverage.py -r ${BED_FILE}  -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 	read_quality.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 fi

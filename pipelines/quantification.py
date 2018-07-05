@@ -17,6 +17,8 @@ header = """
   |            valy.tini@hotmail.it                        |
   |  Version:  2.0 - CREO - RNAseq quantification and      |
   |                         DEA analysis                   |
+  |                         Cufflinks/featureCounts        |
+  |                         edgeR/DESeq2/cummeRbund        |
   +--------------------------------------------------------+
 
   optional arguments (NO SPACES!!):

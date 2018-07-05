@@ -59,7 +59,7 @@ volcanoplot <- function (res, lfcthresh=2, sigthresh=0.05, main="Volcano Plot", 
   legend(legendpos, xjust=1, yjust=1, legend=c(paste("FDR<",sigthresh,sep=""), paste("|LogFC|>",lfcthresh,sep=""), "both"), col=c("red","orange","green"),fill = c("red","orange","green"),bty = "o", xpd = T,cex=0.7,bg="white")
 }
 colnames(diffGenesOutput1)[c(8,10)]=c("log2FoldChange","padj")
-png("cummerbund-volcanoplot.png", 1200, 1000, pointsize=20)
+png("cummeRbund-volcanoplot.png", 1200, 1000, pointsize=20)
 volcanoplot(diffGenesOutput1, textcx=.6)
 dev.off()
 
@@ -71,14 +71,14 @@ fpkm <- as.matrix(fpkm)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 35 )
 rownames(diffGenesOutput1)=diffGenesOutput1$Row.names
 lab <- as.character(diffGenesOutput1[rownames(fpkm[ topVarGenes, ]),"Gene"])
-png("cummerbund-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
+png("cummeRbund-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, scale="row", trace="none", dendrogram="column", col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255),labRow = lab)
 dev.off()
 
 # Sample distance heatmap
 mycols <- brewer.pal(8, "Dark2")[1:length(unique(DataGroups))]
 sampleDists <- as.matrix(dist(t(fpkm)))
-png("cummerbund-heatmap-samples.png", w=1000, h=1000, pointsize=20)
+png("cummeRbund-heatmap-samples.png", w=1000, h=1000, pointsize=20)
 heatmap.2(as.matrix(sampleDists), key=F, trace="none",
           col=colorpanel(100, "black", "white"),
           ColSideColors=mycols[DataGroups], RowSideColors=mycols[DataGroups],
