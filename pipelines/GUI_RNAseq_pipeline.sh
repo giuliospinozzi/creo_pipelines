@@ -1,8 +1,8 @@
 
 description=$(zenity --forms --title="RNA-Seq project" --text="Assign experiment code (no spaces!)" --add-entry="PROJECT NAME" --add-entry="POOL NAME" --add-entry="SAMPLE NAMES (sep by ',')
-[cntrl7,cntrl8,actd10,actd11]" --add-entry="SAMPLE TYPE 
-(cntrl for control, sep by ',')
-[cntrl,cntrl,actd,actd]" --add-entry="Log name")
+[cntrl7,cntrl8,actd10,actd11]" --add-entry="SAMPLE TYPES 
+('cntrl' for control, sep by ',')
+[cntrl,cntrl,actd,actd]" --add-entry="LOG NAME")
 pname=$(echo $description | cut -d'|' -f1)
 poolname=$(echo $description | cut -d'|' -f2)
 snames=$(echo $description | cut -d'|' -f3)
@@ -18,7 +18,7 @@ for sample in `seq 1 "${#arr[@]}"`; do
 	zenity --info --title="READ-1" --text="Select read-1 file for "${arr[$(($sample-1))]} --ok-label="OK";
 	READ1a=$(zenity --file-selection --title="***READ-1***"  --text="Select read-1 file");
 
-	zenity --info --title="READ-2" --text="Select read-2 files for "${arr[$(($sample-1))]} --ok-label="OK";
+	zenity --info --title="READ-2" --text="Select read-2 file for "${arr[$(($sample-1))]} --ok-label="OK";
 	READ2a=$(zenity --file-selection --title="***READ-2***"  --text="Select read-2 file");
 
 	READ1b+=( ${READ1a} )
@@ -56,7 +56,7 @@ zenity --info --title="Reference genome" --text="Select reference genome" --ok-l
 REF=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hg19.fa --title="***Reference genome***"  --text="Select reference genome")
 
 zenity --info --title="Script path" --text="Select script directory" --ok-label="OK" 
-R=$(zenity --file-selection --directory --filename /opt/applications/src/creo_pipelines/pipelines --title="***Scripts path***"  --text="Select script directory")
+R=$(zenity --file-selection --directory --filename /opt/applications/src/creo_pipelines/pipelines --title="***Script path***"  --text="Select script directory")
 
 zenity --info --title="Output directory" --text="Select output directory" --ok-label="OK" 
 OUT=$(zenity --file-selection --directory --title="***Output directory***"  --text="Select output directory")
@@ -64,7 +64,7 @@ OUT=$(zenity --file-selection --directory --title="***Output directory***"  --te
 zenity --info --title="Log directory" --text="Select log directory" --ok-label="OK" 
 LOGF=$(zenity --file-selection --directory --filename /opt/ngs/logs --title="***Log directory***"  --text="Select log directory")
 
-library=$(zenity --list --text="Choose library-type" --radiolist --column "" --column "Library type" --hide-header --title="Library-type" TRUE "fr-firststrand" FALSE "fr-secondstrand")
+library=$(zenity --list --text="Choose library type" --radiolist --column "" --column "Library type" --hide-header --title="Library type" TRUE "fr-firststrand" FALSE "fr-secondstrand")
 
 alignment=$(zenity --list --text="Choose alignment method" --radiolist --column "" --column "Alignment method" --hide-header --title="Alignment method" TRUE "hisat" FALSE "tophat")
 

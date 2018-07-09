@@ -31,7 +31,7 @@ header = """
   -l, --library-type [fr-firststrand,fr-secondstrand]
   -r, --reference-genome [/opt/genome/human/hg19/index/hg19.fa]
   -dea, --dea-method [edgeR,DESeq2,cummeRbund]
-  -r_path, --r_path
+  -r_path, --r_path [/opt/applications/src/creo_pipelines/pipelines]
   
 """ 
 
@@ -41,7 +41,7 @@ description = "This application makes transcript quantification and differential
 usage_example = """
 Examples of usage:
  (1) Quantification and DEA analysis: 
-    <appname> -i input.csv -o working_directory -r_path R_script_directory
+    <appname> -i <input.csv> -o <working_directory>
 
 """
 
@@ -56,7 +56,7 @@ parser.add_argument('-o', '--output-dir', dest="output_dir", help="Output direct
 parser.add_argument('-l', '--library-type', dest="library_type", help="Library type (only for Cufflinks). \n Defaul: fr-firststrand; alternative: fr-secondstrand. \n", action="store", required=False, default="fr-firststrand")
 parser.add_argument('-r', '--reference-genome', dest="ref_gen", help="Reference genome file path (only for Cufflinks). \n Defaul: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/hg19.fa")
 parser.add_argument('-dea', '--dea-method', dest="dea_method", help="Differential Expression Analysis method. \n Default: edgeR; alternatives: DESeq2, cummeRbund. \n", action="store", required=False, default="edgeR")
-parser.add_argument('-r_path', '--r_path', dest="R_path", help="R script directory. \n No default option. \n", action="store", required=True)
+parser.add_argument('-r_path', '--r_path', dest="R_path", help="R script directory. \n Default: creo_pipelines. \n", action="store", required=False, default="/opt/applications/src/creo_pipelines/pipelines")
 
 args = parser.parse_args()
 
