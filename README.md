@@ -74,4 +74,4 @@ This application makes RNA-Seq analysis: quality control, pre-processing, alignm
 ```GUI_RNAseq_pipeline``` <br>
 A series of windows allow to indicate the input files and to choose between the various options.
 
-![GUI](/images/GUI_screenshot.png)
+<p align="center"><img src="/images/GUI_screenshot.png" width="55%"></p>
