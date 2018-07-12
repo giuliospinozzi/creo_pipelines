@@ -80,34 +80,44 @@ fi
 
 threads=$(zenity --forms --title="THREADS" --text="Number of threads" --add-entry="THREADS")
 
-cd ${OUT}
+echo "project_name = "$pname"
 
-python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT 2>&1 >> ${LOGF}/${LOG}.log
+pool_name = "$poolname"
+
+sample_names = "$snames"
+
+sample_types = "$stype"
+
+log = "$LOG"
+
+reads_1 = "$READ1"
+
+reads_2 = "$READ2"
+
+bowtie = "$REF_BOWTIE"
+
+hisat = "$REF_HISAT"
+
+BED_file = "$BED"
+
+phix_genome = "$PHIX"
+
+ribosomal_genomes = "$RIB1", "$RIB2"
+
+GTF_file = "$GTF"
+
+reference_genome = "$REF"
+
+script_directory = "$R"
+
+output_directory = "$OUT"
+
+log_directory = "$LOGF"
+
+threads = "$threads | zenity --text-info --title="Summary" --width=700 --height=600 --ok-label="OK" --cancel-label="Cancel"
 
 
-# echo 'cd '${OUT} >> /Users/shadow/Desktop/prova.txt
-
-# echo 'python '$R'/RNAseq_Illumina.pipeline.py 
-# -n '$pname' 
-# -pn '$poolname'
-# -sn '$snames'
-# -r1 '$READ1'
-# -r2 '$READ2'
-# -type '$stype' 
-# -rb '$REF_BOWTIE' 
-# -rh '$REF_HISAT'
-# -bed '$BED'
-# -ph '$PHIX' 
-# -rib1 '$RIB1'
-# -rib2 '$RIB2' 
-# -t '$threads' 
-# -g '$GTF'
-# -a '$alignment'
-# -l '$library'
-# -q '$quant'
-# -r '$REF'
-# -dea '$dea'
-# -r_path '$R'
-# -o '$OUT'' >> /Users/shadow/Desktop/prova.txt
-
-# echo ${LOGF}'/'${LOG}'.log' >> /Users/shadow/Desktop/prova.txt
+if [ "$?" -eq "0" ]; then
+	cd ${OUT}
+	python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT 2>&1 >> ${LOGF}/${LOG}.log
+fi
