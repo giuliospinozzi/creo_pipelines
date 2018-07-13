@@ -70,7 +70,7 @@ parser.add_argument('-rib1', '--ribosomal-genome1', dest="rib1", help="Ribosomal
 parser.add_argument('-rib2', '--ribosomal-genome2', dest="rib2", help="Ribosomal genome file path. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/contam/bwa/humRibosomal.fa")
 parser.add_argument('-t', '--threads', dest="Threads", help="Max thread number. \n Default: 12. \n", action="store", required=False, default=12)
 parser.add_argument('-g', '--gtf', dest="GTF", help="GTF file path. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf")
-parser.add_argument('-a', '--alignment-method', dest="a_method", help="Alignment method. \n Default: hisat; alternative: tophat. \n", action="store", required=False, default="HISAT2")
+parser.add_argument('-a', '--alignment-method', dest="a_method", help="Alignment method. \n Default: hisat; alternative: tophat. \n", action="store", required=False, default="hisat")
 parser.add_argument('-l', '--library-type', dest="library_type", help="Library type. \n Default: fr-firststrand; alternative: fr-secondstrand. \n", action="store", required=False, default="fr-firststrand")
 #parser.add_argument('-i', '--input', dest="input_path", help="Input path dataframe. \n No default option. \n", action="store", required=True)
 parser.add_argument('-q', '--quantification-method', dest="q_method", help="Quantification method. \n Default: featureCounts; alternative: Cufflinks. \n", action="store", required=False, default="featureCounts")
@@ -182,7 +182,11 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     Run alignment script as desired
     """
 #    print ('\033[1;33m' + "\n^^^^^^^^^Alignment script running^^^^^^^^^\n" + '\033[0m')
-    with open(output_dir+'/input.csv', 'wb') as csvfile:
+    cmd1="mkdir "output_dir+"/"+project_name
+    os.system(cmd1)
+    cmd2="mkdir "output_dir+"/"+project_name+"/"+pool_name
+    os.system(cmd2)
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
         csvfile.close()
@@ -201,15 +205,15 @@ def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,
     """
 #    print ('\033[1;33m' + "\n^^^^^^^^^Quantification script running^^^^^^^^^\n" + '\033[0m')
     res_dir=output_dir+"/"+project_name+"/"+pool_name
-    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/input.csv'+" -o "+res_dir+"/Quantification_and_DEA"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
+    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv'+" -o "+res_dir+"/Quantification_and_DEA"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
     os.system(cmd)
     
     
-def rminput(output_dir):
+def rminput(output_dir,project_name,pool_name):
     """
     Remove input file
     """
-    os.system("rm "+output_dir+'/input.csv')
+    os.system("rm "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv')
         
 
 #########################################################################################
@@ -232,7 +236,7 @@ def main():
     quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen)
     
     # remove input file
-    rminput(args.output_dir)
+    rminput(args.output_dir,args.project_name,args.pool_name)
     
 
 # sentinel
