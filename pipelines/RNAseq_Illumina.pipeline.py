@@ -182,9 +182,9 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     Run alignment script as desired
     """
 #    print ('\033[1;33m' + "\n^^^^^^^^^Alignment script running^^^^^^^^^\n" + '\033[0m')
-    cmd1="mkdir "output_dir+"/"+project_name
+    cmd1="mkdir "+output_dir+"/"+project_name
     os.system(cmd1)
-    cmd2="mkdir "output_dir+"/"+project_name+"/"+pool_name
+    cmd2="mkdir "+output_dir+"/"+project_name+"/"+pool_name
     os.system(cmd2)
     with open(output_dir+'/'+project_name+'/'+pool_name+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
