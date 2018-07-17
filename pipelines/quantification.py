@@ -10,7 +10,7 @@ header = """
   |            Illumina Pipeline: CREO RNAseq              |
   |                                                        |
   +--------------------------------------------------------+
-  |  Author:   Giulio Spinozzi                             |
+  |  Author:   Giulio Spinozzi, PhD                        |
   |            Valentina Tini                              |
   |  Date:     June 2018                                   |
   |  Contact:  giulio.spinozzi@unipg.it                    |

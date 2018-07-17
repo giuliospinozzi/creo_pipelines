@@ -9,7 +9,7 @@ header = """
   |            Illumina Pipeline: CREO RNAseq              |
   |                                                        |
   +--------------------------------------------------------+
-  |  Author:   Giulio Spinozzi                             |
+  |  Author:   Giulio Spinozzi, PhD                        |
   |            Valentina Tini                              |
   |  Date:     June 2018                                   |
   |  Contact:  giulio.spinozzi@unipg.it                    |
@@ -40,11 +40,13 @@ header = """
   -dea, --dea-method [edgeR,DESeq2,cummeRbund]
   -r_path, --r_path [/opt/applications/src/creo_pipelines/pipelines]
   -o, --output-dir
+  -meta, --meta-analysis [full,quant]
+  -cat, --max-cat [5]
   
 """ 
 
 
-description = "This application makes quality control, pre-processing, alignment, transcript quantification and differential expression analysis on BAM files"
+description = "This application makes quality control, pre-processing, alignment, transcript quantification, differential expression analysis and optionaly meta-analysis on BAM files"
 
 usage_example = """
 Examples of usage:
@@ -78,6 +80,8 @@ parser.add_argument('-r', '--reference-genome', dest="ref_gen", help="Reference 
 parser.add_argument('-dea', '--dea-method', dest="dea_method", help="Differential Expression Analysis method. \n Default: edgeR; alternatives: DESeq2, cummeRbund. \n", action="store", required=False, default="edgeR")
 parser.add_argument('-r_path', '--r_path', dest="R_path", help="Script directory (alignment, quantification and DEA). \n Default: creo_pipelines. \n", action="store", required=False, default="/opt/applications/src/creo_pipelines/pipelines")
 parser.add_argument('-o', '--output-dir', dest="output_dir", help="Output directory. \n No default option. \n", action="store", required=True)
+parser.add_argument('-meta', '--meta-analysis', dest="meta", help="Analysis with or without final meta-analysis. \n Default: full; alternative: quant. \n", action="store", required=False, default="full")
+parser.add_argument('-cat', '--max_cat', dest="max_cat", help="Max number of category showed in R plots. \n Default: 5. \n", action="store", required=False, default="5")
 
 args = parser.parse_args()
 
@@ -147,7 +151,9 @@ def checkArgs(args):
             sys.exit()
     R_path1=args.R_path+"/alignment.sh"
     R_path2=args.R_path+"/quantification.py"
-    if not os.path.isfile(R_path1) or not os.path.isfile(R_path2):
+    R_path3=args.R_path+"/GO_pathway.R"
+    R_path4=args.R_path+"/CNETPLOT_FUNCTION.R"
+    if not os.path.isfile(R_path1) or not os.path.isfile(R_path2) or not os.path.isfile(R_path3) or not os.path.isfile(R_path4):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no scripts.\n\tExit\n" + '\033[0m')
         sys.exit()
 
@@ -214,6 +220,18 @@ def rminput(output_dir,project_name,pool_name):
     Remove input file
     """
     os.system("rm "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv')
+    
+    
+def metaanalysis(output_dir,R_path,project_name,pool_name,dea_method,max_cat):
+    """
+    Run meta-analysis script as desired
+    """
+    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis")
+    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Gene_ontology")
+    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Pathway_analysis")
+    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Pathway_analysis/pathview")
+    cmd="Rscript --vanilla --verbose "+R_path+"/GO_pathway.R "+output_dir+'/'+project_name+'/'+pool_name+'/Quantification_and_DEA/*-results.csv '+dea_method+" "+output_dir+'/'+project_name+'/'+pool_name+"/Meta-analysis "+max_cat+" "+R_path
+    os.system(cmd)
         
 
 #########################################################################################
@@ -237,6 +255,10 @@ def main():
     
     # remove input file
     rminput(args.output_dir,args.project_name,args.pool_name)
+    
+    # meta-analysis (GO and pathway analysis)
+    if args.meta == 'full':
+        metaanalysis(args.output_dir,args.R_path,args.project_name,args.pool_name,args.dea_method,args.max_cat)
     
 
 # sentinel

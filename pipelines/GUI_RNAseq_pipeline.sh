@@ -78,6 +78,14 @@ if [ ${alignment} = "tophat" ]; then
 	dea="cummeRbund";
 fi
 
+meta=$(zenity --list --text="Choose whether to perform analysis with final meta-analysis or stop after quantification and DEA analysis" --radiolist --column "" --column "Analysis" --hide-header --title="Analysis" TRUE "full" FALSE "quant")
+
+if [ ${meta} = "full" ]; then
+	max_cat=$(zenity --forms --title="Max category" --text="Number of category to show in R plots" --add-entry="Category number");
+elif [ ${meta} = "quant" ]; then
+	max_cat="5"
+fi
+
 threads=$(zenity --forms --title="THREADS" --text="Number of threads" --add-entry="THREADS")
 
 echo "project_name = "$pname"
@@ -114,10 +122,14 @@ output_directory = "$OUT"
 
 log_directory = "$LOGF"
 
+meta-analysis = "$meta"
+
+category_number = "$max_cat"
+
 threads = "$threads | zenity --text-info --title="Summary" --width=700 --height=600 --ok-label="OK" --cancel-label="Cancel"
 
 
 if [ "$?" -eq "0" ]; then
 	cd ${OUT}
-	python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT 2>&1 >> ${LOGF}/${LOG}.log
+	python $R/RNAseq_Illumina.pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
 fi

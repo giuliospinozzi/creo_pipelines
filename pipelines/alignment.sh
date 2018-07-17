@@ -20,9 +20,11 @@ echo "
   |                                                        |
   +--------------------------------------------------------+
   |  Author:   Giulio Spinozzi, PhD                        |
-  |  Date:     September 2017                              |
+  |            Valentina Tini                              |
+  |  Date:     June 2018                                   |
   |  Contact:  giulio.spinozzi@unipg.it                    |
-  |  Version:  1.0 - CREO - RNAseq alignment               |
+  |            valy.tini@hotmail.it                        |
+  |  Version:  2.0 - CREO - RNAseq alignment               |
   |                  No SAM, HiSeq optimized, Paired-End   |
   |                  TopHat2/HISAT2 - Bowtie2              |
   +--------------------------------------------------------+
