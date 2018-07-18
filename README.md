@@ -2,14 +2,14 @@
 Bioinformatics Pipelines
 
 ## Introduction
-<p align="justify"> This application makes RNA-Seq analysis: quality control, pre-processing, alignment, transcript quantification and differential expression analysis on BAM files. Given input files and working directory, pipeline is completely automatized. First, quality control on fastq files is performed with FastQC e FastQ Screen. FastQC makes quality control and creates one report for sample. FastQ Screen estimates approximately the percentage of reads that can be mapped on genomes other than human, like ribosomal genome, phix genome and mouse genome. This allows to evaluate the presence of contaminating genomes. Pre-processing follows quality control: reads are aligned on phix genome and ribosomal genome to eliminate contaminations. Alignment can be performed with TopHat or HISAT2; in the first case quantification is performed with Cufflinks and DEA with cummeRbund, in the second case quantification is performed with featureCounts and DEA with DESeq2 or edgeR. A second intermediate quality control analysis is also performed on the aligned BAM files with some of the RSeQC scripts and in particular: inner_distance, junction_annotation, junction_saturation, bam_stat, read_distribution, geneBody_coverage. </p>
+<p align="justify"> This application makes RNA-Seq analysis: quality control, pre-processing, alignment, transcript quantification and differential expression analysis on BAM files. Given the input files and the working directory, the pipeline is completely automated. First, quality control on fastq files is performed with FastQC e FastQ Screen. FastQC makes quality control and creates one report for sample. FastQ Screen estimates approximately the percentage of reads that can be mapped on genomes other than human, like ribosomal genome, phix genome and mouse genome. This allows to evaluate the presence of contaminating genomes. Pre-processing follows quality control: the reads are aligned on phix genome and ribosomal genome to eliminate contaminations. Alignment can be performed with TopHat or HISAT2; in the first case quantification is performed with Cufflinks and DEA with cummeRbund, in the second case quantification is performed with featureCounts and DEA with DESeq2 or edgeR. A second intermediate quality control analysis is also performed on the aligned BAM files with some of the RSeQC scripts and in particular: inner_distance, junction_annotation, junction_saturation, bam_stat, read_distribution, geneBody_coverage. It is possible to perform an optional meta-analysis on the results. It consists in Gene Ontology enrichment analysis and KEGG Pathway enrichment analysis on the differentially expressed genes. </p>
 
 ## Prerequisites
 ### Applications
 #### For Graphical User Interface and scripts running:
 *	zenity 3.18.1.1
 *	Python 2.7.12 (modules: os, argparse, sys, csv, pandas)
-*	R 3.2.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, calibrate, genefilter, RColorBrewer, gplots)
+*	R 3.4.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, calibrate, genefilter, RColorBrewer, gplots, clusterProfiler, dplyr, org.Hs.eg.db, igraph, scales, treemap, pathview)
 #### For quality control on fastq files and pre-processing:
 *	FastQC 0.11.5
 *	FastQ Screen 0.11.3
@@ -68,6 +68,8 @@ Bioinformatics Pipelines
 ```-r```	| Reference genome file path. Default: human hg19. [`/opt/genome/human/hg19/index/hg19.fa`] <br>
 ```-dea```	| Differential Expression Analysis method. Default: edgeR; alternatives: DESeq2, cummeRbund. <br>
 ```-r_path```	| Script directory (alignment, quantification and DEA). Default: `/opt/applications/src/creo_pipelines/pipelines` <br>
+```-meta``` | Analysis with or without final meta-analysis. Default: full; alternative: quant. <br>
+```-cat``` | Max number of category showed in R plots for meta-analysis. Default: 5. <br>
 
 ### Graphical User Interface
 #### Usage
