@@ -144,8 +144,8 @@ geneList=geneList1$logFC
 names(geneList)=geneList1$Gene
 pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO.pdf"),10,8)
 par(cex.main=1)
-min=-(round(((max(abs(geneList))+0.5)-1),1))
-max=round(((max(abs(geneList))+0.5)+1),1)
+min=-(round(((max(abs(geneList))+1)-1),1))
+max=round(((max(abs(geneList))+1)+1),1)
 cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
                       col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05")
 cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
