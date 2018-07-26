@@ -199,7 +199,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['sample_name','BAM_path','Type'])
         csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'wb') as csvfile:
-        filewriter = csv.writer(csvfile, delimiter=';')
+        filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['project_name',project_name])
         filewriter.writerow(['pool_name',pool_name])
         filewriter.writerow(['alignment_method',a_method])
@@ -210,7 +210,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['sample_types',stype])
         csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
-        filewriter = csv.writer(csvfile, delimiter=';')
+        filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads','number_bam_reads'])
         csvfile.close()
     read1a=read1.split(",")
