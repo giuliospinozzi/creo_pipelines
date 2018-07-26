@@ -4,7 +4,6 @@ source /etc/profile
 
 PIPEVERSION="1.0 - creo_RNAseq"
 STARTTIME=`date +'%y-%m-%d %H:%M:%S'`
-DBHOSTIP="localhost"
 RUN_ID=`date +"%Y%m%d%H%M%S"`
 
 RED='\033[0;31m' 
