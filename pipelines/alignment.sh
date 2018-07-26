@@ -161,7 +161,7 @@ if [ ${ANALYSIS_PROTOCOL} = "tophat" ]; then
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/accepted_hits.bam;
 		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/accepted_hits.bam";
 	fi
-	READS_MAPPED=$((`samtools $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
+	READS_MAPPED=$((`samtools flagstat $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv
 	printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### RSeQC Report #######${NC}\n"
 	inner_distance.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
@@ -198,7 +198,7 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
 		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam";
 	fi
-	READS_MAPPED=$((`samtools $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
+	READS_MAPPED=$((`samtools flagstat $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv
 	printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### RSeQC Report #######${NC}\n"
 	inner_distance.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
