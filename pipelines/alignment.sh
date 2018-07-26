@@ -5,7 +5,6 @@ source /etc/profile
 PIPEVERSION="1.0 - creo_RNAseq"
 STARTTIME=`date +'%y-%m-%d %H:%M:%S'`
 DBHOSTIP="localhost"
-STATSDBNAME='stats_summary_RNAseq'
 RUN_ID=`date +"%Y%m%d%H%M%S"`
 
 RED='\033[0;31m' 
@@ -77,10 +76,9 @@ RIBOSOMAL_GENOME_humRibosomal="${13}";
 ANALYSIS_PROTOCOL="${14}";
 GTF_FILE="${15}";
 LIBRARY_TYPE="${16}";
-DBSCHEMA="creo";
 SAMPLE_TYPE="${17}";
 
-printf "${GREEN}@@@@ Folder creation --> ${RESULTS_DIR}${NC}\n"
+printf "${GREEN}@@@@ Folder creation --> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}${NC}\n"
 
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX
@@ -90,21 +88,6 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quantification_and_DEA
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
 
-printf "${GREEN}@@@@ Create stats_summary_RNAseq table into DB (if not exists) --> http://141.250.134.204/phpmyadmin${NC}\n"
-mysql -u giulio --password=speedy -e "create database if not exists ${DBSCHEMA} ; " ;
-
-mysql -u giulio --password=speedy -e "
-	CREATE TABLE IF NOT EXISTS ${STATSDBNAME} (
-		RUN_ID varchar(255) default null,
-		RUN_NAME varchar(1000) default null,
-		PROJECT_NAME varchar(255) default null,
-		POOL_NAME varchar(255) default null,
-		LIBRARY_NAME varchar(255) default null,
-		NUMBER_RAW_READS int(30) DEFAULT NULL,
-		NUMBER_PHIX_READS int(30) DEFAULT NULL,
-		NUMBER_RIBOSOMAL_READS int(30) DEFAULT NULL
-	) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-	" ${DBSCHEMA} ;
 
 NUMBER_RAW_READS=$((`zcat ${R1_FASTQ} | wc -l`/4)) ;
 printf "${GREEN}@@@@ Starting Number of Raw Reads --> ${NUMBER_RAW_READS}${NC}\n"
@@ -114,7 +97,7 @@ printf "${GREEN}@@@@ Starting Number of Raw Reads --> ${NUMBER_RAW_READS}${NC}\n
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### FastQC Report #######${NC}\n"
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quality/${LIBRARY_NAME}
-fastqc --nogroup -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quality/${LIBRARY_NAME} -t ${MAXTHREADS} -f fastq ${R1_FASTQ} ${R2_FASTQ}
+fastqc --nogroup --extract -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quality/${LIBRARY_NAME} -t ${MAXTHREADS} -f fastq ${R1_FASTQ} ${R2_FASTQ}
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### FastQ Screen Report #######${NC}\n"
 fastq_screen ${R1_FASTQ} ${R2_FASTQ} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Quality/${LIBRARY_NAME}
@@ -178,6 +161,7 @@ if [ ${ANALYSIS_PROTOCOL} = "tophat" ]; then
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/accepted_hits.bam;
 		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/accepted_hits.bam";
 	fi
+	READS_MAPPED=$((`samtools $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv
 	printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### RSeQC Report #######${NC}\n"
 	inner_distance.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/TopHat2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
@@ -214,6 +198,7 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
 		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam";
 	fi
+	READS_MAPPED=$((`samtools $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv
 	printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### RSeQC Report #######${NC}\n"
 	inner_distance.py -r ${BED_FILE} -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
@@ -226,22 +211,5 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 #	read_quality.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 fi
 
+cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv && echo "${LIBRARY_NAME};${SAMPLE_TYPE};${NUMBER_RAW_READS};${NUMBER_PHIX_READS};${NUMBER_RIBOSOMAL_READS};${READS_MAPPED}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
 
-echo "
-::VARIABLE SUMMARY:: dlimiters<>
-	RUN_ID=<${RUN_ID}>
-	RUN_NAME=<${RUN_NAME}>
-	PROJECT_NAME=<${PROJECT_NAME}>
-	POOL_NAME=<${POOL_NAME}>
-	LIBRARY_NAME=<${LIBRARY_NAME}>
-	NUMBER_RAW_READS=<${NUMBER_RAW_READS}>
-	NUMBER_PHIX_READS=<${NUMBER_PHIX_READS}>
-	NUMBER_RIBOSOMAL_READS=<${NUMBER_RIBOSOMAL_READS}>
-" ;
-
-printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}[CREO] Import STATS into SUMMARY table${NC}\n"
-mysql -u giulio --password=speedy -e "INSERT INTO ${DBSCHEMA}.${STATSDBNAME} 
-(RUN_ID, RUN_NAME, PROJECT_NAME, POOL_NAME, LIBRARY_NAME, NUMBER_RAW_READS, NUMBER_PHIX_READS, NUMBER_RIBOSOMAL_READS)
-VALUES
-('${RUN_ID}', '${RUN_NAME}', '${PROJECT_NAME}', '${POOL_NAME}', '${LIBRARY_NAME}', '${NUMBER_RAW_READS}', '${NUMBER_PHIX_READS}', '${NUMBER_RIBOSOMAL_READS}')
-" ${DBSCHEMA} ;

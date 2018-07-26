@@ -81,7 +81,7 @@ parser.add_argument('-dea', '--dea-method', dest="dea_method", help="Differentia
 parser.add_argument('-r_path', '--r_path', dest="R_path", help="Script directory (alignment, quantification and DEA). \n Default: creo_pipelines. \n", action="store", required=False, default="/opt/applications/src/creo_pipelines/pipelines")
 parser.add_argument('-o', '--output-dir', dest="output_dir", help="Output directory. \n No default option. \n", action="store", required=True)
 parser.add_argument('-meta', '--meta-analysis', dest="meta", help="Analysis with or without final meta-analysis. \n Default: full; alternative: quant. \n", action="store", required=False, default="full")
-parser.add_argument('-cat', '--max_cat', dest="max_cat", help="Max number of category showed in R plots. \n Default: 5. \n", action="store", required=False, default="5")
+parser.add_argument('-cat', '--max_cat', dest="max_cat", help="Max number of category showed in R plots for meta-analysis. \n Default: 5. \n", action="store", required=False, default="5")
 
 args = parser.parse_args()
 
@@ -90,7 +90,7 @@ args = parser.parse_args()
 ####### GLOBAL VARS
 ########################################################################
 
-#######################################################################
+########################################################################
 ####### FUNCTIONS
 ########################################################################
 
@@ -183,7 +183,7 @@ def checkFile(read1,read2,stype,sample_name):
         sys.exit()
 
 
-def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,ref_bowtie,ref_hisat2,bed_file,phix,rib1,rib2,a_method,GTF,library_type,R_path,stype):
+def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,ref_bowtie,ref_hisat2,bed_file,phix,rib1,rib2,a_method,GTF,library_type,R_path,stype,q_method,dea_method):
     """
     Run alignment script as desired
     """
@@ -192,9 +192,26 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     os.system(cmd1)
     cmd2="mkdir "+output_dir+"/"+project_name+"/"+pool_name
     os.system(cmd2)
+    cmd3="mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/reports"
+    os.system(cmd3)    
     with open(output_dir+'/'+project_name+'/'+pool_name+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
+        csvfile.close()
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'wb') as csvfile:
+        filewriter = csv.writer(csvfile, delimiter=';')
+        filewriter.writerow(['project_name',project_name])
+        filewriter.writerow(['pool_name',pool_name])
+        filewriter.writerow(['alignment_method',a_method])
+        filewriter.writerow(['library_type',library_type])
+        filewriter.writerow(['quantification_method',q_method])
+        filewriter.writerow(['dea_method',dea_method])
+        filewriter.writerow(['sample_names',sample_name])
+        filewriter.writerow(['sample_types',stype])
+        csvfile.close()
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
+        filewriter = csv.writer(csvfile, delimiter=';')
+        filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads','number_bam_reads'])
         csvfile.close()
     read1a=read1.split(",")
     read2a=read2.split(",")
@@ -248,7 +265,7 @@ def main():
     checkFile(args.read1,args.read2,args.stype,args.sample_name)
 
     # alignment
-    alignment(args.project_name,args.pool_name,args.sample_name,args.output_dir,args.read1,args.read2,args.Threads,args.ref_bowtie,args.ref_hisat2,args.bed_file,args.phix,args.rib1,args.rib2,args.a_method,args.GTF,args.library_type,args.R_path,args.stype)
+    alignment(args.project_name,args.pool_name,args.sample_name,args.output_dir,args.read1,args.read2,args.Threads,args.ref_bowtie,args.ref_hisat2,args.bed_file,args.phix,args.rib1,args.rib2,args.a_method,args.GTF,args.library_type,args.R_path,args.stype,args.q_method,args.dea_method)
 
     # quantification
     quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen)
