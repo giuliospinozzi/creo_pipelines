@@ -185,7 +185,6 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 		samtools sort -@ ${MAXTHREADS} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted;
 		rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam;
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
-		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam";
 	elif [ ${LIBRARY_TYPE} = "fr-secondstrand" ]; then
 		printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}##### Mapping Reads to the Genome #####${NC}\n"
 		printf "${GREEN}@@@@ Splicing read mapping --> HISAT2${NC}\n"
@@ -195,7 +194,6 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 		samtools sort -@ ${MAXTHREADS} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted;
 		rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam;
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
-		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam";
 	fi
 	READS_MAPPED=$((`samtools flagstat $BAM | grep '0 mapped ' | cut -d' ' -f1`)) ;
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input.csv
@@ -210,5 +208,5 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 #	read_quality.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 fi
 
-cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv && echo -e "${LIBRARY_NAME}\t${SAMPLE_TYPE}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${NUMBER_RIBOSOMAL_READS}\t${READS_MAPPED}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
+cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Reports/sample_report.csv && echo -e "${LIBRARY_NAME}\t${SAMPLE_TYPE}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${NUMBER_RIBOSOMAL_READS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Reports/sample_report.csv
 
