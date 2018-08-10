@@ -16,10 +16,11 @@ input_table <- read.csv(input,sep=",")
 DataGroups <- input_table$Type
 fpkm <- repFpkmMatrix(genes(cuff_data))
 pca <- rbind(fpkm,type=as.character(DataGroups))
-png("cummeRbund-pca.png", w=1000, h=1000, pointsize=20)
-autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=4)+ 
-  theme(plot.title = element_text(face="bold",hjust=0.5,size=20),legend.text=element_text(size=12),
-        legend.title=element_blank(),axis.text = element_text(size=12))
+png("cummeRbund-pca.png", w=1000, h=1000, pointsize=30)
+autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=10)+ 
+  theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=30),
+        legend.title=element_blank(),axis.text = element_text(size=30),
+        axis.title=element_text(size=30))
 dev.off()
 
 # #Retrive significant gene IDs (XLOC) with a pre-specified alpha
