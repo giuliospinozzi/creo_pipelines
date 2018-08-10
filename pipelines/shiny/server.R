@@ -384,7 +384,9 @@ shinyServer(function(input, output, session) {
   
   Report <- eventReactive(input$download,{
     disable("download") 
-    rmarkdown::render("report.Rmd",
+    tempReport <- file.path(tempdir(), "report.Rmd")
+    file.copy("report.Rmd", tempReport, overwrite = TRUE)
+    rmarkdown::render(tempReport,
                       output_file = paste0(out_dir,"/reports/my-report.",switch(
                         input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
                       )),
