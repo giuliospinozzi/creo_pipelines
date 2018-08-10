@@ -206,8 +206,8 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['library_type',library_type])
         filewriter.writerow(['quantification_method',q_method])
         filewriter.writerow(['dea_method',dea_method])
-        filewriter.writerow(['sample_names',sample_name])
-        filewriter.writerow(['sample_types',stype])
+#        filewriter.writerow(['sample_names',sample_name])
+#        filewriter.writerow(['sample_types',stype])
         csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/Reports/sample_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
