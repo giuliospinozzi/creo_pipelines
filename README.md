@@ -80,5 +80,5 @@ A series of windows allow to indicate the input files and to choose between the 
 <p align="center"><img src="/images/GUI_screenshot.png" width="55%"></p>
 
 ### Shiny app
-To observe the results of the analysis in an interactive form, it is possible to launch a shiny app.
+To observe the results of the analysis in an interactive form, it is possible to launch a [shiny app](shiny.md).
 
