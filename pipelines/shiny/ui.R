@@ -193,7 +193,7 @@ shinyUI(fluidPage(
                             tags$h1("References")
                           ),
                           tags$ul(style="font-size: 20px",
-                                  tags$li("S. Andrews, “FastQC: A quality control tool for high throughput sequence data.,” Http://Www.Bioinformatics.Babraham.Ac.Uk/Projects/Fastqc/, 2010. ."), 
+                                  tags$li("S. Andrews, “FastQC: A quality control tool for high throughput sequence data.,” Http://Www.Bioinformatics.Babraham.Ac.Uk/Projects/Fastqc/, 2010."), 
                                   tags$li("S. Andrews, “FastQ Screen,” http://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/, 2011."), 
                                   tags$li("H. Li and R. Durbin, “Fast and accurate short read alignment with Burrows-Wheeler transform,” Bioinformatics, vol. 25, no. 14, pp. 1754–1760, 2009."),
                                   tags$li("H. Li, “A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data,” Bioinformatics, vol. 27, no. 21, pp. 2987–2993, 2011."),
@@ -206,15 +206,15 @@ shinyUI(fluidPage(
                                   tags$li("M. D. Robinson, D. J. McCarthy, and G. K. Smyth, “edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.,” Bioinformatics, vol. 26, no. 1, pp. 139–40, 2010."),
                                   tags$li("D. J. McCarthy, Y. Chen, and G. K. Smyth, “Differential expression analysis of multifactor RNA-Seq experiments with respect to biological variation,” Nucleic Acids Res., vol. 40, no. 10, pp. 4288–4297, 2012."),
                                   tags$li("M. I. Love, W. Huber, et al., “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2,” Genome Biol., vol. 15, no. 12, p. 550, 2014."),
-                                  tags$li("Yuan Tang, Masaaki Horikoshi, and Wenxuan Li. “ggfortify: Unified Interface to Visualize Statistical Result of Popular R Packages.” The R Journal 8.2 (2016): 478-489."),
+                                  tags$li("Yuan Tang, Masaaki Horikoshi, and Wenxuan Li. “ggfortify: Unified Interface to Visualize Statistical Result of Popular R Packages.” The R Journal 8.2, pp. 478-489, 2016."),
                                   tags$li("Masaaki Horikoshi and Yuan Tang, “ggfortify: Data Visualization Tools for Statistical Analysis Results.”, 2016"),
                                   tags$li("J. Graffelman, “calibrate: Calibration of Scatterplot and Biplot Axes.,” R Packag. version 1.7.2., 2013."),
                                   tags$li("R. Gentleman, V. Carey, W. Huber, and F. Hahne, “genefilter: methods for filtering genes from high-throughput experiments.,” R Packag. version 1.60.0., 2017."),
                                   tags$li("G. R. Warnes, B. Bolker, L. Bonebakker, R. Gentleman, W. H. A. Liaw, T. Lumley, M. Maechler, A. Magnusson, S. Moeller, M. Schwartz, and B. Venables, “gplots: Various R Programming Tools for Plotting Data,” R Packag. version 3.0.1., 2016."),
-                                  tags$li("Yihui Xie, “DT: A Wrapper of the JavaScript Library 'DataTables'.” R package version 0.4., 2018"),
-                                  tags$li("Jeroen Ooms, “magick: Advanced Graphics and Image-Processing in R.” R package version 1.9., 2018"),
-                                  tags$li("Almende B.V., Benoit Thieurmel and Titouan Robert, “visNetwork: Network Visualization using 'vis.js' Library.” R package version 2.0.4., 2018"),
-                                  tags$li("Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson, “shiny: Web Application Framework for R.” R package version 1.0.5., 2017")
+                                  tags$li("Yihui Xie, “DT: A Wrapper of the JavaScript Library 'DataTables'.” R package version 0.4., 2018."),
+                                  tags$li("Jeroen Ooms, “magick: Advanced Graphics and Image-Processing in R.” R package version 1.9., 2018."),
+                                  tags$li("Almende B.V., Benoit Thieurmel and Titouan Robert, “visNetwork: Network Visualization using 'vis.js' Library.” R package version 2.0.4., 2018."),
+                                  tags$li("Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson, “shiny: Web Application Framework for R.” R package version 1.0.5., 2017.")
                           )
                         ))
                

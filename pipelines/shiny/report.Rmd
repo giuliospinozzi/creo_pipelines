@@ -158,25 +158,25 @@ print(cnet_path)
 
 # References
 
-* "S. Andrews, “FastQC: A quality control tool for high throughput sequence data.,” Http://Www.Bioinformatics.Babraham.Ac.Uk/Projects/Fastqc/, 2010. ."
+* S. Andrews, “FastQC: A quality control tool for high throughput sequence data.,” Http://Www.Bioinformatics.Babraham.Ac.Uk/Projects/Fastqc/, 2010. 
 * "S. Andrews, “FastQ Screen,” http://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/, 2011." 
-* "H. Li and R. Durbin, “Fast and accurate short read alignment with Burrows-Wheeler transform,” Bioinformatics, vol. 25, no. 14, pp. 1754–1760, 2009."
-* "H. Li, “A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data,” Bioinformatics, vol. 27, no. 21, pp. 2987–2993, 2011."
-* "D. Kim, G. Pertea, C. Trapnell, H. Pimentel, R. Kelley, and S. L. Salzberg, “TopHat2: Accurate alignment of transcriptomes in the presence of insertions, deletions and gene fusions,” Genome Biol., vol. 14, no. 4, 2013."
-* "L. Wang, S. Wang, and W. Li, “RSeQC: quality control of RNA-seq experiments,” Bioinformatics, vol. 28, no. 16, pp. 2184–2185, 2012."
-* "D. Kim, B. Langmead, and S. L. Salzberg, “HISAT: A fast spliced aligner with low memory requirements,” Nat. Methods, vol. 12, no. 4, pp. 357–360, 2015."
-* "Y. Liao, G. K. Smyth, and W. Shi, “FeatureCounts: An efficient general purpose program for assigning sequence reads to genomic features,” Bioinformatics, vol. 30, no. 7, pp. 923–930, 2014."
-* "C. Trapnell, B. A. Williams, G. Pertea, A. Mortazavi, G. Kwan, M. J. Van Baren, S. L. Salzberg, B. J. Wold, and L. Pachter, “Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation,” Nat. Biotechnol., vol. 28, no. 5, pp. 511–515, 2010."
-* "L. A. Goff, C. Trapnell, and D. Kelley, “cummeRbund: Analysis, exploration, manipulation, and visualization of Cufflinks high-throughput sequencing data,” R Packag. Version 2.2, 2012."
-* "M. D. Robinson, D. J. McCarthy, and G. K. Smyth, “edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.,” Bioinformatics, vol. 26, no. 1, pp. 139–40, 2010."
-* "D. J. McCarthy, Y. Chen, and G. K. Smyth, “Differential expression analysis of multifactor RNA-Seq experiments with respect to biological variation,” Nucleic Acids Res., vol. 40, no. 10, pp. 4288–4297, 2012."
-* "M. I. Love, W. Huber, et al., “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2,” Genome Biol., vol. 15, no. 12, p. 550, 2014."
-* "Yuan Tang, Masaaki Horikoshi, and Wenxuan Li. “ggfortify: Unified Interface to Visualize Statistical Result of Popular R Packages.” The R Journal 8.2 (2016): 478-489."
-* "Masaaki Horikoshi and Yuan Tang, “ggfortify: Data Visualization Tools for Statistical Analysis Results.”, 2016"
-* "J. Graffelman, “calibrate: Calibration of Scatterplot and Biplot Axes.,” R Packag. version 1.7.2., 2013."
-* "R. Gentleman, V. Carey, W. Huber, and F. Hahne, “genefilter: methods for filtering genes from high-throughput experiments.,” R Packag. version 1.60.0., 2017."
-* "G. R. Warnes, B. Bolker, L. Bonebakker, R. Gentleman, W. H. A. Liaw, T. Lumley, M. Maechler, A. Magnusson, S. Moeller, M. Schwartz, and B. Venables, “gplots: Various R Programming Tools for Plotting Data,” R Packag. version 3.0.1., 2016."
-* "Yihui Xie, “DT: A Wrapper of the JavaScript Library 'DataTables'.” R package version 0.4., 2018"
-* "Jeroen Ooms, “magick: Advanced Graphics and Image-Processing in R.” R package version 1.9., 2018"
-* "Almende B.V., Benoit Thieurmel and Titouan Robert, “visNetwork: Network Visualization using 'vis.js' Library.” R package version 2.0.4., 2018"
-* "Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson, “shiny: Web Application Framework for R.” R package version 1.0.5., 2017"
+* H. Li and R. Durbin, “Fast and accurate short read alignment with Burrows-Wheeler transform,” Bioinformatics, vol. 25, no. 14, pp. 1754–1760, 2009.
+* H. Li, “A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data,” Bioinformatics, vol. 27, no. 21, pp. 2987–2993, 2011.
+* D. Kim, G. Pertea, C. Trapnell, H. Pimentel, R. Kelley, and S. L. Salzberg, “TopHat2: Accurate alignment of transcriptomes in the presence of insertions, deletions and gene fusions,” Genome Biol., vol. 14, no. 4, 2013.
+* L. Wang, S. Wang, and W. Li, “RSeQC: quality control of RNA-seq experiments,” Bioinformatics, vol. 28, no. 16, pp. 2184–2185, 2012.
+* D. Kim, B. Langmead, and S. L. Salzberg, “HISAT: A fast spliced aligner with low memory requirements,” Nat. Methods, vol. 12, no. 4, pp. 357–360, 2015.
+* Y. Liao, G. K. Smyth, and W. Shi, “FeatureCounts: An efficient general purpose program for assigning sequence reads to genomic features,” Bioinformatics, vol. 30, no. 7, pp. 923–930, 2014.
+* C. Trapnell, B. A. Williams, G. Pertea, A. Mortazavi, G. Kwan, M. J. Van Baren, S. L. Salzberg, B. J. Wold, and L. Pachter, “Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation,” Nat. Biotechnol., vol. 28, no. 5, pp. 511–515, 2010.
+* L. A. Goff, C. Trapnell, and D. Kelley, “cummeRbund: Analysis, exploration, manipulation, and visualization of Cufflinks high-throughput sequencing data,” R Packag. Version 2.2, 2012.
+* M. D. Robinson, D. J. McCarthy, and G. K. Smyth, “edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.,” Bioinformatics, vol. 26, no. 1, pp. 139–40, 2010.
+* D. J. McCarthy, Y. Chen, and G. K. Smyth, “Differential expression analysis of multifactor RNA-Seq experiments with respect to biological variation,” Nucleic Acids Res., vol. 40, no. 10, pp. 4288–4297, 2012.
+* M. I. Love, W. Huber, et al., “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2,” Genome Biol., vol. 15, no. 12, p. 550, 2014.
+* Yuan Tang, Masaaki Horikoshi, and Wenxuan Li. “ggfortify: Unified Interface to Visualize Statistical Result of Popular R Packages.” The R Journal 8.2, pp. 478-489, 2016.
+* Masaaki Horikoshi and Yuan Tang, “ggfortify: Data Visualization Tools for Statistical Analysis Results.”, 2016.
+* J. Graffelman, “calibrate: Calibration of Scatterplot and Biplot Axes.,” R Packag. version 1.7.2., 2013.
+* R. Gentleman, V. Carey, W. Huber, and F. Hahne, “genefilter: methods for filtering genes from high-throughput experiments.,” R Packag. version 1.60.0., 2017.
+* G. R. Warnes, B. Bolker, L. Bonebakker, R. Gentleman, W. H. A. Liaw, T. Lumley, M. Maechler, A. Magnusson, S. Moeller, M. Schwartz, and B. Venables, “gplots: Various R Programming Tools for Plotting Data,” R Packag. version 3.0.1., 2016.
+* Yihui Xie, “DT: A Wrapper of the JavaScript Library 'DataTables'.” R package version 0.4., 2018.
+* Jeroen Ooms, “magick: Advanced Graphics and Image-Processing in R.” R package version 1.9., 2018.
+* Almende B.V., Benoit Thieurmel and Titouan Robert, “visNetwork: Network Visualization using 'vis.js' Library.” R package version 2.0.4., 2018.
+* Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson, “shiny: Web Application Framework for R.” R package version 1.0.5., 2017.

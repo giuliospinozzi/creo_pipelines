@@ -73,7 +73,9 @@ topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 35 )
 rownames(diffGenesOutput1)=diffGenesOutput1$Row.names
 lab <- as.character(diffGenesOutput1[rownames(fpkm[ topVarGenes, ]),"Gene"])
 png("cummeRbund-heatmap-topVarGenes.png", w=1000, h=1000, pointsize=20)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, scale="row", trace="none", dendrogram="column", col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255),labRow = lab)
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.75, cexRow=0.7, offsetRow=-0.4, offsetCol=-0.4, 
+           scale="row", trace="none", dendrogram="none", main="Top Variance Genes Heatmap",
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255),labRow = lab)
 dev.off()
 
 # Sample distance heatmap

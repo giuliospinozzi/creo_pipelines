@@ -192,13 +192,13 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     os.system(cmd1)
     cmd2="mkdir "+output_dir+"/"+project_name+"/"+pool_name
     os.system(cmd2)
-    cmd3="mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Reports"
+    cmd3="mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/reports"
     os.system(cmd3)    
     with open(output_dir+'/'+project_name+'/'+pool_name+'/input.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
         csvfile.close()
-    with open(output_dir+'/'+project_name+'/'+pool_name+'/Reports/general_report.csv', 'wb') as csvfile:
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['project_name',project_name])
         filewriter.writerow(['pool_name',pool_name])
@@ -209,7 +209,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
 #        filewriter.writerow(['sample_names',sample_name])
 #        filewriter.writerow(['sample_types',stype])
         csvfile.close()
-    with open(output_dir+'/'+project_name+'/'+pool_name+'/Reports/sample_report.csv', 'wb') as csvfile:
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads'])
         csvfile.close()

@@ -70,7 +70,6 @@ volcano=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
 heat1=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
                             pattern = "-heatmap-topVarGenes.png",
                             full.names = T))
-heat1=image_annotate(heat1,"Top variance genes heatmap",gravity = "North",size = 30)
 heat2=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
                             pattern = "-heatmap-samples.png",
                             full.names = T))
