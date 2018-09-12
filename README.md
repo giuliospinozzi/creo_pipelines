@@ -9,7 +9,8 @@ Bioinformatics Pipelines
 #### For Graphical User Interface and scripts running:
 *	zenity 3.18.1.1
 *	Python 2.7.12 (modules: os, argparse, sys, csv, pandas)
-*	R 3.4.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, calibrate, genefilter, RColorBrewer, gplots, clusterProfiler, dplyr, org.Hs.eg.db, igraph, scales, treemap, pathview)
+*	R 3.4.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, calibrate, genefilter, RColorBrewer, gplots, clusterProfiler, dplyr, org.Hs.eg.db, igraph, scales, treemap, pathview, shiny, DT, magick, rlist, visNetwork, shinyjs)
+* pandoc
 #### For quality control on fastq files and pre-processing:
 *	FastQC 0.11.5
 *	FastQ Screen 0.11.3
@@ -77,3 +78,7 @@ Bioinformatics Pipelines
 A series of windows allow to indicate the input files and to choose between the various options.
 
 <p align="center"><img src="/images/GUI_screenshot.png" width="55%"></p>
+
+### Shiny app
+To observe the results of the analysis in an interactive form, it is possible to launch a shiny app.
+
