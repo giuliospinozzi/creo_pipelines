@@ -1,9 +1,9 @@
 # Shiny app
 <p align="justify"> To observe the results of the analysis in an interactive form, it is possible to launch a shiny app using the following command, with the same path used in the analysis: </p>
 
-```R -e "shiny::runApp('/path/to/shiny/app/directory/',port=8080,host='141.250.134.204')" --args "/output_dir/project_name/pool_name"```
+```R -e "shiny::runApp('/path/to/shiny/app/directory/',port=8080,host='localhost')" --args "/output_dir/project_name/pool_name"```
 
-<p align="justify"> The shiny app will be available at the address indicated (in the example it is http://141.250.134.204:8080). It shows the results of the RNA-Seq analysis divided into a series of tabs for each phase. </p>
+<p align="justify"> The shiny app will be available at the address indicated (in the example it is http://localhost:8080). It shows the results of the RNA-Seq analysis divided into a series of tabs for each phase. </p>
 
 ## Summary
 <p align="center"><img src="/images/shiny1_summary.png" width="75%"></p>
