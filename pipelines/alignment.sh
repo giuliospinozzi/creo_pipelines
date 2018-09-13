@@ -210,5 +210,5 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 #	read_quality.py -i ${BAM} -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/RSeQC/${LIBRARY_NAME};
 fi
 
-cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Reports/sample_report.csv && echo -e "${LIBRARY_NAME}\t${SAMPLE_TYPE}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${NUMBER_RIBOSOMAL_READS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Reports/sample_report.csv
+cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv && echo -e "${LIBRARY_NAME}\t${SAMPLE_TYPE}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${NUMBER_RIBOSOMAL_READS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
 
