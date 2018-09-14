@@ -59,7 +59,7 @@ FastQ Screen is useful for evaluating the amount of contaminating genome. The ou
 
 FastQC is a software that returns a series of output plots useful for evaluating the quality of the sequence. The best and simplest plot to evaluate the quality of the reads is the one that shows the values of the Phread Score contained in the FastQ files through the boxplots based on the position on the read. The values found in the green zone are considered of good quality.
 
-```{r comment="", results='asis', fig.align='center', message=FALSE}
+```{r comment="", results='asis', fig.align='center', message=FALSE, out.width = "90%", dpi = 500}
 library(magick,quietly = T)
 library(rlist)
 sam=as.character(sam_sum$sample_name)
@@ -86,7 +86,7 @@ for (i in 1:length(sam)) {
 
 # BAM quality
 
-```{r comment="", results='asis'}
+```{r comment="", results='asis', fig.align="center", out.width = "90%", dpi = 500}
 if (gen_sum[3,1]=="tophat") {
   cat("TopHat2 is an alignment software that provides an initial phase of alignment on the transcriptome, followed by the mapping of the remaining reads on the genome and the subsequent splicing alignment for the multi-exon sequences. The parameters used are the following:  
 
