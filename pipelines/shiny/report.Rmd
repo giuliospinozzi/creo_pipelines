@@ -1,11 +1,11 @@
 ---
 title: "RNA-Seq analysis"
 output:
-  html_document: 
+  word_document: 
     toc: true
   pdf_document: 
     toc: true
-  word_document: 
+  html_document: 
     toc: true
 params:
   out_dir: NA
@@ -24,6 +24,27 @@ library(knitr)
 out_dir=params$out_dir
 gen_sum=read.csv(paste0(out_dir,"/reports/general_report.csv"),sep="\t",header = F,row.names = 1)
 kable(gen_sum,col.names = "Summary table")
+```
+
+An initial quality control was made on the FastQ files with FastQ Screen and FastQC, followed by a preprocessing to eliminate the reads of contaminating DNA, such as the PhiX genome and the ribosomal genome (see below for more details). An alignment of the reads with bwa on the PhiX and ribosomal genomes has been performed with the following thresholds:
+
+* ```-k 16```   --- Minimum seed length. Matches shorter than 16 will be missed. The alignment speed is usually insensitive to this value unless it significantly deviates 20.
+* ```-r 1```  --- Trigger re-seeding for a MEM longer than minSeedLen. This is a key heuristic parameter for tuning the performance. Larger value yields fewer seeds, which leads to faster alignment speed but lower accuracy.
+* ```-M```  --- Mark shorter split hits as secondary (for Picard compatibility).
+* ```-T 15```   --- Don’t output alignment with score lower than 15. This option only affects output.
+* ```-v 1```  --- Control the verbose level of the output. This option has not been fully supported throughout BWA. Ideally, a value 0 for disabling all the output to stderr; 1 for outputting errors only; 2 for warnings and errors; 3 for all normal messages; 4 or higher for debugging. When this option takes value 4, the output is not SAM.
+
+On the aligned reads a samtools view filter was then applied to distinguish only the best alignments, which are the DNA reads to be eliminated from the initial FastQ files. The parameters used are the following:
+
+* ``` -F 2308 ``` --- Do not output alignments with any bits set in INT present in the FLAG field. 
+* ``` -q 25 ``` --- Skip alignments with MAPQ smaller than 25.
+* ``` -f 35 ``` --- Only output alignments with all bits set in INT present in the FLAG field.
+* ``` -u ``` --- Output uncompressed BAM. This option saves time spent on compression/decompression and is thus preferred when the output is piped to another samtools command.
+* ```-S``` --- Ignored for compatibility with previous samtools versions. Previously this option was required if input was in SAM format, but now the correct format is automatically detected by examining the first few characters of input.
+
+The numbers of raw reads and reads removed in the various steps are as follows:
+
+```{r comment="", results='asis'}
 sam_sum=read.csv(paste0(out_dir,"/reports/sample_report.csv"),sep="\t",header = T)
 kable(sam_sum)
 ```
@@ -32,8 +53,14 @@ kable(sam_sum)
 
 # FastQ quality
 
-```{r comment="", results='asis', fig.align='center'}
-library(magick)
+The quality control on FastQ files was made with FastQ Screen and FastQC.  
+
+FastQ Screen is useful for evaluating the amount of contaminating genome. The output of FastQ Screen shows the percentage of DNA of sample reads mapped on different genomes and in particular human, murine, PhiX and ribosomal genomes. To calculate this percentage, 100,000 random reads are selected from the sample and they are sequenced on the reference genomes, then the result is multiplied by the rest of the genome.  
+
+FastQC is a software that returns a series of output plots useful for evaluating the quality of the sequence. The best and simplest plot to evaluate the quality of the reads is the one that shows the values of the Phread Score contained in the FastQ files through the boxplots based on the position on the read. The values found in the green zone are considered of good quality.
+
+```{r comment="", results='asis', fig.align='center', message=FALSE}
+library(magick,quietly = T)
 library(rlist)
 sam=as.character(sam_sum$sample_name)
 for (i in 1:length(sam)) {
@@ -58,6 +85,30 @@ for (i in 1:length(sam)) {
 \pagebreak
 
 # BAM quality
+
+```{r comment="", results='asis'}
+if (gen_sum[3,1]=="tophat") {
+  cat("TopHat2 is an alignment software that provides an initial phase of alignment on the transcriptome, followed by the mapping of the remaining reads on the genome and the subsequent splicing alignment for the multi-exon sequences. The parameters used are the following:  
+
+* ``` --mate-inner-dist 0 ``` ---  This is the expected (mean) inner distance between mate pairs.
+* ``` --mate-std-dev 80 ``` --- The standard deviation for the distribution on inner distances between mate pairs.
+* ``` --no-coverage-search ``` --- Disables the coverage based search for junctions.
+
+The library-type option is used to specify the strand-specific information, that can be of three types: fr-unstrand, fr-firststrand, fr-secondstrand. The secondstrand means a read corresponds to a transcript, while the firststrand means a read corresponds to the reverse complemented counterpart of a transcript, while the unstrand both. The deafult option is fr-firststrand, which can be changed to fr-secondstrand among the initial options.  ")
+}
+
+if (gen_sum[3,1]=="hisat") {
+  cat("HISAT2 is an alignment software that uses indexing schemes based on the Burrows-Wheeler transform and on the Ferragina-Manzini index (FM) using two types of alignment indexing: an FM index on the whole genome to anchor the various alignments and numerous local FM indexes for a rapid extension of these alignments. The parameters used are the following:  
+
+* ``` --dta ``` ---  Report alignments tailored for transcript assemblers including StringTie. With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.  
+
+The rna-strandness option is used to specify the strand-specific information, that can be of three types: unstrand, FR, RF. FR (corresponding to fr-secondstrand) means a read corresponds to a transcript, while RF (corresponding to fr-firststrand) means a read corresponds to the reverse complemented counterpart of a transcript, while the unstrand both. The deafult option is fr-firststrand (RF), which can be changed to fr-secondstrand (FR) among the initial options.  ")
+}
+```
+
+The quality of the BAM files was evaluated using RSeQC software, using a series of python scripts for creating different plots and in particular: inner_distance, which serves to measure the distribution of the internal distance between paired reads; junction_annotation, which determines which splice junctions are known, completely new or partially new based on the reference genome; junction_saturation, which determines whether the sequencing depth is sufficient for alternative splicing analysis; bam_stat, which makes statistics on read mapping; read_distribution, which calculates the fraction of reads mapped to the coding exon portion, the 5'-UTR region, the 3'-UTR region and the intron or intragenic regions.  
+
+The following are some of the outputs obtained for the various samples. In the first table are reported statistics related to the reads mapping, in the second table are reported reads fractions mapped on the coding exon part, on the 5'-UTR region, on the 3'-UTR region and on the intronic or intragenic regions, the final image shows the distribution of the internal distance between paired reads.
 
 ```{r comment="", fig.align='center', out.width = "90%", dpi = 500}
 
@@ -93,6 +144,42 @@ for (i in 1:length(sam)) {
 \pagebreak
 
 # Differential expression analysis
+```{r comment="", results='asis'}
+if (gen_sum[5,1]=="Cufflinks") {
+  cat("The quantification was performed with Cufflinks, a software that, starting from the alignment output of TopHat2, proceeds first with the assembly of the transcripts, including all the different isoforms, then calculates the abundance and estimates the most likely by the value of likelihood.  
+
+")
+}
+
+if (gen_sum[5,1]=="featureCounts") {
+  cat("The quantification was performed with featureCounts, a software that, starting from the alignment output of HISAT2, calculates the abundance of the transcripts using the simple method of reads count. The parameters used are the following:  
+
+* ```-p``` --- If specified, fragments (or templates) will be counted instead of reads.  
+
+")
+}
+```
+
+```{r comment="", results='asis'}
+if (gen_sum[6,1]=="cummeRbund") {
+  cat("For the differential expression analysis the Cuffdiff function of Cufflinks was used, while for the representation of the results the R package “cummeRbund”.  
+Cuffdiff is a software that, starting from the quantification of the transcripts operated by Cufflinks, calculates the levels of differential expression between different conditions by testing the log of the Fold Change observed against the null hypothesis of no change, which corresponds to a value of Fold Change equal to zero.  
+The results obtained with Cuffdiff were then processed with cummeRbund.  
+")
+}
+
+if (gen_sum[6,1]=="DESeq2") {
+  cat("For the differential expression analysis the R package “DESeq2” was used. It is based on a generalized linear model where the counts for each gene for each sample are modeled using a negative binomial distribution. The p-value for the differential expression between the different groups is calculated by a Wald test, which consists in dividing the value of log2-Fold Change estimated for each gene for the estimated error of the same; in this way a z value is obtained which must be compared with the normal distribution to obtain the p-value. Finally, the p-value obtained is adjusted by the FDR method.")
+}
+
+if (gen_sum[6,1]=="edgeR") {
+  cat("For the differential expression analysis the R package “edgeR” was used. Before the differential analysis, the genes were filtered to keep those that have at least one count per million in at least two samples. After filtering, the data were normalized through the TMM method (Trimmed Mean of M values). The model used is a GLM, a generalized linear model, which represents an extension of the simplest linear model. Each gene is fitted through a negative binomial distribution. Differential expression analysis is performed by a likelihood ratio test. It consists in comparing the logarithm of the calculated likelihood for two different models, one of which is the one obtained under the null hypothesis. The value obtained is compared with the corresponding probability distribution and thus the p-value is obtained, which is then corrected by the FDR method.")
+}
+```
+
+Outputs consist of a matrix with differential expression results, a PCA, a volcano plot, a top genes heatmap, and a sample distance heatmap. Following are: the PCA to evaluate the differences between the samples; the volcano plot, which reports the values of Fold Change and p-value for all genes; the heatmap of the 35 genes with greater variance, in which the value of the Z-score is reported and therefore the distance from the mean for the various samples; the heatmap showing the distances between the samples, calculated in a distance matrix using the euclidean distance method.  
+
+
 
 ```{r fig.align='center', out.width = "90%", dpi = 500}
 pca=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
@@ -108,7 +195,6 @@ cat("\n\n")
 heat1=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
                             pattern = "-heatmap-topVarGenes.png",
                             full.names = T))
-heat1=image_annotate(heat1,"Top variance genes heatmap",gravity = "North",size = 30)
 print(heat1)
 cat("\n\n")
 heat2=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
@@ -123,6 +209,12 @@ print(heat2)
 # Meta-analysis
 
 ## Gene ontology
+
+The Gene Ontology database, developed by the GO consortium, allows to analyze genes on the basis of their molecular function, the biological process in which they intervene or the cellular localization of their products. One of the main uses of GO is to perform enrichment analysis on gene sets. For the analysis of GO, the R package "clusterProfiler" was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
+
+The outputs obtained are a treemap, three cnetplot and three dotplot (one for GO domain). The treemap reports the terms of GO enriched with dimensions of the rectangles proportional to the number of genes. In the dotplots, instead, the five most enriched terms (with lower p-values) are reported with dimensions proportional to the number of genes. Finally, the same five terms of the dotplots are shown in the cnetplots to show the genes that have been enriched.  
+
+
 
 ```{r fig.align='center', out.width = "100%", dpi = 500}
 tree=image_read_pdf(paste0(out_dir,"/Meta-analysis/Gene_ontology/treemap_GO_fc1.5_pv0.05.pdf"))
@@ -145,6 +237,12 @@ cat("\n\n")
 ```
 
 ## Pathway analysis
+
+Another method of gene clustering is to use the pathway analysis in order to relate the genes obtained from previous analysis with the metabolic and signaling pathways present in public databases. One of the most used pathway database is the Kyoto Encyclopedia of Genes and Genomes (KEGG), which since its introduction in 1995 has proved a useful reference for the understanding of biological pathways. For the pathway analysis, the R package "clusterProfiler" was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
+
+The outputs obtained are a dotplot and a cnetplot. In both are shown the five most enriched pathways (with lower p-values).  
+
+
 
 ```{r fig.align='center', out.width = "100%", dpi = 500}
 dot=image_read_pdf(paste0(out_dir,"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))
