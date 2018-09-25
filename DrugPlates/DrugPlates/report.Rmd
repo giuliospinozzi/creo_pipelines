@@ -1,0 +1,242 @@
+---
+title: ""
+output: pdf_document
+params:
+  conc1: NA
+  conc2: NA
+  conc3: NA
+  conc4: NA
+  unit: NA
+  cell_num: NA
+  name1: NA
+  file1: NA
+  sep1: NA
+  col1: NA
+  name2: NA
+  file2: NA
+  sep2: NA
+  col2: NA
+  name3: NA
+  file3: NA
+  sep3: NA
+  col3: NA
+  name4: NA
+  file4: NA
+  sep4: NA
+  col4: NA
+classoption: landscape
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+```{r fig.align='center', message=FALSE, warning=FALSE, results='asis', out.height = "150%", fig.width=10, fig.height=5}
+library(rlist)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(knitr)
+df1 <-read.csv(params$file1,sep=params$sep1,row.names = 1,dec=".")
+conc=c(rep(params$conc1,3),rep(params$conc2,3),rep(params$conc3,3),rep(params$conc4,3))
+colnames(df1)=conc
+drug=rownames(df1)
+table1=t(df1)
+
+for (i in 1:(ncol(table1))) {
+  df=data.frame(viability=table1[,i],dose=conc)
+  fit <- drm(viability ~ dose, data=df, fct = LL.4(names=c("slope","low","high","IC50")), 
+             type = "continuous")
+  pred.df <- expand.grid(dose=exp(seq(log(max(df$dose)),log(min(df$dose)),length=100))) 
+  pred <- predict(fit,newdata=pred.df,interval="confidence") 
+  pred.df$viability <- pmax(pred[,1],0)
+  pred.df$viability <- pmin(pred.df$viability,100)
+  pred.df$viability.low <- pmax(pred[,2],0)
+  pred.df$viability.low <- pmin(pred.df$viability.low,100)
+  pred.df$viability.high <- pmax(pred[,3],0)
+  pred.df$viability.high <- pmin(pred.df$viability.high,100)
+  colnames(pred.df)=c("conc", "p", "pmin", "pmax")
+      
+  p <- ggplot(df,aes(x=dose,y=viability)) +
+    geom_point(aes(colour=params$name1),size=2.5) +
+    labs(y="viability") +
+    coord_trans(x="log")+theme_bw() +
+    scale_x_continuous(name=paste0("dose (",params$unit,")"),breaks=sort(unique(df$dose))) +
+    ggtitle(paste0("Drug ",colnames(table1)[i])) + 
+    theme(plot.title=element_text(hjust=0.5,face="bold",size=24),
+          axis.text=element_text(size=16),
+          axis.title=element_text(size=18),
+          legend.text=element_text(size=14),
+          legend.title=element_text(size=16)) +
+    theme(axis.text.x = element_text(angle = 35, hjust = 1)) +
+    geom_line(data=pred.df,aes(x=conc,y=p,colour=params$name1),size=0.8) +
+    geom_vline(xintercept=summary(fit)$coefficient[4,1],c,size=0.5,linetype="dashed", 
+               color=params$col1)
+
+  if (params$cell_num==1) {
+    cols=c(params$col1)
+    names(cols)=params$name1
+    p <- p + scale_colour_manual("Cell lines", breaks = params$name1,values = cols) +
+      annotate("text",x=c(signif(summary(fit)$coefficient[4,1],4)), y=c(max(df$viability)),
+               label=c(signif(summary(fit)$coefficient[4,1],4)), color=c(params$col1),size=5)
+    }
+  
+  if (params$cell_num>1) {
+    d.f2 <-read.csv(params$file2,sep=params$sep2,row.names = 1,dec=".")
+    colnames(d.f2)=conc
+    table2=t(d.f2)
+    df2=data.frame(viability=table2[,i],dose=conc)
+    fit2 <- drm(viability ~ dose, data=df2, fct = LL.4(names=c("slope","low","high","IC50")),
+                type = "continuous")
+    pred.df2 <- expand.grid(dose=exp(seq(log(max(df2$dose)),log(min(df2$dose)),length=100)))
+    pred2 <- predict(fit2,newdata=pred.df2,interval="confidence")
+    pred.df2$viability <- pmax(pred2[,1],0)
+    pred.df2$viability <- pmin(pred.df2$viability,100)
+    pred.df2$viability.low <- pmax(pred2[,2],0)
+    pred.df2$viability.low <- pmin(pred.df2$viability.low,100)
+    pred.df2$viability.high <- pmax(pred2[,3],0)
+    pred.df2$viability.high <- pmin(pred.df2$viability.high,100)
+    colnames(pred.df2)=c("conc", "p", "pmin", "pmax")
+
+    p <- p + geom_point(data=df2,aes(x=dose,y=viability,colour=params$name2),size=2.5) +
+      geom_line(data=pred.df2,aes(x=conc,y=p,colour=params$name2),size=0.8) +
+      geom_vline(xintercept=summary(fit2)$coefficient[4,1],c,size=0.5,linetype="dashed",
+                 color=params$col2)
+    }
+  
+  if (params$cell_num==2) {
+    cols2=c(params$col1,params$col2)
+    names(cols2)=c(params$name1,params$name2)
+    p <- p +
+      scale_colour_manual("Cell lines", breaks = c(params$name1,params$name2), values = cols2) +
+      annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
+                           signif(summary(fit2)$coefficient[4,1],4)),
+               y=c(max(df$viability),
+                   max(df2$viability)),
+               label=c(signif(summary(fit)$coefficient[4,1],4),
+                        signif(summary(fit2)$coefficient[4,1],4)),
+               color=c(params$col1,params$col2),size=5)
+    }
+  
+  if (params$cell_num>2) {
+    d.f3 <-read.csv(params$file3,sep=params$sep3,row.names = 1,dec=".")
+    colnames(d.f3)=conc
+    table3=t(d.f3)
+    df3=data.frame(viability=table3[,i],dose=conc)
+    fit3 <- drm(viability ~ dose, data=df3, fct = LL.4(names=c("slope","low","high","IC50")),
+                type = "continuous")
+    pred.df3 <- expand.grid(dose=exp(seq(log(max(df3$dose)),log(min(df3$dose)),length=100)))
+    pred3 <- predict(fit3,newdata=pred.df3,interval="confidence")
+    pred.df3$viability <- pmax(pred3[,1],0)
+    pred.df3$viability <- pmin(pred.df3$viability,100)
+    pred.df3$viability.low <- pmax(pred3[,2],0)
+    pred.df3$viability.low <- pmin(pred.df3$viability.low,100)
+    pred.df3$viability.high <- pmax(pred3[,3],0)
+    pred.df3$viability.high <- pmin(pred.df3$viability.high,100)
+    colnames(pred.df3)=c("conc", "p", "pmin", "pmax")
+
+    p <- p + geom_point(data=df3,aes(x=dose,y=viability,colour=params$name3),size=2.5) +
+      geom_line(data=pred.df3,aes(x=conc,y=p,colour=params$name3),size=0.8) +
+      geom_vline(xintercept=summary(fit3)$coefficient[4,1],c,size=0.5,linetype="dashed",
+                 color=params$col3)
+    }
+
+  if (params$cell_num==3) {
+    cols3=c(params$col1,params$col2,params$col3)
+    names(cols3)=c(params$name1,params$name2,params$name3)
+    p <- p +
+      scale_colour_manual("Cell lines", breaks = c(params$name1,params$name2,params$name3),
+                          values = cols3) +
+      annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
+                           signif(summary(fit2)$coefficient[4,1],4),
+                           signif(summary(fit3)$coefficient[4,1],4)),
+               y=c(max(df$viability),
+                   max(df2$viability),
+                   max(df3$viability)),
+               label=c(signif(summary(fit)$coefficient[4,1],4),
+                       signif(summary(fit2)$coefficient[4,1],4),
+                       signif(summary(fit3)$coefficient[4,1],4)),
+               color=c(params$col1,params$col2,params$col3),size=5)
+    }
+
+  if (params$cell_num>3) {
+    d.f4 <-read.csv(params$file4,sep=params$sep4,row.names = 1,dec=".")
+    colnames(d.f4)=conc
+    table4=t(d.f4)
+    df4=data.frame(viability=table4[,i],dose=conc)
+    fit4 <- drm(viability ~ dose, data=df4, fct = LL.4(names=c("slope","low","high","IC50")),
+                type = "continuous")
+    pred.df4 <- expand.grid(dose=exp(seq(log(max(df4$dose)),log(min(df4$dose)),length=100)))
+    pred4 <- predict(fit4,newdata=pred.df4,interval="confidence")
+    pred.df4$viability <- pmax(pred4[,1],0)
+    pred.df4$viability <- pmin(pred.df4$viability,100)
+    pred.df4$viability.low <- pmax(pred4[,2],0)
+    pred.df4$viability.low <- pmin(pred.df4$viability.low,100)
+    pred.df4$viability.high <- pmax(pred4[,3],0)
+    pred.df4$viability.high <- pmin(pred.df4$viability.high,100)
+    colnames(pred.df4)=c("conc", "p", "pmin", "pmax")
+
+    p <- p + geom_point(data=df4,aes(x=dose,y=viability,colour=params$name4),size=2.5) +
+      geom_line(data=pred.df4,aes(x=conc,y=p,colour=params$name4),size=0.8) +
+      geom_vline(xintercept=summary(fit4)$coefficient[4,1],c,size=0.5,linetype="dashed",
+                 color=params$col4)
+    }
+
+  if (params$cell_num==4) {
+    cols4=c(params$col1,params$col2,params$col3,params$col4)
+    names(cols4)=c(params$name1,params$name2,params$name3,params$name4)
+    p <- p +
+      scale_colour_manual("Cell lines",
+                          breaks = c(params$name1,params$name2,params$name3,params$name4),
+                          values = cols4) +
+      annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
+                           signif(summary(fit2)$coefficient[4,1],4),
+                           signif(summary(fit3)$coefficient[4,1],4),
+                           signif(summary(fit4)$coefficient[4,1],4)),
+               y=c(max(df$viability),
+                   max(df2$viability),
+                   max(df3$viability),
+                   max(df4$viability)),
+               label=c(signif(summary(fit)$coefficient[4,1],4),
+                       signif(summary(fit2)$coefficient[4,1],4),
+                       signif(summary(fit3)$coefficient[4,1],4),
+                       signif(summary(fit4)$coefficient[4,1],4)),
+               color=c(params$col1,params$col2,params$col3,params$col4),size=5)
+    }
+  
+  print(p)
+  
+  if (params$cell_num==1) {
+    a=df1[drug[i],,drop=F]
+    rownames(a)=paste(params$name1, drug[i])
+    print(kable(a, format = "markdown", digits = 3, longtable = TRUE))
+    }
+  
+   if (params$cell_num==2) {
+     a=rbind(df1[i,],d.f2[i,])
+     rownames(a)=c(paste(params$name1, drug[i]), paste(params$name2, drug[i]))
+     print(kable(a, format = "markdown", digits = 3))
+   }
+
+   if (params$cell_num==3) {
+     a=rbind(df1[i,],d.f2[i,])
+     a=rbind(a,d.f3[i,])
+     rownames(a)=c(paste(params$name1,drug[i]), paste(params$name2,drug[i]),
+                   paste(params$name3,drug[i]))
+     print(kable(a, format = "markdown", digits = 3))
+   }
+
+   if (params$cell_num==4) {
+     a=rbind(df1[i,],d.f2[i,])
+     a=rbind(a,d.f3[i,])
+     a=rbind(a,d.f4[i,])
+     rownames(a)=c(paste(params$name1,drug[i]),paste(params$name2,drug[i]),
+                   paste(params$name3,drug[i]),paste(params$name4,drug[i]))
+     print(kable(a, format = "markdown", digits = 3))
+   }
+   
+
+cat("\n\n\\pagebreak\n")
+}
+```
+
