@@ -303,50 +303,9 @@ shinyServer(function(input, output) {
   output$download <- downloadHandler(
     filename = function() {"plot.pdf"},
     content = function(file) {
-      ggsave(file)
+      ggsave(file,width = 10, height = 7)
     }
   )
-  
-  # output$report <- downloadHandler(
-  #   filename = "report.pdf",
-  #   content = function(file) {
-  #     withProgress(message = 'Generating Report', value = 0, {  
-  #     tempReport <- file.path(tempdir(), "report.Rmd")
-  #     file.copy("report.Rmd", tempReport, overwrite = TRUE)
-  #     incProgress(1/3)
-  #     params <- list(conc1 = input$conc1, conc2 = input$conc2, conc3 = input$conc3, 
-  #                    conc4 = input$conc4, unit = input$unit, cell_num = input$cell_num,
-  #                    name1 = input$name1, file1 = input$file1$datapath, sep1 = input$sep1,
-  #                    col1 = input$col1, name2 = NULL, file2 = NULL, sep2 = NULL, col2 = NULL,
-  #                    name3 = NULL, file3 = NULL, sep3 = NULL, col3 = NULL, name4 = NULL, 
-  #                    file4 = NULL, sep4 = NULL, col4 = NULL)
-  #     if (input$cell_num>=2) {
-  #       params$name2 = input$name2
-  #       params$file2 = input$file2$datapath
-  #       params$sep2 = input$sep2
-  #       params$col2 = input$col2
-  #     }
-  #     if (input$cell_num>=3) {
-  #       params$name3 = input$name3
-  #       params$file3 = input$file3$datapath
-  #       params$sep3 = input$sep3
-  #       params$col3 = input$col3
-  #     }
-  #     if (input$cell_num>=4) {
-  #       params$name4 = input$name4
-  #       params$file4 = input$file4$datapath
-  #       params$sep4 = input$sep4
-  #       params$col4 = input$col4
-  #     }
-  #     incProgress(1/3)
-  #     rmarkdown::render(tempReport, output_file = file,
-  #                       params = params,
-  #                       envir = new.env(parent = globalenv())
-  #     )
-  #     incProgress(1/3)
-  #     })
-  #   }
-  # )
   
   Report <- eventReactive(input$report,{
     withProgress(message = 'Generating Report', value = 0, {  

@@ -121,17 +121,17 @@ shinyUI(fluidPage(
       ),
       hr(),
       textInput('out_dir',strong("Project Name (no spaces):"),paste0("Project_",Sys.Date())),
-      fluidRow(column(12, align="center", actionButton("report","Generate report")))
-    ),
+      fluidRow(column(12, align="center", actionButton("report","Generate report"))),
+      br(),
+      uiOutput("text"),
+      tags$head(tags$style("#text{color: red;
+                           font-size: 14px;
+                           }"
+      )
+      )
+      ),
     
     mainPanel(align="center",
-              br(),
-              uiOutput("text"),
-              tags$head(tags$style("#text{color: red;
-                                   font-size: 14px;
-                                   }"
-                        )
-              ),
               br(),
               conditionalPanel(
                 condition = "output.fileUploaded",
@@ -144,6 +144,6 @@ shinyUI(fluidPage(
               plotOutput("plot"),
               br(),
               uiOutput("downloadData")
-              )
     )
-))
+      )
+  ))
