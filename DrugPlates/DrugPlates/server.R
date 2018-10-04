@@ -5,6 +5,10 @@ library(ggplot2)
 library(grid)
 library(gridExtra)
 library(rlist)
+library(reshape2)
+library(plyr)
+library(tidyr)
+library(gplots)
 
 shinyServer(function(input, output) {
   
@@ -361,5 +365,247 @@ shinyServer(function(input, output) {
       tagList("Report is available here:", url)
     }
   })
+  
+  ############ synergy ################
+  
+  output$fileUploaded1 <- reactive({
+    return(is.null(input$file1.1))
+  })
+  outputOptions(output, 'fileUploaded1',suspendWhenHidden=FALSE)
+  
+  filedata1.1 <- reactive({
+    infile <- input$file0
+    if (is.null(infile)) {return(NULL)}
+    read.csv(infile$datapath,sep=";",row.names = 1) 
+  })
+  
+  filedata1.2 <- reactive({
+    infile <- input$file1.1
+    if (is.null(infile)) {return(NULL)}
+    read.csv(infile$datapath,sep=";",row.names = 1,header = F) 
+  })
+  
+  output$syn1 <- renderTable({
+    if (is.null(input$file0)) {return(NULL)}
+    data=filedata1.1()
+    conc.data=c(input$conc1.1,input$conc2.1,input$conc3.1,input$conc4.1,input$conc5.1,input$conc6.1,
+                input$conc7.1,input$conc8.1)
+    colnames(data)=rep(conc.data,3)
+    rownames(data)=rev(conc.data)
+    new.data=data[,1:8]
+    for (j in 1:8) {
+      for (i in 1:8) {
+        new.data[j,i]=mean(c(data[j,i],data[j,(i+8)],data[j,(i+16)]))
+      }
+    }
+    return(new.data)
+  },rownames = T)
+  
+  output$syn2 <- renderTable({
+    if (is.null(input$file1.1)) {return(NULL)}
+    drug=filedata1.2()
+    conc.drug=c(input$conc1.2,input$conc2.2,input$conc3.2,input$conc4.2,input$conc5.2,input$conc6.2,
+                input$conc7.2,input$conc8.2)
+    colnames(drug)=conc.drug
+    rownames(drug)=c(input$name1.1,input$name2.1)
+    new.drug=drug[,1:8]
+    for (j in 1:2) {
+      for (i in 1:8) {
+        new.drug[j,i]=mean(c(drug[j,((i*3)-2)],drug[j,((i*3)-1)],drug[j,(i*3)]))
+      }
+    }
+    return(new.drug)
+  },rownames = T)
+  
+  dff.cre <- reactive({
+    if (is.null(input$file0)) {return(NULL)}
+    if (is.null(input$file1.1)) {return(NULL)}
+    data=filedata1.1()
+    drug=filedata1.2()
+    conc.data=c(input$conc1.1,input$conc2.1,input$conc3.1,input$conc4.1,input$conc5.1,input$conc6.1,
+                input$conc7.1,input$conc8.1)
+    conc.drug=c(input$conc1.2,input$conc2.2,input$conc3.2,input$conc4.2,input$conc5.2,input$conc6.2,
+                input$conc7.2,input$conc8.2)
+    drug1=input$name1.1
+    drug2=input$name2.1
+    project=input$name_project
+    unit=input$unit_conc
+    
+    # create input table
+    input=data.frame(row.names = 1:240)
+    drugA_syn=rep(conc.data,24)
+    drugA_syn=sort(drugA_syn,decreasing = T)
+    drugA_only1=rep(conc.drug,3)
+    drugA_only1=sort(drugA_only1,decreasing = T)
+    drugA_only0=rep(0,24)
+    drugA_only=c(drugA_only1,drugA_only0)
+    input$drugA=c(drugA_syn,drugA_only)
+    drugB_syn=sort(conc.data)
+    drugB_syn=rep(drugB_syn,3)
+    drugB_syn=rep(drugB_syn,8)
+    drugB_only=c(drugA_only0,drugA_only1)
+    input$drugB=c(drugB_syn,drugB_only)
+    value=as.vector(t(data))
+    value1=as.vector(t(drug))
+    input$value=c(value,value1)
+    colnames(input)[1:2]=rownames(drug)
+    mydata=input
+    # colnames(mydata)[1]=c(input$name1.1)
+    # colnames(mydata)[2]=c(input$name2.1)
+    colnames(mydata)[3]=c("Signal")
+    mydata[,1]=as.numeric(as.character(mydata[,1]))
+    mydata[,2]=as.numeric(as.character(mydata[,2]))
+    mydata[,3]=as.numeric(as.character(mydata[,3]))
+    mydata2=ddply(mydata,c(colnames(mydata)[1],colnames(mydata)[2]),summarise,Fraction=mean(Signal))
+    maxSignal=max(mydata2$Fraction)
+    mydata2$Fraction=mydata2$Fraction/maxSignal
+    mydata2=mydata2[with(mydata2,order(mydata2[,1],mydata2[,2])),]
+    mydata2[1,3]=1
+    
+    ## remove outliners
+    tmp=mydata2[,3]==1
+    tmp[1]=FALSE
+    mydata2=mydata2[!tmp,]
+    
+    # isobologram
+    drug1Base=1
+    drug2Base=1
+    
+    dose1 = mydata2[,1]/drug1Base
+    dose2 = mydata2[,2]/drug2Base
+    fa = 1-mydata2[,3]   ## fration of total cells or viability
+    ##    Estimate the parameters in the median effect equation for single drug and their mixture at
+    ##    the fixed ratio dose2/dose1=d2.d1
+    fa1 = fa
+    fu = 1-fa    ## death cell fraction
+    resp = rep(NA, length(fa))
+    resp[!(fa==0 | fa==1)] = log(fa[!(fa==0 | fa==1)]/fu[!(fa==0 | fa==1)])  ## resp=log(fa/fu)
+    totdose = dose1 + dose2
+    logd = log(totdose)
+    
+    ind1 = dose2==0 & dose1!=0
+    ind2 = dose1==0 & dose2!=0
+    ind3 = dose1!=0 & dose2!=0
+    
+    ##     Estimate the parameters using median-effect plot for two single drugs and
+    ##     their combination at the fixed ratio (dose of drug 2)/(dose of drug 1)=d2.d1.
+    lm1 = lm(resp[ind1]~logd[ind1])
+    dm1 = exp(-summary(lm1)$coef[1,1]/summary(lm1)$coef[2,1])
+    lm2 = lm(resp[ind2]~logd[ind2])
+    dm2 = exp(-summary(lm2)$coef[1,1]/summary(lm2)$coef[2,1])
+    lmcomb = lm(resp[ind3]~logd[ind3])
+    dmcomb = exp(-summary(lmcomb)$coef[1,1]/summary(lmcomb)$coef[2,1])
+    
+    fa12 = fa1[ind3]
+    d1 = dose1[ind3]
+    d2 = dose2[ind3]
+    Dx1o = dm1*(fa12/(1-fa12))^(1/summary(lm1)$coef[2,1])
+    Dx2o = dm2*(fa12/(1-fa12))^(1/summary(lm2)$coef[2,1])
+    
+    temp = (Dx1o-d1)*Dx2o/(Dx1o*d2)
+    dff = data.frame(d1=d1,d2=d2,temp=temp)
+    
+    dff$syn = rep(NA,length(dff$temp))
+    dff$syn = ifelse(dff$temp>1,"Antagonism","Synergy")
+    dff$syn[dff$temp==1] = "Additivity"
+    
+    dff$syn = factor(dff$syn)
+    levels(dff$syn) = c("Synergy","Antagonism","Additivity")
+    
+    dff
+  })
+  
+  output$isob <- renderPlot({
+    
+    if (is.null(input$file0)) {return(NULL)}
+    if (is.null(input$file1.1)) {return(NULL)}
+    
+    drug1=input$name1.1
+    drug2=input$name2.1
+    project=input$name_project
+    unit=input$unit_conc
+    
+    dff=dff.cre()
+    
+    plot(ggplot(dff,aes(x=factor(signif(d1,2)), y=factor(signif(d2,2)),
+                        col=factor(syn,levels=c("Synergy","Antagonism","Additivity"))))+
+           geom_point(aes(size=log(abs(temp))),shape=19)+ guides(size = FALSE)+
+           scale_color_manual("Drug-Drug interaction", breaks=c("Synergy","Antagonism","Additivity"),
+                              values=c("dodgerblue","firebrick1","black"))+
+           scale_size_continuous("Interaction Strength", range=c(1,10))+
+           xlab(paste0("\n",drug1," concentration (",unit,")"))+
+           ylab(paste0(drug2," concentration (",unit,")\n"))+
+           ggtitle("Isobologram",subtitle = paste0(project,"\n"))+
+           theme(
+             panel.background = element_blank(),
+             legend.text = element_text(size = 10),
+             plot.title = element_text(face="bold",colour="black",hjust = 0.5),
+             plot.subtitle = element_text(face="bold",colour="black",hjust = 0.5),
+             legend.position = "bottom",
+             panel.grid.major = element_line(linetype = "dotted", colour = "grey"),
+             panel.grid.minor = element_line(linetype = "dotted", colour = "grey50")
+           ))
+  })
+  
+  
+  output$heat <- renderPlot({
+    
+    if (is.null(input$file0)) {return(NULL)}
+    if (is.null(input$file1.1)) {return(NULL)}
+    
+    project=input$name_project
+    unit=input$unit_conc
+    drug1=input$name1.1
+    drug2=input$name2.1
+    
+    # heatmap
+    
+    m=dff.cre()
+    
+    m$temp=log(abs(m$temp))
+    m$temp=m$temp+abs(extendrange(range(c(min(m$temp),max(m$temp))))[1])
+    for (i in 1:nrow(m)) {if (m$syn[i]=="Antagonism") {m$temp[i]=m$temp[i]*(-1)}}
+    
+    p=spread(m[,1:3], d1, temp, fill=0)
+    rownames(p)=p$d2
+    p=p[,2:ncol(p)]
+    
+    p=p[order(as.numeric(rownames(p)),decreasing = T),]
+    p=p[order(as.numeric(colnames(p))),]
+    
+    p=as.matrix(p)
+    colnames(p)=signif(as.numeric(colnames(p)),2)
+    rownames(p)=signif(as.numeric(rownames(p)),2)
+    
+    my_palette <- colorRampPalette(c("firebrick1", "white","dodgerblue"))(n = 101)
+    par(cex.main=1)
+    heatmap.2(p, dendrogram = "none", scale="none", Rowv = F, Colv = F, cellnote = round(p,2),
+              trace="none", density.info = "none",col = my_palette,notecol ="black",
+              main=paste0("Isobologram matrix\n\n ",project), symbreaks = T,
+              symkey = T, cexCol = 1, cexRow = 1,
+              xlab = paste0("\n",drug1," concentration (",unit,")"),
+              ylab = paste0(drug2," concentration (",unit,")\n"),
+              margins=c(5,6.5))
+    
+  })
+  
+  output$report1 <- downloadHandler(
+    filename = "report_synergy.pdf",
+    content = function(file) {
+      
+      tempReport <- file.path(tempdir(), "report_synergy.Rmd")
+      file.copy("report_synergy.Rmd", tempReport, overwrite = TRUE)
+      
+      params1 <- list(conc.data = c(input$conc1.1,input$conc2.1,input$conc3.1,input$conc4.1,
+                                    input$conc5.1,input$conc6.1,input$conc7.1,input$conc8.1),
+                      conc.drug=c(input$conc1.2,input$conc2.2,input$conc3.2,input$conc4.2,
+                                  input$conc5.2,input$conc6.2,input$conc7.2,input$conc8.2),
+                      file2 = input$file1.1$datapath, file1 = input$file0$datapath,
+                      drug1 = input$name1.1, drug2 = input$name2.1, project = input$name_project,
+                      unit = input$unit_conc, dff = dff.cre())
+      rmarkdown::render(tempReport, output_file = file, params = params1, 
+                        envir = new.env(parent = globalenv())
+      )
+    })
   
 })

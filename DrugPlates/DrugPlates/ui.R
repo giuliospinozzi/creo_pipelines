@@ -3,8 +3,10 @@ library(shinyjs)
 
 shinyUI(fluidPage(
   
-  titlePanel(HTML("<center>IC50 Drug Plates</center>")),
-  
+  titlePanel(HTML("<center>Drug Plates</center>")),
+  tabsetPanel(
+    tabPanel("IC50", 
+             
   sidebarLayout(
     sidebarPanel(
       shinyjs::useShinyjs(),
@@ -146,4 +148,79 @@ shinyUI(fluidPage(
               uiOutput("downloadData")
     )
       )
+    ),
+  tabPanel("Drug synergy",
+           sidebarLayout(
+             sidebarPanel(
+               textInput('name_project',strong("Project Name:"),paste0("Project ",Sys.Date())),
+               hr(),
+               strong("Concentrations of drug combinations (in triplicate):"),
+               br(),
+               "(The model is very sensitive: enter all decimals)",
+               fluidRow(
+                 column(4,numericInput("conc1.1","",0.000000000,step = 0.000000001)),
+                 column(4,numericInput("conc2.1","",0.000500001,step = 0.000000001)),
+                 column(4,numericInput("conc3.1","",0.002000001,step = 0.000000001)),
+                 column(4,numericInput("conc4.1","",0.010000001,step = 0.000000001)),
+                 column(4,numericInput("conc5.1","",0.050000001,step = 0.000000001)),
+                 column(4,numericInput("conc6.1","",0.200000001,step = 0.000000001)),
+                 column(4,numericInput("conc7.1","",1.000000001,step = 0.000000001)),
+                 column(4,numericInput("conc8.1","",5.000000001,step = 0.000000001)),
+                 column(4,textInput('unit_conc',strong("Data Unit:"),'uM'))
+               ),
+               fileInput('file0','Choose CSV File for drug combinations:', 
+                         accept=c(
+                           "text/csv",
+                           "text/comma-separated-values,text/plain",
+                           ".csv")
+               ),
+               hr(),
+               fluidRow(
+                 column(9,textInput('name1.1',strong("Drug 1 Name:"),'Drug 1'))
+                 #                 column(3,numericInput("drug_base1", strong("Drug Base:"), 1))
+               ),
+               fluidRow(
+                 column(9,textInput('name2.1',strong("Drug 2 Name"),'Drug 2'))
+                 #                 column(3,numericInput("drug_base2", strong("Drug Base:"), 1))
+               ),
+               strong("Concentrations of single drugs (in triplicate):"),
+               br(),
+               "(The model is very sensitive: enter all decimals)",
+               fluidRow(
+                 column(4,numericInput("conc1.2","",10.000000001,step = 0.000000001)),
+                 column(4,numericInput("conc2.2","",2.000000001,step = 0.000000001)),
+                 column(4,numericInput("conc3.2","",0.600000001,step = 0.000000001)),
+                 column(4,numericInput("conc4.2","",0.100000001,step = 0.000000001)),
+                 column(4,numericInput("conc5.2","",0.030000001,step = 0.000000001)),
+                 column(4,numericInput("conc6.2","",0.008000001,step = 0.000000001)),
+                 column(4,numericInput("conc7.2","",0.002100001,step = 0.000000001)),
+                 column(4,numericInput("conc8.2","",0.000510001,step = 0.000000001))
+               ),
+               fileInput('file1.1','Choose CSV File for single drugs:', 
+                         accept=c(
+                           "text/csv",
+                           "text/comma-separated-values,text/plain",
+                           ".csv")
+               ),
+               hr(),
+               fluidRow(column(12,align="center", downloadButton("report1","Generate report")))
+             ),
+             mainPanel(align="center",
+                       br(),
+                       conditionalPanel(
+                         condition = "output.fileUploaded1",
+                         HTML("<center><font size='3' color='red'>To check the results, please upload your drug plate data.</font></center>")
+                       ),
+                       tableOutput("syn1"),
+                       br(),
+                       tableOutput("syn2"),
+                       br(),
+                       plotOutput("isob"),
+                       br(),
+                       plotOutput("heat"),
+                       br()
+             )
+           )
+  )
+  )
   ))

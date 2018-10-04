@@ -1,0 +1,100 @@
+---
+title: "Drug Synergy"
+output: pdf_document
+params:
+  conc.data: NA
+  conc.drug: NA
+  file1: NA
+  file2: NA
+  drug1: NA
+  drug2: NA
+  project: NA
+  unit: NA
+  dff: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+```{r fig.align='center', message=FALSE, warning=FALSE, results='asis', out.height = "100%", fig.width=10, fig.height=5}
+
+## tables
+
+conc.data1=signif(params$conc.data,digits = 2)
+data=read.csv(params$file1,sep=";",row.names = 1) 
+colnames(data)=rep(conc.data1,3)
+rownames(data)=rev(conc.data1)
+new.data=data[,1:8]
+for (j in 1:8) {
+  for (i in 1:8) {
+    new.data[j,i]=mean(c(data[j,i],data[j,(i+8)],data[j,(i+16)]))
+    }
+  }
+cat("##Matrix of drug combinations")
+kable(new.data, format="markdown", digits = 2, caption = "Prova titolo")
+
+conc.drug1=signif(params$conc.drug,digits = 2)
+drug=read.csv(params$file2,sep=";",row.names = 1,header = F) 
+colnames(drug)=conc.drug1
+rownames(drug)=c(params$drug1,params$drug2)
+new.drug=drug[,1:8]
+for (j in 1:2) {
+  for (i in 1:8) {
+    new.drug[j,i]=mean(c(drug[j,((i*3)-2)],drug[j,((i*3)-1)],drug[j,(i*3)]))
+    }
+  }
+cat("## Matrix of single drugs")
+kable(new.drug, format="markdown", digits = 2)
+
+
+## isobologram
+
+plot(ggplot(params$dff,aes(x=factor(signif(d1,2)), y=factor(signif(d2,2)),
+                           col=factor(syn,levels=c("Synergy","Antagonism","Additivity"))))+
+       geom_point(aes(size=log(abs(temp))),shape=19)+ guides(size = FALSE)+
+       scale_color_manual("Drug-Drug interaction", breaks=c("Synergy","Antagonism","Additivity"),
+                          values=c("dodgerblue","firebrick1","black"))+
+       scale_size_continuous("Interaction Strength", range=c(1,10))+
+       xlab(paste0("\n",params$drug1," concentration (",params$unit,")"))+
+       ylab(paste0(params$drug2," concentration (",params$unit,")\n"))+
+       ggtitle("Isobologram",subtitle = paste0(params$project,"\n"))+
+       theme(
+         panel.background = element_blank(),
+         legend.text = element_text(size = 10),
+         plot.title = element_text(face="bold",colour="black",hjust = 0.5),
+         plot.subtitle = element_text(face="bold",colour="black",hjust = 0.5),
+         legend.position = "bottom",
+         panel.grid.major = element_line(linetype = "dotted", colour = "grey"),
+         panel.grid.minor = element_line(linetype = "dotted", colour = "grey50")
+         )
+     )
+
+
+# heatmap
+
+m=params$dff
+m$temp=log(abs(m$temp))
+m$temp=m$temp+abs(extendrange(range(c(min(m$temp),max(m$temp))))[1])
+for (i in 1:nrow(m)) {if (m$syn[i]=="Antagonism") {m$temp[i]=m$temp[i]*(-1)}}
+
+p=spread(m[,1:3], d1, temp, fill=0)
+rownames(p)=p$d2
+p=p[,2:ncol(p)]
+p=p[order(as.numeric(rownames(p)),decreasing = T),]
+p=p[order(as.numeric(colnames(p))),]
+p=as.matrix(p)
+colnames(p)=signif(as.numeric(colnames(p)),2)
+rownames(p)=signif(as.numeric(rownames(p)),2)
+
+my_palette <- colorRampPalette(c("firebrick1", "white","dodgerblue"))(n = 101)
+par(cex.main=1)
+heatmap.2(p, dendrogram = "none", scale="none", Rowv = F, Colv = F, cellnote = round(p,2),
+          trace="none", density.info = "none",col = my_palette,notecol ="black",
+          main=paste0("Isobologram matrix\n\n ",params$project), symbreaks = T,
+          symkey = T, cexCol = 1, cexRow = 1,
+          xlab = paste0("\n",params$drug1," concentration (",params$unit,")"),
+          ylab = paste0(params$drug2," concentration (",params$unit,")\n"),
+          margins=c(5,6.5))
+
+```
