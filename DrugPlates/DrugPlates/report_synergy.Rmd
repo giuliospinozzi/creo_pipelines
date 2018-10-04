@@ -19,6 +19,11 @@ knitr::opts_chunk$set(echo = F)
 
 ```{r fig.align='center', message=FALSE, warning=FALSE, results='asis', out.height = "100%", fig.width=10, fig.height=5}
 
+library(knitr)
+library(ggplot2)
+library(gplots)
+library(tidyr)
+
 ## tables
 
 conc.data1=signif(params$conc.data,digits = 2)
