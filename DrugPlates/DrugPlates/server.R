@@ -10,6 +10,21 @@ library(plyr)
 library(tidyr)
 library(gplots)
 
+mod <- function(df) {
+  fit <- drm(df$viability ~ df$dose, data=df, fct = LL.4(names=c("slope","low","high","IC50")), 
+             type = "continuous")
+  pred.df <- expand.grid(dose=exp(seq(log(max(df$dose)),log(min(df$dose)),length=100))) 
+  pred <- predict(fit,newdata=pred.df,interval="confidence") 
+  pred.df$viability <- pmax(pred[,1],0)
+  pred.df$viability <- pmin(pred.df$viability,100)
+  pred.df$viability.low <- pmax(pred[,2],0)
+  pred.df$viability.low <- pmin(pred.df$viability.low,100)
+  pred.df$viability.high <- pmax(pred[,3],0)
+  pred.df$viability.high <- pmin(pred.df$viability.high,100)
+  colnames(pred.df)=c("conc", "p", "pmin", "pmax")
+  return(list(ic50=summary(fit)$coefficient[4,1],pred.df=pred.df))
+}
+
 shinyServer(function(input, output) {
   
   output$fileUploaded <- reactive({
@@ -17,34 +32,11 @@ shinyServer(function(input, output) {
   })
   outputOptions(output, 'fileUploaded',suspendWhenHidden=FALSE)
   
-  filedata1 <- reactive({
-    infile <- input$file1
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
-  })
-  
-  filedata2 <- reactive({
-    infile <- input$file2
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
-  })
-  
-  filedata3 <- reactive({
-    infile <- input$file3
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
-  })
-  
-  filedata4 <- reactive({
-    infile <- input$file4
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
-  })
-  
   output$tab <- renderUI({
     if (is.null(input$file1)) {return(NULL)}
     conc=c(rep(input$conc1,3),rep(input$conc2,3),rep(input$conc3,3),rep(input$conc4,3))
-    df1 <-filedata1()
+    infile <- input$file1
+    df1 <-read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
     drug=rownames(df1)
     selectInput("Drug", "Choose a drug:", choices = drug)
   })
@@ -52,22 +44,26 @@ shinyServer(function(input, output) {
   output$table <- renderTable({
     conc=c(rep(input$conc1,3),rep(input$conc2,3),rep(input$conc3,3),rep(input$conc4,3))
     if (is.null(input$file1)) {return(NULL)}
-    df1 <-filedata1()
+    infile <- input$file1
+    df1 <-read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
     colnames(df1)=conc
     drug=rownames(df1)
     if (input$cell_num>=2) {
       if (is.null(input$file2)) {return(NULL)}
-      df2 <-filedata2()
+      infile <- input$file2
+      df2 <-read.csv(infile$datapath,sep=input$sep2,row.names = 1,dec=".") 
       colnames(df2)=conc
     }
     if (input$cell_num>=3) {
       if (is.null(input$file3)) {return(NULL)}
-      df3 <-filedata3()
+      infile <- input$file3
+      df3 <-read.csv(infile$datapath,sep=input$sep3,row.names = 1,dec=".") 
       colnames(df3)=conc
     }
     if (input$cell_num==4) {
       if (is.null(input$file4)) {return(NULL)}
-      df4 <-filedata4()
+      infile <- input$file4
+      df4 <-read.csv(infile$datapath,sep=input$sep4,row.names = 1,dec=".") 
       colnames(df4)=conc
     }
     if (input$cell_num==1) {
@@ -114,12 +110,10 @@ shinyServer(function(input, output) {
     
   },rownames = T)
   
-  
   output$plot <- renderPlot({
-    if (is.null(input$file1)) {
-      return(NULL)
-    }
-    df1 <-filedata1()
+    if (is.null(input$file1)) {return(NULL)}
+    infile <- input$file1
+    df1 <-read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec=".") 
     conc=c(rep(input$conc1,3),rep(input$conc2,3),rep(input$conc3,3),rep(input$conc4,3))
     colnames(df1)=conc
     drug=rownames(df1)
@@ -129,17 +123,9 @@ shinyServer(function(input, output) {
     withProgress(message = 'Generating plot', detail = "part 0", value = 0, {
       for (i in 1:(ncol(table1))) {
         df=data.frame(viability=table1[,i],dose=conc)
-        fit <- drm(viability ~ dose, data=df, fct = LL.4(names=c("slope","low","high","IC50")), 
-                   type = "continuous")
-        pred.df <- expand.grid(dose=exp(seq(log(max(df$dose)),log(min(df$dose)),length=100))) 
-        pred <- predict(fit,newdata=pred.df,interval="confidence") 
-        pred.df$viability <- pmax(pred[,1],0)
-        pred.df$viability <- pmin(pred.df$viability,100)
-        pred.df$viability.low <- pmax(pred[,2],0)
-        pred.df$viability.low <- pmin(pred.df$viability.low,100)
-        pred.df$viability.high <- pmax(pred[,3],0)
-        pred.df$viability.high <- pmin(pred.df$viability.high,100)
-        colnames(pred.df)=c("conc", "p", "pmin", "pmax")
+        out_mod=mod(df)
+        pred.df=out_mod[[2]]
+        ic50=out_mod[[1]]
         
         p <- ggplot(df,aes(x=dose,y=viability)) +
           geom_point(aes(colour=input$name1),size=2.5) +
@@ -154,38 +140,30 @@ shinyServer(function(input, output) {
                 legend.title=element_text(size=16)) +
           theme(axis.text.x = element_text(angle = 35, hjust = 1)) +
           geom_line(data=pred.df,aes(x=conc,y=p,colour=input$name1),size=0.8) +
-          geom_vline(xintercept=summary(fit)$coefficient[4,1],c,size=0.5,linetype="dashed", 
-                     color=input$col1)
+          geom_vline(xintercept=ic50,c,size=0.5,linetype="dashed",color=input$col1)
         
         if (input$cell_num==1) {
           cols=c(input$col1)
           names(cols)=input$name1
           p <- p + scale_colour_manual("Cell lines", breaks = input$name1,values = cols) +
-            annotate("text",x=c(signif(summary(fit)$coefficient[4,1],4)), y=c(max(df$viability)),
-                     label=c(signif(summary(fit)$coefficient[4,1],4)), color=c(input$col1),size=5)
+            annotate("text",x=c(signif(ic50,4)), y=c(max(df$viability)),
+                     label=c(signif(ic50,4)), color=c(input$col1), size=5)
         }
         
         if (input$cell_num>1) {
           if (is.null(input$file2)) {return(NULL)}
-          d.f2 <-filedata2()
+          infile <- input$file2
+          d.f2 <-read.csv(infile$datapath,sep=input$sep2,row.names = 1,dec=".") 
           colnames(d.f2)=conc
           table2=t(d.f2)
           df2=data.frame(viability=table2[,i],dose=conc)
-          fit2 <- drm(viability ~ dose, data=df2, fct = LL.4(names=c("slope","low","high","IC50")), 
-                      type = "continuous")
-          pred.df2 <- expand.grid(dose=exp(seq(log(max(df2$dose)),log(min(df2$dose)),length=100))) 
-          pred2 <- predict(fit2,newdata=pred.df2,interval="confidence") 
-          pred.df2$viability <- pmax(pred2[,1],0)
-          pred.df2$viability <- pmin(pred.df2$viability,100)
-          pred.df2$viability.low <- pmax(pred2[,2],0)
-          pred.df2$viability.low <- pmin(pred.df2$viability.low,100)
-          pred.df2$viability.high <- pmax(pred2[,3],0)
-          pred.df2$viability.high <- pmin(pred.df2$viability.high,100)
-          colnames(pred.df2)=c("conc", "p", "pmin", "pmax")
+          out_mod=mod(df2)
+          pred.df2=out_mod[[2]]
+          ic502=out_mod[[1]]
           
           p <- p + geom_point(data=df2,aes(x=dose,y=viability,colour=input$name2),size=2.5) + 
             geom_line(data=pred.df2,aes(x=conc,y=p,colour=input$name2),size=0.8) +
-            geom_vline(xintercept=summary(fit2)$coefficient[4,1],c,size=0.5,linetype="dashed", 
+            geom_vline(xintercept=ic502,c,size=0.5,linetype="dashed", 
                        color=input$col2)
         }
         
@@ -194,37 +172,26 @@ shinyServer(function(input, output) {
           names(cols2)=c(input$name1,input$name2)
           p <- p + 
             scale_colour_manual("Cell lines", breaks = c(input$name1,input$name2), values = cols2) +
-            annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
-                                 signif(summary(fit2)$coefficient[4,1],4)), 
-                     y=c(max(df$viability),
-                         max(df2$viability)),
-                     label=c(signif(summary(fit)$coefficient[4,1],4),
-                             signif(summary(fit2)$coefficient[4,1],4)), 
+            annotate("text", x=c(signif(ic50,4),signif(ic502,4)), 
+                     y=c(max(df$viability),max(df2$viability)),
+                     label=c(signif(ic50,4),signif(ic502,4)), 
                      color=c(input$col1,input$col2),size=5)
         }
         
         if (input$cell_num>2) {
           if (is.null(input$file3)) {return(NULL)}
-          d.f3 <-filedata3()
+          infile <- input$file3
+          d.f3 <-read.csv(infile$datapath,sep=input$sep3,row.names = 1,dec=".") 
           colnames(d.f3)=conc
           table3=t(d.f3)
           df3=data.frame(viability=table3[,i],dose=conc)
-          fit3 <- drm(viability ~ dose, data=df3, fct = LL.4(names=c("slope","low","high","IC50")), 
-                      type = "continuous")
-          pred.df3 <- expand.grid(dose=exp(seq(log(max(df3$dose)),log(min(df3$dose)),length=100))) 
-          pred3 <- predict(fit3,newdata=pred.df3,interval="confidence") 
-          pred.df3$viability <- pmax(pred3[,1],0)
-          pred.df3$viability <- pmin(pred.df3$viability,100)
-          pred.df3$viability.low <- pmax(pred3[,2],0)
-          pred.df3$viability.low <- pmin(pred.df3$viability.low,100)
-          pred.df3$viability.high <- pmax(pred3[,3],0)
-          pred.df3$viability.high <- pmin(pred.df3$viability.high,100)
-          colnames(pred.df3)=c("conc", "p", "pmin", "pmax")
+          out_mod=mod(df3)
+          pred.df3=out_mod[[2]]
+          ic503=out_mod[[1]]
           
           p <- p + geom_point(data=df3,aes(x=dose,y=viability,colour=input$name3),size=2.5) + 
             geom_line(data=pred.df3,aes(x=conc,y=p,colour=input$name3),size=0.8) +
-            geom_vline(xintercept=summary(fit3)$coefficient[4,1],c,size=0.5,linetype="dashed", 
-                       color=input$col3)
+            geom_vline(xintercept=ic503,c,size=0.5,linetype="dashed",color=input$col3)
         }
         
         if (input$cell_num==3) {
@@ -233,40 +200,26 @@ shinyServer(function(input, output) {
           p <- p + 
             scale_colour_manual("Cell lines", breaks = c(input$name1,input$name2,input$name3),
                                 values = cols3) +
-            annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
-                                 signif(summary(fit2)$coefficient[4,1],4),
-                                 signif(summary(fit3)$coefficient[4,1],4)), 
-                     y=c(max(df$viability),
-                         max(df2$viability),
-                         max(df3$viability)),
-                     label=c(signif(summary(fit)$coefficient[4,1],4),
-                             signif(summary(fit2)$coefficient[4,1],4),
-                             signif(summary(fit3)$coefficient[4,1],4)), 
+            annotate("text", x=c(signif(ic50,4),signif(ic502,4),signif(ic503,4)), 
+                     y=c(max(df$viability),max(df2$viability),max(df3$viability)),
+                     label=c(signif(ic50,4),signif(ic502,4),signif(ic503,4)), 
                      color=c(input$col1,input$col2,input$col3),size=5)
         }
         
         if (input$cell_num>3) {
           if (is.null(input$file4)) {return(NULL)}
-          d.f4 <-filedata4()
+          infile <- input$file4
+          d.f4 <-read.csv(infile$datapath,sep=input$sep4,row.names = 1,dec=".") 
           colnames(d.f4)=conc
           table4=t(d.f4)
           df4=data.frame(viability=table4[,i],dose=conc)
-          fit4 <- drm(viability ~ dose, data=df4, fct = LL.4(names=c("slope","low","high","IC50")), 
-                      type = "continuous")
-          pred.df4 <- expand.grid(dose=exp(seq(log(max(df4$dose)),log(min(df4$dose)),length=100))) 
-          pred4 <- predict(fit4,newdata=pred.df4,interval="confidence") 
-          pred.df4$viability <- pmax(pred4[,1],0)
-          pred.df4$viability <- pmin(pred.df4$viability,100)
-          pred.df4$viability.low <- pmax(pred4[,2],0)
-          pred.df4$viability.low <- pmin(pred.df4$viability.low,100)
-          pred.df4$viability.high <- pmax(pred4[,3],0)
-          pred.df4$viability.high <- pmin(pred.df4$viability.high,100)
-          colnames(pred.df4)=c("conc", "p", "pmin", "pmax")
+          out_mod=mod(df4)
+          pred.df4=out_mod[[2]]
+          ic504=out_mod[[1]]
           
           p <- p + geom_point(data=df4,aes(x=dose,y=viability,colour=input$name4),size=2.5) + 
             geom_line(data=pred.df4,aes(x=conc,y=p,colour=input$name4),size=0.8) +
-            geom_vline(xintercept=summary(fit4)$coefficient[4,1],c,size=0.5,linetype="dashed", 
-                       color=input$col4)
+            geom_vline(xintercept=ic504,c,size=0.5,linetype="dashed",color=input$col4)
         }
         
         if (input$cell_num==4) {
@@ -276,22 +229,13 @@ shinyServer(function(input, output) {
             scale_colour_manual("Cell lines", 
                                 breaks = c(input$name1,input$name2,input$name3,input$name4),
                                 values = cols4) +
-            annotate("text", x=c(signif(summary(fit)$coefficient[4,1],4),
-                                 signif(summary(fit2)$coefficient[4,1],4),
-                                 signif(summary(fit3)$coefficient[4,1],4),
-                                 signif(summary(fit4)$coefficient[4,1],4)), 
-                     y=c(max(df$viability),
-                         max(df2$viability),
-                         max(df3$viability),
-                         max(df4$viability)),
-                     label=c(signif(summary(fit)$coefficient[4,1],4),
-                             signif(summary(fit2)$coefficient[4,1],4),
-                             signif(summary(fit3)$coefficient[4,1],4),
-                             signif(summary(fit4)$coefficient[4,1],4)), 
+            annotate("text", x=c(signif(ic50,4),signif(ic502,4),signif(ic503,4),signif(ic504,4)), 
+                     y=c(max(df$viability),max(df2$viability),max(df3$viability),max(df4$viability)),
+                     label=c(signif(ic50,4),signif(ic502,4),signif(ic503,4),signif(ic504,4)), 
                      color=c(input$col1,input$col2,input$col3,input$col4),size=5)
         }
         pl=list.append(pl,p)
-        incProgress(1/32, detail = paste0("part ", i, "/", (ncol(table1))))
+        incProgress(1/ncol(table1), detail = paste0("part ", i, "/", (ncol(table1))))
       }
     })
     for (i in 1:length(drug)) {
@@ -300,14 +244,18 @@ shinyServer(function(input, output) {
   })
   
   output$downloadData <- renderUI({
-    req(input$file1, filedata1())
+    if (input$cell_num==1) {infile <- input$file1}
+    if (input$cell_num==2) {infile <- input$file2}
+    if (input$cell_num==3) {infile <- input$file3}
+    if (input$cell_num==4) {infile <- input$file4}
+    req(infile, read.csv(infile$datapath,sep=input$sep1,row.names = 1,dec="."))
     downloadButton("download",label = "Download plot")
   })
   
   output$download <- downloadHandler(
     filename = function() {"plot.pdf"},
     content = function(file) {
-      ggsave(file,width = 10, height = 7)
+      ggsave(file)
     }
   )
   
