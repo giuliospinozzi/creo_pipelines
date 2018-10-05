@@ -253,9 +253,11 @@ shinyServer(function(input, output) {
   })
   
   output$download <- downloadHandler(
-    filename = function() {"plot.pdf"},
+    filename = function() {"Rplot.pdf"},
     content = function(file) {
+      pdf(NULL)
       ggsave(file)
+      dev.off()
     }
   )
   
