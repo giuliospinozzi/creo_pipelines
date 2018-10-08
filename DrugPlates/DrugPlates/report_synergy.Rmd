@@ -11,6 +11,8 @@ params:
   project: NA
   unit: NA
   dff: NA
+  sep1: NA
+  sep2: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -26,8 +28,9 @@ library(tidyr)
 
 ## tables
 
+options(scipen=999)
 conc.data1=signif(params$conc.data,digits = 2)
-data=read.csv(params$file1,sep=";",row.names = 1) 
+data=read.csv(params$file1,sep=params$sep1,row.names = 1) 
 colnames(data)=rep(conc.data1,3)
 rownames(data)=rev(conc.data1)
 new.data=data[,1:8]
@@ -35,12 +38,17 @@ for (j in 1:8) {
   for (i in 1:8) {
     new.data[j,i]=mean(c(data[j,i],data[j,(i+8)],data[j,(i+16)]))
     }
-  }
+}
+new.data=data.frame(drug2=NA,new.data)
+new.data=rbind(drug1=NA,new.data)
+colnames(new.data)=c(params$drug2,conc.data1)
+rownames(new.data)[1]=c(params$drug1,rev(conc.data1))
+
 cat("##Matrix of drug combinations")
-kable(new.data, format="markdown", digits = 2, caption = "Prova titolo")
+kable(new.data, format="markdown", digits = 2)
 
 conc.drug1=signif(params$conc.drug,digits = 2)
-drug=read.csv(params$file2,sep=";",row.names = 1,header = F) 
+drug=read.csv(params$file2,sep=params$sep2,row.names = 1,header = F) 
 colnames(drug)=conc.drug1
 rownames(drug)=c(params$drug1,params$drug2)
 new.drug=drug[,1:8]
@@ -50,7 +58,8 @@ for (j in 1:2) {
     }
   }
 cat("## Matrix of single drugs")
-kable(new.drug, format="markdown", digits = 2)
+options(knitr.kable.NA = '')
+kable(new.drug, format="markdown", digits = 2, na="")
 
 
 ## isobologram

@@ -323,40 +323,35 @@ shinyServer(function(input, output) {
   })
   outputOptions(output, 'fileUploaded1',suspendWhenHidden=FALSE)
   
-  filedata1.1 <- reactive({
-    infile <- input$file0
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=";",row.names = 1) 
-  })
-  
-  filedata1.2 <- reactive({
-    infile <- input$file1.1
-    if (is.null(infile)) {return(NULL)}
-    read.csv(infile$datapath,sep=";",row.names = 1,header = F) 
-  })
-  
   output$syn1 <- renderTable({
     if (is.null(input$file0)) {return(NULL)}
-    data=filedata1.1()
+    options(scipen=999)
+    infile <- input$file0
+    data=read.csv(infile$datapath,sep=input$sep_1,row.names = 1)
     conc.data=c(input$conc1.1,input$conc2.1,input$conc3.1,input$conc4.1,input$conc5.1,input$conc6.1,
                 input$conc7.1,input$conc8.1)
-    colnames(data)=rep(conc.data,3)
-    rownames(data)=rev(conc.data)
+    colnames(data)=signif(rep(conc.data,3),2)
+    rownames(data)=signif(rev(conc.data),2)
     new.data=data[,1:8]
     for (j in 1:8) {
       for (i in 1:8) {
         new.data[j,i]=mean(c(data[j,i],data[j,(i+8)],data[j,(i+16)]))
       }
     }
+    new.data=data.frame(drug2=NA,new.data)
+    new.data=rbind(drug1=NA,new.data)
+    colnames(new.data)=c(input$name2.1,signif(conc.data,2))
+    rownames(new.data)[1]=c(input$name1.1,signif(rev(conc.data),2))
     return(new.data)
-  },rownames = T)
+  },rownames = T, na="")
   
   output$syn2 <- renderTable({
     if (is.null(input$file1.1)) {return(NULL)}
-    drug=filedata1.2()
+    infile <- input$file1.1
+    drug=read.csv(infile$datapath,sep=input$sep_2,row.names = 1,header = F)
     conc.drug=c(input$conc1.2,input$conc2.2,input$conc3.2,input$conc4.2,input$conc5.2,input$conc6.2,
                 input$conc7.2,input$conc8.2)
-    colnames(drug)=conc.drug
+    colnames(drug)=signif(conc.drug,2)
     rownames(drug)=c(input$name1.1,input$name2.1)
     new.drug=drug[,1:8]
     for (j in 1:2) {
@@ -370,16 +365,15 @@ shinyServer(function(input, output) {
   dff.cre <- reactive({
     if (is.null(input$file0)) {return(NULL)}
     if (is.null(input$file1.1)) {return(NULL)}
-    data=filedata1.1()
-    drug=filedata1.2()
+    infile <- input$file0
+    data=read.csv(infile$datapath,sep=input$sep_1,row.names = 1) 
+    infile <- input$file1.1
+    drug=read.csv(infile$datapath,sep=input$sep_2,row.names = 1,header = F) 
     conc.data=c(input$conc1.1,input$conc2.1,input$conc3.1,input$conc4.1,input$conc5.1,input$conc6.1,
                 input$conc7.1,input$conc8.1)
     conc.drug=c(input$conc1.2,input$conc2.2,input$conc3.2,input$conc4.2,input$conc5.2,input$conc6.2,
                 input$conc7.2,input$conc8.2)
-    drug1=input$name1.1
-    drug2=input$name2.1
-    project=input$name_project
-    unit=input$unit_conc
+    rownames(drug)=c(input$name1.1,input$name2.1)
     
     # create input table
     input=data.frame(row.names = 1:240)
@@ -552,7 +546,7 @@ shinyServer(function(input, output) {
                                   input$conc5.2,input$conc6.2,input$conc7.2,input$conc8.2),
                       file2 = input$file1.1$datapath, file1 = input$file0$datapath,
                       drug1 = input$name1.1, drug2 = input$name2.1, project = input$name_project,
-                      unit = input$unit_conc, dff = dff.cre())
+                      unit = input$unit_conc, dff = dff.cre(), sep1=input$sep_1, sep2=input$sep_2)
       rmarkdown::render(tempReport, output_file = file, params = params1, 
                         envir = new.env(parent = globalenv())
       )

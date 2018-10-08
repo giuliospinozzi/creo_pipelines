@@ -166,21 +166,20 @@ shinyUI(fluidPage(
                  column(4,numericInput("conc6.1","",0.200000001,step = 0.000000001)),
                  column(4,numericInput("conc7.1","",1.000000001,step = 0.000000001)),
                  column(4,numericInput("conc8.1","",5.000000001,step = 0.000000001)),
-                 column(4,textInput('unit_conc',strong("Data Unit:"),'uM'))
-               ),
-               fileInput('file0','Choose CSV File for drug combinations:', 
-                         accept=c(
-                           "text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv")
+                 column(4,textInput('unit_conc',strong("Data Unit:"),'uM')),
+                 column(8,fileInput('file0','Choose CSV File for drug combinations:', 
+                                    accept=c("text/csv","text/comma-separated-values,text/plain",".csv"))),
+                 column(4,radioButtons("sep_1", "Separator:",
+                                       choices = c(Comma = ",", Semicolon = ";", Tab = "\t"),
+                                       selected = ";"))
                ),
                hr(),
                fluidRow(
-                 column(9,textInput('name1.1',strong("Drug 1 Name:"),'Drug 1'))
+                 column(9,textInput('name1.1',strong("Drug 1 Name (NO spaces):"),'Drug1'))
                  #                 column(3,numericInput("drug_base1", strong("Drug Base:"), 1))
                ),
                fluidRow(
-                 column(9,textInput('name2.1',strong("Drug 2 Name"),'Drug 2'))
+                 column(9,textInput('name2.1',strong("Drug 2 Name (NO spaces):"),'Drug2'))
                  #                 column(3,numericInput("drug_base2", strong("Drug Base:"), 1))
                ),
                strong("Concentrations of single drugs (in triplicate):"),
@@ -194,13 +193,13 @@ shinyUI(fluidPage(
                  column(4,numericInput("conc5.2","",0.030000001,step = 0.000000001)),
                  column(4,numericInput("conc6.2","",0.008000001,step = 0.000000001)),
                  column(4,numericInput("conc7.2","",0.002100001,step = 0.000000001)),
-                 column(4,numericInput("conc8.2","",0.000510001,step = 0.000000001))
-               ),
-               fileInput('file1.1','Choose CSV File for single drugs:', 
-                         accept=c(
-                           "text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv")
+                 column(4,numericInput("conc8.2","",0.000510001,step = 0.000000001)),
+                 column(8,fileInput('file1.1','Choose CSV File for single drugs:', 
+                                    accept=c("text/csv","text/comma-separated-values,text/plain",
+                                             ".csv"))),
+                 column(4,radioButtons("sep_2", "Separator:",
+                                       choices = c(Comma = ",", Semicolon = ";", Tab = "\t"),
+                                       selected = ";"))
                ),
                hr(),
                fluidRow(column(12,align="center", downloadButton("report1","Generate report")))
