@@ -36,7 +36,7 @@ png("edgeR-pca.png", w=1000, h=1000, pointsize=30)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=10)+ 
   theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=30),
         legend.title=element_blank(),axis.text = element_text(size=30),
-        axis.title=element_text(size=30))
+        axis.title=element_text(size=30)) +geom_text(aes(label=colnames(fpkm)),size=10)
 dev.off()
 
 # filter data to retain genes that are represented at least 1 counts per million (cpm) in at least 2 samples
