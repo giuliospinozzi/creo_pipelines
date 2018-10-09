@@ -529,7 +529,7 @@ shinyServer(function(input, output) {
               symkey = T, cexCol = 1, cexRow = 1,
               xlab = paste0("\n",drug1," concentration (",unit,")"),
               ylab = paste0(drug2," concentration (",unit,")\n"),
-              margins=c(5,6.5))
+              margins=c(5,6.5), key.xlab="Interaction Strength")
     
   })
   

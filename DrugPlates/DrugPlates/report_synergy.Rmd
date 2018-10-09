@@ -109,6 +109,6 @@ heatmap.2(p, dendrogram = "none", scale="none", Rowv = F, Colv = F, cellnote = r
           symkey = T, cexCol = 1, cexRow = 1,
           xlab = paste0("\n",params$drug1," concentration (",params$unit,")"),
           ylab = paste0(params$drug2," concentration (",params$unit,")\n"),
-          margins=c(5,6.5))
+          margins=c(5,6.5), key.xlab="Interaction Strength")
 
 ```
