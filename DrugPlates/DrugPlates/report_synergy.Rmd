@@ -45,6 +45,7 @@ colnames(new.data)=c(params$drug2,conc.data1)
 rownames(new.data)[1]=c(params$drug1,rev(conc.data1))
 
 cat("##Matrix of drug combinations")
+options(knitr.kable.NA = '')
 kable(new.data, format="markdown", digits = 2)
 
 conc.drug1=signif(params$conc.drug,digits = 2)
@@ -58,7 +59,6 @@ for (j in 1:2) {
     }
   }
 cat("## Matrix of single drugs")
-options(knitr.kable.NA = '')
 kable(new.drug, format="markdown", digits = 2, na="")
 
 
