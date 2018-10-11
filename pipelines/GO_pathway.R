@@ -108,28 +108,28 @@ write.csv(tab_all,paste0(output_dir,"/Gene_ontology/tab_GO_genes.csv"),row.names
 # dotplot
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.pdf"),10,8)
-  dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process")
+  print(dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process"))
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.png"),1000, 800, pointsize=20)
-  dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process")
+  print(dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process"))
   dev.off()
 }
 
 if (nrow(GO_CC@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.pdf"),10,8)
-  dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component")
+  print(dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component"))
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.png"),1000, 800, pointsize=20)
-  dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component")
+  print(dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component"))
   dev.off()
 }
 
 if (nrow(GO_MF@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.pdf"),10,8)
-  dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function")
+  print(dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function"))
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.png"),1000, 800, pointsize=20)
-  dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function")
+  print(dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function"))
   dev.off()
 }
 
