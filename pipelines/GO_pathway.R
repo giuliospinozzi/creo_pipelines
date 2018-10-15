@@ -142,14 +142,14 @@ rownames(prov)=prov$Gene
 geneList=prov$logFC
 names(geneList)=prov$Gene
 
-par(cex.main=1)
 min=-(round(((max(abs(geneList))+1)-1),1))
 max=round(((max(abs(geneList))+1)+1),1)
 
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.pdf"),10,8)
   cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                      col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05")
+                      col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05",
+                      cex.main=1)
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20)
   cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
