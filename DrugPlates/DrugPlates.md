@@ -14,6 +14,8 @@
 
 <p align="justify"> For the calculation of the model and of the IC50 the application uses the R package "drc" (Ritz et al., 2015) and in particular the drm function, which is based on the minimization of negative log likelihood function. On the basis of the model obtained, a plot is generated that reports the observed values of the experiments for each drug, a curve that represents the model trend and a dotted line at the IC50 value level. The plot is shown together with a summary table showing the values on which the model was built. It is possible to compare up to four different experiments for the same drug, comparing for example four different cell lines, provided the number and the names of the drugs are the same, as well as the concentrations at which the experiments were made. In the same plot the results for the different cell lines will be reported in different colors. You can download the plots individually or generate a report with the results for all the drugs analyzed. </p>
 
+<p align="center"><img src="/images/IC50.png" width="100%"></p>
+
 ## Drug synergy
 
 <p align="justify"> Synergy analysis requires two csv files as input, one for drug combinations and one for single drugs. In the first file there are 8 repetitions in triplicate in a 24x8 table, while in the second file another 8 triplicate concentrations reported in a 24x2 table with one drug per row. Here are two examples of input (attention to the distribution of triplicates): </p>
@@ -35,6 +37,8 @@
 **DrugB** | 0.3842 | 0.2852 | 0.2517 | 0.8469 | 0.8737 | 0.8448 | 0.6464 | 0.7124 | 0.895 | 0.9446 | 0.9082 | 0.9372 | 0.8384 | 0.8345 | 0.7416 | 0.7507 | 0.8316 | 0.9251 | 0.8854 | 0.8132 | 0.827 | 0.7868 | 1.022 | 1.0507
 
 <p align="justify"> For the calculation of the interaction between drugs we have resorted to the DDCV scripts (Tongwu Zhang et al., 2015) that use the median-effect principle (Chou TC et al., 2006). The results show two summary tables with the average of triplicates of the input tables, and two plots. The first is a representation of the isobologram, in which it is reported for each combination of the two drugs whether it is synergy, antagonism or additivity and the strength of the interaction. The second is a heatmap that reports values proportional to the strength of interaction to better orientate itself in the isobologram. The results can be exported to a report. </p>
+
+<p align="center"><img src="/images/Drug_synergy.png" width="100%"></p>
 
 ## References
 
