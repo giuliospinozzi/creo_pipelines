@@ -63,6 +63,7 @@ edgeR_results <- topTags(lrt, n=Inf)
 resdata <- merge(as.data.frame(edgeR_results), as.data.frame(fpkm), by="row.names")
 names(resdata)[1] <- "Gene"
 resdata <- resdata[order(resdata$FDR), ]
+resdata[resdata$PValue==0|resdata$FDR==0,c("PValue","FDR")]=0.1e-320
 write.csv(resdata,"edgeR-diffexpr-results.csv")
 
 # volcano plot

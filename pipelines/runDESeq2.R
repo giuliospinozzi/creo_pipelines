@@ -58,6 +58,7 @@ res <- res[order(res$padj), ]
 resdata <- merge(as.data.frame(res), as.data.frame(fpkm), by="row.names", sort=FALSE)
 names(resdata)[1] <- "Gene"
 ## Write results
+resdata[resdata$pvalue==0|resdata$padj==0,c("pvalue","padj")]=0.1e-320
 write.csv(resdata, file="deseq2-diffexpr-results.csv")
 
 ## Volcano plot
