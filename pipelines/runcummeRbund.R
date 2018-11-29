@@ -48,7 +48,7 @@ diffGenesOutput1 <- merge(diffGenesOutput,fpkm,by="row.names")
 write.csv(diffGenesOutput1, file="cummeRbund-diffexpr-results.csv")
 
 # volcano plot
-volcanoplot <- function (res, lfcthresh=2, sigthresh=0.05, main="Volcano Plot", legendpos="bottomright", labelsig=TRUE, textcx=1, ...) {
+volcanoplot <- function (res, lfcthresh=2, sigthresh=0.05, main="Volcano Plot", legendpos="topleft", labelsig=TRUE, textcx=1, ...) {
   with(res, plot(log2FoldChange, -log10(padj), pch=20, main=main, ...))
   with(subset(res, padj<sigthresh ), points(log2FoldChange, -log10(padj), pch=20, col="red", ...))
   with(subset(res, abs(log2FoldChange)>lfcthresh), points(log2FoldChange, -log10(padj), pch=20, col="orange", ...))

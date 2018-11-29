@@ -62,7 +62,7 @@ parser.add_argument('-n', '--project-name', dest="project_name", help="Project n
 parser.add_argument('-pn', '--pool-name', dest="pool_name", help="Pool name. \n No default option. \n", action="store", required=True)
 parser.add_argument('-sn', '--sample-name', dest="sample_name", help="Sample names (',' sep). \n No default option. \n", action="store", required=True)
 parser.add_argument('-r1', '--read1', dest="read1", help="Read 1 fastq path (',' sep). \n No default option. \n", action="store", required=True)
-parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 fastq path (',' sep). \n No default option. \n", action="store", required=True)
+parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 fastq path (',' sep). \n No default option. \n", action="store", required=False, default="")
 parser.add_argument('-type', '--type', dest="stype", help="Sample types (cntrl,treat). \n No default option. \n", action="store", required=True)
 parser.add_argument('-rb', '--reference-genome-bowtie', dest="ref_bowtie", help="Reference genome file path for bowtie. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/bowtie2/hg19")
 parser.add_argument('-rh', '--reference-genome-hisat2', dest="ref_hisat2", help="Reference genome file path for hisat2. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/hisat2/hg19")
@@ -140,15 +140,16 @@ def checkArgs(args):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for index genome (hisat or bowtie).\n\tExit\n" + '\033[0m')
         sys.exit()
     r1=args.read1.split(",")
-    r2=args.read2.split(",")
     for i in range(0, (len(r1))):
         if not os.path.isfile(r1[i]):
             print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for read 1.\n\tExit\n" + '\033[0m')
             sys.exit()
-    for j in range(0, (len(r2))):
-        if not os.path.isfile(r2[j]):
-            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for read 2.\n\tExit\n" + '\033[0m')
-            sys.exit()
+    if args.read2 != "":
+        r2=args.read2.split(",")
+        for j in range(0, (len(r2))):
+            if not os.path.isfile(r2[j]):
+                print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for read 2.\n\tExit\n" + '\033[0m')
+                sys.exit()
     R_path1=args.R_path+"/alignment.sh"
     R_path2=args.R_path+"/quantification.py"
     R_path3=args.R_path+"/GO_pathway.R"
@@ -175,12 +176,17 @@ def checkFile(read1,read2,stype,sample_name):
     Check read and sample type number
     """
     read1a=read1.split(",")
-    read2a=read2.split(",")
     stype1=stype.split(",")
     sample_name1=sample_name.split(",")
-    if len(read1a)!=len(read2a) or len(read1a)!=len(stype1) or len(read1a)!=len(sample_name1):
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: read1, read2, type and sample name must be of the same length.\n\tExit\n" + '\033[0m')
+    if len(read1a)!=len(stype1) or len(read1a)!=len(sample_name1):
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: read1, type and sample name must be of the same length.\n\tExit\n" + '\033[0m')
         sys.exit()
+    if read2 != "":
+        read2a=read2.split(",")
+        if len(read1a)!=len(read2a):
+            print ('\033[0;31m' + "\n[AP]\tError while reading files: read1 and read2 must be of the same length.\n\tExit\n" + '\033[0m')
+            sys.exit()
+    
 
 
 def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,ref_bowtie,ref_hisat2,bed_file,phix,rib1,rib2,a_method,GTF,library_type,R_path,stype,q_method,dea_method):
@@ -206,20 +212,23 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['library_type',library_type])
         filewriter.writerow(['quantification_method',q_method])
         filewriter.writerow(['dea_method',dea_method])
-#        filewriter.writerow(['sample_names',sample_name])
-#        filewriter.writerow(['sample_types',stype])
         csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads'])
         csvfile.close()
     read1a=read1.split(",")
-    read2a=read2.split(",")
     sample_name1=sample_name.split(",")
     stype1=stype.split(",")
-    for i in range(0, (len(read1a))):
-        cmd="bash "+R_path+"/alignment.sh "+project_name+" "+pool_name+" "+sample_name1[i]+" "+output_dir+" "+read1a[i]+" "+read2a[i]+" "+str(Threads)+" "+ref_bowtie+" "+ref_hisat2+" "+bed_file+" "+phix+" "+rib1+" "+rib2+" "+a_method+" "+GTF+" "+library_type+" "+stype1[i]
-        os.system(cmd)
+    if read2 != "":
+        read2a=read2.split(",")
+        for i in range(0, (len(read1a))):
+            cmd="bash "+R_path+"/alignment.sh "+project_name+" "+pool_name+" "+sample_name1[i]+" "+output_dir+" "+read1a[i]+" "+read2a[i]+" "+str(Threads)+" "+ref_bowtie+" "+ref_hisat2+" "+bed_file+" "+phix+" "+rib1+" "+rib2+" "+a_method+" "+GTF+" "+library_type+" "+stype1[i]
+            os.system(cmd)
+    if read2 == "":
+        for i in range(0, (len(read1a))):
+            cmd="bash "+R_path+"/alignment_se.sh "+project_name+" "+pool_name+" "+sample_name1[i]+" "+output_dir+" "+read1a[i]+" "+str(Threads)+" "+ref_bowtie+" "+ref_hisat2+" "+bed_file+" "+phix+" "+rib1+" "+rib2+" "+a_method+" "+GTF+" "+library_type+" "+stype1[i]
+            os.system(cmd)
 
 
 def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,Threads,GTF,library_type,ref_gen):
