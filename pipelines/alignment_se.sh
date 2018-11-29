@@ -102,7 +102,7 @@ fastq_screen ${R1_FASTQ} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/Qu
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}####### PhiX Alignment #######${NC}\n"
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}
-bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${PHIX_GENOME} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.PE.bam;
+bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${PHIX_GENOME} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.PE.bam;
 samtools view ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.PE.bam | cut -f 1 > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.header.list
 sort --parallel=5 ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.header.list > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.header.sorted.list;
 rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/PhiX.header.list;
@@ -117,8 +117,8 @@ R1_FASTQ="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BN
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}##### Ribosomal DNA Alignment #####${NC}\n"
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}
-bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_hum5SrDNA} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/hum5SrDNA.PE.bam &
-bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_humRibosomal} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/humRibosomal.PE.bam &
+bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_hum5SrDNA} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/hum5SrDNA.PE.bam &
+bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${RIBOSOMAL_GENOME_humRibosomal} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/humRibosomal.PE.bam &
 wait
 samtools view ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/hum5SrDNA.PE.bam | cut -f 1 > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/hum5SrDNA.list &
 samtools view ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/humRibosomal.PE.bam | cut -f 1 > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/humRibosomal.list &
