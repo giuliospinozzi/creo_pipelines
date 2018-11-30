@@ -159,7 +159,7 @@ def checkArgs(args):
         sys.exit()
 
 
-def checkOptions(a_method,q_method):
+def checkOptions(a_method,q_method,dea_method):
     """
     Check quantification and DEA method options
     """
@@ -169,11 +169,20 @@ def checkOptions(a_method,q_method):
     if a_method == 'Tophat' and q_method == 'featureCounts':
         print ('\033[0;31m' + "\n[AP]\tError: alignment method Tophat requires quantification method Cufflinks\n\tExit\n" + '\033[0m')
         sys.exit()
+    if q_method == 'Cufflinks' and dea_method == 'edgeR':
+        print ('\033[0;31m' + "\n[AP]\tError: quantification method Cufflinks requires DEA method cummeRbund\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if q_method == 'Cufflinks' and dea_method == 'DESeq2':
+        print ('\033[0;31m' + "\n[AP]\tError: quantification method Cufflinks requires DEA method cummeRbund\n\tExit\n" + '\033[0m')
+        sys.exit()
+    if q_method == 'featureCounts' and dea_method == 'cummeRbund':
+        print ('\033[0;31m' + "\n[AP]\tError: quantification method featureCounts requires DEA method edgeR or DESeq2\n\tExit\n" + '\033[0m')
+        sys.exit()
 
 
 def checkFile(read1,read2,stype,sample_name):
     """
-    Check read and sample type number
+    Check read and sample type number and case/control
     """
     read1a=read1.split(",")
     stype1=stype.split(",")
@@ -186,6 +195,9 @@ def checkFile(read1,read2,stype,sample_name):
         if len(read1a)!=len(read2a):
             print ('\033[0;31m' + "\n[AP]\tError while reading files: read1 and read2 must be of the same length.\n\tExit\n" + '\033[0m')
             sys.exit()
+    if len([t for t in stype1 if t == 'cntrl'])==0 or len([t for t in stype1 if t != 'cntrl'])==0:
+        print ('\033[0;31m' + "\n[AP]\tError while reading files: there must be at least one case and one control.\n\tExit\n" + '\033[0m')
+        sys.exit()
     
 
 

@@ -62,19 +62,32 @@ resdata[resdata$pvalue==0|resdata$padj==0,c("pvalue","padj")]=0.1e-320
 write.csv(resdata, file="deseq2-diffexpr-results.csv")
 
 ## Volcano plot
-volcanoplot <- function (res, lfcthresh=2, sigthresh=0.05, main="Volcano Plot", legendpos="topleft", labelsig=TRUE, textcx=1, ...) {
-  with(res, plot(log2FoldChange, -log10(pvalue), pch=20, main=main, ...))
-  with(subset(res, padj<sigthresh ), points(log2FoldChange, -log10(pvalue), pch=20, col="red", ...))
-  with(subset(res, abs(log2FoldChange)>lfcthresh), points(log2FoldChange, -log10(pvalue), pch=20, col="orange", ...))
-  with(subset(res, padj<sigthresh & abs(log2FoldChange)>lfcthresh), points(log2FoldChange, -log10(pvalue), pch=20, col="green", ...))
-  if (labelsig) {
-    require(calibrate)
-    with(subset(res, padj<sigthresh & abs(log2FoldChange)>lfcthresh), textxy(log2FoldChange, -log10(pvalue), labs=Gene, cex=textcx, ...))
-  }
-  legend(legendpos, xjust=1, yjust=1, legend=c(paste("FDR<",sigthresh,sep=""), paste("|LogFC|>",lfcthresh,sep=""), "both"), pch=20, col=c("red","orange","green"))
+colnames(resdata)[c(3,7)]=c("log2FoldChange","padj")
+resdata$color="F"
+for (i in 1:nrow(resdata)) {
+  if (resdata$padj[i]<0.05) {resdata$color[i]="FDR<0.05"}
+  if (abs(resdata$log2FoldChange[i])>1.5) {resdata$color[i]="|LogFC|>1.5"}
+  if (resdata$padj[i]<0.05 & abs(resdata$log2FoldChange[i])>1.5) {resdata$color[i]="both"}
 }
+resdata=resdata[order(resdata$padj,decreasing = T),]
 png("deseq2-volcanoplot.png", 1200, 1000, pointsize=20)
-volcanoplot(resdata, textcx=.6)
+print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
+        geom_point(aes(color = color)) + 
+        scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
+                           breaks=c("F","FDR<0.05", "|LogFC|>1.5","both"), name="",
+                           labels=c("F","FDR<0.05", "|LogFC|>1.5","both"),
+                           limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
+        geom_text_repel(
+          data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
+          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+              panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+              panel.background = element_blank(), axis.line = element_line(colour = "black"),
+              legend.key = element_rect(colour = NA, fill = NA),
+              legend.title = element_blank(),
+              legend.background = element_rect(fill="white",
+                                               size=0.25, linetype="solid", 
+                                               colour ="black")))
 dev.off()
 
 # heatmap topgenes
