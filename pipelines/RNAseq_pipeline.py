@@ -282,7 +282,7 @@ def main():
     """
     # first check args and file paths
     checkArgs(args)
-    checkOptions(args.a_method,args.q_method)
+    checkOptions(args.a_method,args.q_method,args.dea_method)
     checkFile(args.read1,args.read2,args.stype,args.sample_name)
 
     # alignment
