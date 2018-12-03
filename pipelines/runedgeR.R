@@ -67,6 +67,7 @@ resdata[resdata$PValue==0|resdata$FDR==0,c("PValue","FDR")]=0.1e-320
 write.csv(resdata,"edgeR-diffexpr-results.csv")
 
 # volcano plot
+library(ggrepel)
 colnames(resdata)[c(3,7)]=c("log2FoldChange","padj")
 resdata$color="F"
 for (i in 1:nrow(resdata)) {

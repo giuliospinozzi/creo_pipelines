@@ -62,6 +62,7 @@ resdata[resdata$pvalue==0|resdata$padj==0,c("pvalue","padj")]=0.1e-320
 write.csv(resdata, file="deseq2-diffexpr-results.csv")
 
 ## Volcano plot
+library(ggrepel)
 colnames(resdata)[c(3,7)]=c("log2FoldChange","padj")
 resdata$color="F"
 for (i in 1:nrow(resdata)) {

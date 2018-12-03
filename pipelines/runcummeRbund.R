@@ -48,6 +48,7 @@ diffGenesOutput1 <- merge(diffGenesOutput,fpkm,by="row.names")
 write.csv(diffGenesOutput1, file="cummeRbund-diffexpr-results.csv")
 
 # volcano plot
+library(ggrepel)
 colnames(diffGenesOutput1)[c(8,10)]=c("log2FoldChange","padj")
 resdata=diffGenesOutput1
 resdata$color="F"
