@@ -14,16 +14,21 @@ arr=($array)
 READ1b=()
 READ2b=()
 
+se_pe=$(zenity --list --text="" --radiolist --column "" --column "" --hide-header --title="Paired end/Single end" TRUE "Paired_end" FALSE "Single_end")
+
 for sample in `seq 1 "${#arr[@]}"`; do
 	zenity --info --title="READ-1" --text="Select read-1 file for "${arr[$(($sample-1))]} --ok-label="OK";
 	READ1a=$(zenity --file-selection --title="***READ-1***"  --text="Select read-1 file");
-
-	zenity --info --title="READ-2" --text="Select read-2 file for "${arr[$(($sample-1))]} --ok-label="OK";
-	READ2a=$(zenity --file-selection --title="***READ-2***"  --text="Select read-2 file");
-
 	READ1b+=( ${READ1a} )
-	READ2b+=( ${READ2a} )
 done
+
+if [ ${se_pe} = "Paired_end" ]; then
+	for sample in `seq 1 "${#arr[@]}"`; do
+		zenity --info --title="READ-2" --text="Select read-2 file for "${arr[$(($sample-1))]} --ok-label="OK";
+		READ2a=$(zenity --file-selection --title="***READ-2***"  --text="Select read-2 file");
+		READ2b+=( ${READ2a} )
+	done
+fi
 
 function join { local IFS="$1"; shift; echo "$*"; }
 READ1=$(join , ${READ1b[@]})

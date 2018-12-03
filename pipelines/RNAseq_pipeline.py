@@ -225,6 +225,16 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['quantification_method',q_method])
         filewriter.writerow(['dea_method',dea_method])
         csvfile.close()
+    if read2 == "":
+        with open('/Users/shadow/Desktop/general_report.csv', 'a') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter='\t')
+            filewriter.writerow(['Single-end/Paired-end',"Single_end"])
+            csvfile.close()
+    if read2 != "":
+        with open('/Users/shadow/Desktop/general_report.csv', 'a') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter='\t')
+            filewriter.writerow(['Single-end/Paired-end',"Paired_end"])
+            csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
         filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads'])
