@@ -133,8 +133,17 @@ category_number = "$max_cat"
 
 threads = "$threads | zenity --text-info --title="Summary" --width=700 --height=600 --ok-label="OK" --cancel-label="Cancel"
 
-
-if [ "$?" -eq "0" ]; then
-	cd ${OUT}
-	python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
+if [ ${se_pe} = "Paired_end" ]; then
+	if [ "$?" -eq "0" ]; then
+		cd ${OUT}
+		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
+	fi
 fi
+
+if [ ${se_pe} = "Single_end" ]; then
+	if [ "$?" -eq "0" ]; then
+		cd ${OUT}
+		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
+	fi
+fi
+

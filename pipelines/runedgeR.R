@@ -63,12 +63,14 @@ edgeR_results <- topTags(lrt, n=Inf)
 resdata <- merge(as.data.frame(edgeR_results), as.data.frame(fpkm), by="row.names")
 names(resdata)[1] <- "Gene"
 resdata <- resdata[order(resdata$FDR), ]
+resdata=resdata[,c(1,3,6:13)]
+resdata=na.omit(resdata)
 resdata[resdata$PValue==0|resdata$FDR==0,c("PValue","FDR")]=0.1e-320
 write.csv(resdata,"edgeR-diffexpr-results.csv")
 
 # volcano plot
 library(ggrepel)
-colnames(resdata)[c(3,7)]=c("log2FoldChange","padj")
+colnames(resdata)[c(2,4)]=c("log2FoldChange","padj")
 resdata$color="F"
 for (i in 1:nrow(resdata)) {
   if (resdata$padj[i]<0.05) {resdata$color[i]="FDR<0.05"}

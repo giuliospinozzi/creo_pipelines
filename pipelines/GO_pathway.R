@@ -16,12 +16,12 @@ max_c = as.numeric(max_c)
 
 if (dea == "edgeR"|dea == "DESeq2") {
   table=read.csv(table_path,row.names = 1)
-  table1=table[,c(1,3,7)]
+  table1=table[,c(1,2,4)]
 }
 
 if (dea == "cummeRbund") {
   table=read.csv(table_path,row.names = 1)
-  table1=table[,c(2,8,10)]
+  table1=table[,c(1,2,3)]
 }
 
 colnames(table1)=c("Gene","logFC","FDR")

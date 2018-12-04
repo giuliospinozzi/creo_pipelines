@@ -21,14 +21,19 @@ fastqc2=list()
 for (i in 1:length(sam)) {
   img1=image_read(list.files(path=paste0(out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[1])
   screen1=list.append(screen1,img1)
-  img2=image_read(list.files(path=paste0(out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[2])
-  screen2=list.append(screen2,img2)
   img3=image_read(paste0(list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F)[1],"/Images/per_base_quality.png"))
   img3=image_annotate(img3,list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[1],size=30)
   fastqc1=list.append(fastqc1,img3)
-  img4=image_read(paste0(list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F)[2],"/Images/per_base_quality.png"))
-  img4=image_annotate(img4,list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[2],size=30)
-  fastqc2=list.append(fastqc2,img4)
+}
+
+if (gen_sum[7,1]=="Paired_end") {
+  for (i in 1:length(sam)) {
+    img2=image_read(list.files(path=paste0(out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[2])
+    screen2=list.append(screen2,img2)
+    img4=image_read(paste0(list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F)[2],"/Images/per_base_quality.png"))
+    img4=image_annotate(img4,list.dirs(path=paste0(out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[2],size=30)
+    fastqc2=list.append(fastqc2,img4)
+  }
 }
 
 ## BAM Quality
@@ -37,9 +42,20 @@ if (gen_sum[3,1]=="tophat") {dir_a="/TopHat2/"}
 stat=list()
 read_d=list()
 inn_d=list()
+jun=list()
+spli_ev=list()
+spli_jun=list()
 for (i in 1:length(sam)) {
   stat=list.append(stat,list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="bam_stat.txt",full.names = T))
   read_d=list.append(read_d,list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="read_distribution.txt",full.names = T))
+  img1=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="junctionSaturation_plot.pdf",full.names = T))
+  img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 70)
+  jun=list.append(jun,img1)
+  spli_ev=list.append(spli_ev,image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_events.pdf",full.names = T)))
+  spli_jun=list.append(spli_jun,image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_junction.pdf",full.names = T)))
+}
+
+if (gen_sum[7,1]=="Paired_end") {
   img=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
   img=image_annotate(img,"Inner distance plot",gravity = "North",size = 70)
   inn_d=list.append(inn_d,img)
@@ -60,7 +76,7 @@ processFile = function(filepath,title) {
 
 ## Differential expression analysis
 data_test=read.csv(paste0(out_dir,"/Quantification_and_DEA/",list.files(path=paste0(out_dir,"/Quantification_and_DEA/"),pattern="-diffexpr-results.csv")), row.names = 1,dec = ".")
-for (i in 3:ncol(data_test)){data_test[,i]=signif(data_test[,i],digits=3)}
+for (i in 2:ncol(data_test)){data_test[,i]=signif(data_test[,i],digits=3)}
 pca=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
                           pattern = "-pca.png",
                           full.names = T))
@@ -121,8 +137,10 @@ shinyServer(function(input, output, session) {
   })
   
   output$quality2 <- renderPlot({
-    for (i in 1:length(sam)) {
-      if (input$FastQ==sam[i]) {plot(screen2[[i]])}
+    if (length(screen2)>0) {
+      for (i in 1:length(sam)) {
+        if (input$FastQ==sam[i]) {plot(screen2[[i]])}
+      }
     }
   })
   
@@ -133,8 +151,10 @@ shinyServer(function(input, output, session) {
   })
   
   output$quality4 <- renderPlot({
-    for (i in 1:length(sam)) {
-      if (input$FastQ==sam[i]) {plot(fastqc2[[i]])}
+    if (length(fastqc2)>0) {
+      for (i in 1:length(sam)) {
+        if (input$FastQ==sam[i]) {plot(fastqc2[[i]])}
+      }
     }
   })
   
@@ -152,8 +172,28 @@ shinyServer(function(input, output, session) {
   })
   
   output$inn <- renderPlot({
+    if (length(inn_d)>0) {
+      for (i in 1:length(sam)) {
+        if (input$BAM==sam[i]) {plot(inn_d[[i]])}
+      }
+    }
+  })
+  
+  output$spli_ev_out <- renderPlot({
     for (i in 1:length(sam)) {
-      if (input$BAM==sam[i]) {plot(inn_d[[i]])}
+      if (input$BAM==sam[i]) {plot(spli_ev[[i]])}
+    }
+  })
+  
+  output$spli_jun_out <- renderPlot({
+    for (i in 1:length(sam)) {
+      if (input$BAM==sam[i]) {plot(spli_jun[[i]])}
+    }
+  })
+  
+  output$jun_out <- renderPlot({
+    for (i in 1:length(sam)) {
+      if (input$BAM==sam[i]) {plot(jun[[i]])}
     }
   })
   
@@ -365,7 +405,7 @@ shinyServer(function(input, output, session) {
     g_gene=c()
     fc=c()
     for (i in 1:length(gene)) {
-      fc[i]=data_test[data_test$Gene==gene[i],"logFC"]
+      fc[i]=data_test[data_test$Gene==gene[i],"log2FoldChange"]
       if (fc[i]<0) {g_gene[i]="down"}
       if (fc[i]>=0) {g_gene[i]="up"}
     }

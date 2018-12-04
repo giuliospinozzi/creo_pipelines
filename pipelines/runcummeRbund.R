@@ -15,6 +15,14 @@ library(ggfortify)
 input_table <- read.csv(input,sep=",")
 DataGroups <- input_table$Type
 fpkm <- repFpkmMatrix(genes(cuff_data))
+#change sample names
+sam_names=read.table(paste0(cuffdiff,"/read_groups.info"),header = T)
+sam_names$name1=paste0(sam_names$condition,"_",sam_names$replicate_num)
+for (i in 1:nrow(sam_names)) {
+  sam_names$name2[i]=gsub("^.*?Quantification_and_DEA/","",sam_names$file[i])
+  sam_names$name2[i]=gsub("/cuffquant/abundances.cxb$","",sam_names$name2[i])
+  colnames(fpkm)[grep(sam_names$name1[i],colnames(fpkm))]=sam_names$name2[i]
+}
 pca <- rbind(fpkm,type=as.character(DataGroups))
 png("cummeRbund-pca.png", w=1000, h=1000, pointsize=30)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=10)+ 
@@ -43,13 +51,16 @@ diffGenesData <- diffGenesData[,-1]
 diffGenesOutput <- merge(diffGenesNames,diffGenesData,by="row.names")
 rownames(diffGenesOutput) <- diffGenesOutput$Row.names
 diffGenesOutput <- diffGenesOutput[,-1]
-colnames(diffGenesOutput)[1] <- "Gene"
 diffGenesOutput1 <- merge(diffGenesOutput,fpkm,by="row.names")
+diffGenesOutput1=diffGenesOutput1[,c(2,8,10,13:18)]
+colnames(diffGenesOutput1)[1:3] <- c("Gene","log2FoldChange","padj")
+diffGenesOutput1 <- diffGenesOutput1[order(diffGenesOutput1$padj), ]
+diffGenesOutput1=na.omit(diffGenesOutput1)
+diffGenesOutput1[diffGenesOutput1$padj==0,c("padj")]=0.1e-320
 write.csv(diffGenesOutput1, file="cummeRbund-diffexpr-results.csv")
 
 # volcano plot
 library(ggrepel)
-colnames(diffGenesOutput1)[c(8,10)]=c("log2FoldChange","padj")
 resdata=diffGenesOutput1
 resdata$color="F"
 for (i in 1:nrow(resdata)) {

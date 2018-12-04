@@ -62,7 +62,7 @@ parser.add_argument('-n', '--project-name', dest="project_name", help="Project n
 parser.add_argument('-pn', '--pool-name', dest="pool_name", help="Pool name. \n No default option. \n", action="store", required=True)
 parser.add_argument('-sn', '--sample-name', dest="sample_name", help="Sample names (',' sep). \n No default option. \n", action="store", required=True)
 parser.add_argument('-r1', '--read1', dest="read1", help="Read 1 fastq path (',' sep). \n No default option. \n", action="store", required=True)
-parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 fastq path (',' sep). \n No default option. \n", action="store", required=False, default="")
+parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 fastq path (',' sep). \n Default: single-end. \n", action="store", required=False, default="")
 parser.add_argument('-type', '--type', dest="stype", help="Sample types (cntrl,treat). \n No default option. \n", action="store", required=True)
 parser.add_argument('-rb', '--reference-genome-bowtie', dest="ref_bowtie", help="Reference genome file path for bowtie. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/bowtie2/hg19")
 parser.add_argument('-rh', '--reference-genome-hisat2', dest="ref_hisat2", help="Reference genome file path for hisat2. \n Default: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/hisat2/hg19")
@@ -226,12 +226,12 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['dea_method',dea_method])
         csvfile.close()
     if read2 == "":
-        with open('/Users/shadow/Desktop/general_report.csv', 'a') as csvfile:
+        with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'a') as csvfile:
             filewriter = csv.writer(csvfile, delimiter='\t')
             filewriter.writerow(['Single-end/Paired-end',"Single_end"])
             csvfile.close()
     if read2 != "":
-        with open('/Users/shadow/Desktop/general_report.csv', 'a') as csvfile:
+        with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'a') as csvfile:
             filewriter = csv.writer(csvfile, delimiter='\t')
             filewriter.writerow(['Single-end/Paired-end',"Paired_end"])
             csvfile.close()

@@ -6,6 +6,7 @@ out_dir <- args[1]
 
 sam_sum=read.csv(paste0(out_dir,"/reports/sample_report.csv"),sep="\t")
 sam=as.character(sam_sum$sample_name)
+gen_sum=read.csv(paste0(out_dir,"/reports/general_report.csv"),sep="\t",header = F,row.names = 1)
 
 shinyUI(fluidPage(
   
@@ -72,9 +73,13 @@ shinyUI(fluidPage(
                           ),
                           column(8,align="center",
                                  plotOutput("quality1",height = "600px"),
-                                 plotOutput("quality2",height = "600px"),
+                                 if (gen_sum[7,1]=="Paired_end") {
+                                   plotOutput("quality2",height = "600px")
+                                 },
                                  plotOutput("quality3",height = "600px"),
-                                 plotOutput("quality4",height = "600px")
+                                 if (gen_sum[7,1]=="Paired_end") {
+                                   plotOutput("quality4",height = "600px")
+                                 }
                           )
                         )
                ),
@@ -89,7 +94,12 @@ shinyUI(fluidPage(
                           column(8,
                                  verbatimTextOutput("stat"),
                                  verbatimTextOutput("read"),
-                                 plotOutput("inn",height = "800px")
+                                 if (gen_sum[7,1]=="Paired_end") {
+                                   plotOutput("inn",height = "800px")
+                                 },
+                                 plotOutput("jun_out",height = "800px"),
+                                 plotOutput("spli_ev_out",height = "800px"),
+                                 plotOutput("spli_jun_out",height = "800px")
                           )
                         )
                ),

@@ -57,13 +57,15 @@ res <- res[order(res$padj), ]
 ## Merge with normalized count data
 resdata <- merge(as.data.frame(res), as.data.frame(fpkm), by="row.names", sort=FALSE)
 names(resdata)[1] <- "Gene"
+resdata=resdata[,c(1,3,6:13)]
 ## Write results
+resdata=na.omit(resdata)
 resdata[resdata$pvalue==0|resdata$padj==0,c("pvalue","padj")]=0.1e-320
 write.csv(resdata, file="deseq2-diffexpr-results.csv")
 
 ## Volcano plot
 library(ggrepel)
-colnames(resdata)[c(3,7)]=c("log2FoldChange","padj")
+colnames(resdata)[c(2,4)]=c("log2FoldChange","padj")
 resdata$color="F"
 for (i in 1:nrow(resdata)) {
   if (resdata$padj[i]<0.05) {resdata$color[i]="FDR<0.05"}
