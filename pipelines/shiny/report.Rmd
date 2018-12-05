@@ -68,17 +68,21 @@ for (i in 1:length(sam)) {
   img1=image_read(list.files(path=paste0(params$out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[1])
   plot(img1)
   cat("\n\n")
-  img2=image_read(list.files(path=paste0(params$out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[2])
-  plot(img2)
-  cat("\n\n")
+  if (gen_sum$V2[7]=="Paired_end") {
+    img2=image_read(list.files(path=paste0(params$out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[2])
+    plot(img2)
+    cat("\n\n")
+  }
   img3=image_read(paste0(list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F)[1],"/Images/per_base_quality.png"))
   img3=image_annotate(img3,list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[1],size=30)
   plot(img3)
   cat("\n\n")
-  img4=image_read(paste0(list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F)[2],"/Images/per_base_quality.png"))
-  img4=image_annotate(img4,list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[2],size=30)
-  plot(img4)
-  cat("\n\n")
+  if (gen_sum$V2[7]=="Paired_end") {
+    img4=image_read(paste0(list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F)[2],"/Images/per_base_quality.png"))
+    img4=image_annotate(img4,list.dirs(path=paste0(params$out_dir,"/Quality/",sam[i]),recursive = F,full.names = F)[2],size=30)
+    plot(img4)
+    cat("\n\n")
+  }
 }
 ```
 
@@ -134,9 +138,18 @@ for (i in 1:length(sam)) {
   read_d=list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="read_distribution.txt",full.names = T)
   processFile(read_d, paste0("\n\n#### Read distribution ",sam[i]," ####\n"))
   cat("\n\n")
-  img_inn=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
-  img_inn=image_annotate(img_inn, paste0("Inner distance plot ",sam[i]),gravity = "North",size = 70)
-  plot(img_inn)
+  if (gen_sum$V2[7]=="Paired_end") {
+    img_inn=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
+    img_inn=image_annotate(img_inn, paste0("Inner distance plot ",sam[i]),gravity = "North",size = 70)
+    plot(img_inn)
+  }
+  img1=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="junctionSaturation_plot.pdf",full.names = T))
+  img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 70)
+  plot(img1)
+  spli_ev=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_events.pdf",full.names = T))
+  plot(spli_ev)
+  spli_jun=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_junction.pdf",full.names = T))
+  plot(spli_jun)
 }
 
 ```
@@ -182,23 +195,23 @@ Outputs consist of a matrix with differential expression results, a PCA, a volca
 
 
 ```{r fig.align='center', out.width = "90%", dpi = 500}
-pca=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                          pattern = "-pca.png",
+pca=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                          pattern = "-pca.pdf",
                           full.names = T))
 print(pca)
 cat("\n\n")
-volcano=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                              pattern = "-volcanoplot.png",
+volcano=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                              pattern = "-volcanoplot.pdf",
                               full.names = T))
 print(volcano)
 cat("\n\n")
-heat1=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                            pattern = "-heatmap-topVarGenes.png",
+heat1=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                            pattern = "-heatmap-topVarGenes.pdf",
                             full.names = T))
 print(heat1)
 cat("\n\n")
-heat2=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                            pattern = "-heatmap-samples.png",
+heat2=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                            pattern = "-heatmap-samples.pdf",
                             full.names = T))
 print(heat2)
 
@@ -206,20 +219,30 @@ print(heat2)
 
 \pagebreak
 
-# Meta-analysis
+```{r comment="", results='asis'}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+  
+cat("# Meta-analysis
 
 ## Gene ontology
 
-The Gene Ontology database, developed by the GO consortium, allows to analyze genes on the basis of their molecular function, the biological process in which they intervene or the cellular localization of their products. One of the main uses of GO is to perform enrichment analysis on gene sets. For the analysis of GO, the R package "clusterProfiler" was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
+The Gene Ontology database, developed by the GO consortium, allows to analyze genes on the basis of their molecular function, the biological process in which they intervene or the cellular localization of their products. One of the main uses of GO is to perform enrichment analysis on gene sets. For the analysis of GO, the R package 'clusterProfiler' was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
 
 The outputs obtained are a treemap, three cnetplot and three dotplot (one for GO domain). The treemap reports the terms of GO enriched with dimensions of the rectangles proportional to the number of genes. In the dotplots, instead, the five most enriched terms (with lower p-values) are reported with dimensions proportional to the number of genes. Finally, the same five terms of the dotplots are shown in the cnetplots to show the genes that have been enriched.  
 
-
+")}
+```
 
 ```{r fig.align='center', out.width = "100%", dpi = 500}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+
 tree=image_read_pdf(paste0(out_dir,"/Meta-analysis/Gene_ontology/treemap_GO_fc1.5_pv0.05.pdf"))
 print(tree)
-cat("\n\n")
+}
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+
 dotp=list.files(path=paste0(out_dir,"/Meta-analysis/Gene_ontology"),
                             pattern = "dotplot_GO_.*\\.pdf",
                             full.names = T)
@@ -228,9 +251,15 @@ for (i in 1:length(dotp)) {
   dot_go=list.append(dot_go,image_read_pdf(dotp[i]))
 }
 print(dot_go[[1]])
-if (length(dot_go)>1) {print(dot_go[[2]])}
-if (length(dot_go)>2) {print(dot_go[[3]])}
+}
 
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+if (length(dot_go)>1) {print(dot_go[[2]])}}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+if (length(dot_go)>2) {print(dot_go[[3]])}}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
 cnetp=list.files(path=paste0(out_dir,"/Meta-analysis/Gene_ontology"),
                             pattern = "cnetplot_GO_.*\\.pdf",
                             full.names = T)
@@ -238,26 +267,37 @@ cnet_go=list()
 for (i in 1:length(cnetp)) {
   cnet_go=list.append(cnet_go,image_read_pdf(cnetp[i]))
 }
-print(cnet_go[[1]])
-if (length(cnet_go)>1) {print(cnet_go[[2]])}
-if (length(cnet_go)>2) {print(cnet_go[[3]])}
+print(cnet_go[[1]])}
 
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+if (length(cnet_go)>1) {print(cnet_go[[2]])}}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+if (length(cnet_go)>2) {print(cnet_go[[3]])}
+}
 ```
 
-## Pathway analysis
+```{r comment="", results='asis'}
 
-Another method of gene clustering is to use the pathway analysis in order to relate the genes obtained from previous analysis with the metabolic and signaling pathways present in public databases. One of the most used pathway database is the Kyoto Encyclopedia of Genes and Genomes (KEGG), which since its introduction in 1995 has proved a useful reference for the understanding of biological pathways. For the pathway analysis, the R package "clusterProfiler" was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
+  
+cat("## Pathway analysis
+
+Another method of gene clustering is to use the pathway analysis in order to relate the genes obtained from previous analysis with the metabolic and signaling pathways present in public databases. One of the most used pathway database is the Kyoto Encyclopedia of Genes and Genomes (KEGG), which since its introduction in 1995 has proved a useful reference for the understanding of biological pathways. For the pathway analysis, the R package 'clusterProfiler' was used, evaluating genes with an absolute value of Fold Change greater than 1.5 and an adjusted p-value of less than 0.05. The enrichment was evaluated with a p-value threshold of 0.05 and the adjustment method for multiple tests FDR.  
 
 The outputs obtained are a dotplot and a cnetplot. In both are shown the five most enriched pathways (with lower p-values).  
 
-
+")}
+```
 
 ```{r fig.align='center', out.width = "100%", dpi = 500}
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
 dot=image_read_pdf(paste0(out_dir,"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))
-print(dot)
-cat("\n\n")
+print(dot)}
+
+if (file.exists(paste0(out_dir,"/Meta-analysis"))) {
 cnet_path=image_read_pdf(paste0(out_dir,"/Meta-analysis/Pathway_analysis/cnetplot_pathways.pdf"))
-print(cnet_path)
+print(cnet_path)}
 ```
 
 \pagebreak

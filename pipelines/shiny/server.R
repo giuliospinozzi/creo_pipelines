@@ -56,9 +56,11 @@ for (i in 1:length(sam)) {
 }
 
 if (gen_sum[7,1]=="Paired_end") {
-  img=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
-  img=image_annotate(img,"Inner distance plot",gravity = "North",size = 70)
-  inn_d=list.append(inn_d,img)
+  for (i in 1:length(sam)) {
+    img=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
+    img=image_annotate(img,"Inner distance plot",gravity = "North",size = 70)
+    inn_d=list.append(inn_d,img)
+  }
 }
 
 processFile = function(filepath,title) {
@@ -77,39 +79,40 @@ processFile = function(filepath,title) {
 ## Differential expression analysis
 data_test=read.csv(paste0(out_dir,"/Quantification_and_DEA/",list.files(path=paste0(out_dir,"/Quantification_and_DEA/"),pattern="-diffexpr-results.csv")), row.names = 1,dec = ".")
 for (i in 2:ncol(data_test)){data_test[,i]=signif(data_test[,i],digits=3)}
-pca=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                          pattern = "-pca.png",
-                          full.names = T))
-volcano=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                              pattern = "-volcanoplot.png",
+pca=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                              pattern = "-pca.pdf",
                               full.names = T))
-heat1=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                            pattern = "-heatmap-topVarGenes.png",
-                            full.names = T))
-heat2=image_read(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
-                            pattern = "-heatmap-samples.png",
-                            full.names = T))
+volcano=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                                  pattern = "-volcanoplot.pdf",
+                                  full.names = T))
+heat1=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                                pattern = "-heatmap-topVarGenes.pdf",
+                                full.names = T))
+heat2=image_read_pdf(list.files(path=paste0(out_dir,"/Quantification_and_DEA"),
+                                pattern = "-heatmap-samples.pdf",
+                                full.names = T))
 
 
 ## Meta-analysis
-GO=read.csv(paste0(out_dir,"/Meta-analysis/Gene_ontology/GO_fc1.5_pv0.05.csv"))
-GO=GO[,c(1,2,3,4,5,6,7,9,10,8)]
-for (i in 5:7){GO[,i]=signif(GO[,i],digits=3)}
-GO_gene=read.csv(paste0(out_dir,"/Meta-analysis/Gene_ontology/tab_GO_genes.csv"))
-GO_gene$logFC=signif(GO_gene$logFC,digits = 3)
-tree=image_read_pdf(paste0(out_dir,"/Meta-analysis/Gene_ontology/treemap_GO_fc1.5_pv0.05.pdf"))
-dotp=list.files(path=paste0(out_dir,"/Meta-analysis/Gene_ontology"),
-                pattern = "dotplot_GO_.*\\.pdf",
-                full.names = T)
-dot_go=list()
-for (i in 1:length(dotp)) {
-  dot_go=list.append(dot_go,image_read_pdf(dotp[i]))
+if (file.exists(paste0(out_dir,"/Meta-analysis"))){
+  GO=read.csv(paste0(out_dir,"/Meta-analysis/Gene_ontology/GO_fc1.5_pv0.05.csv"))
+  GO=GO[,c(1,2,3,4,5,6,7,9,10,8)]
+  for (i in 5:7){GO[,i]=signif(GO[,i],digits=3)}
+  GO_gene=read.csv(paste0(out_dir,"/Meta-analysis/Gene_ontology/tab_GO_genes.csv"))
+  GO_gene$logFC=signif(GO_gene$logFC,digits = 3)
+  tree=image_read_pdf(paste0(out_dir,"/Meta-analysis/Gene_ontology/treemap_GO_fc1.5_pv0.05.pdf"))
+  dotp=list.files(path=paste0(out_dir,"/Meta-analysis/Gene_ontology"),
+                  pattern = "dotplot_GO_.*\\.pdf",
+                  full.names = T)
+  dot_go=list()
+  for (i in 1:length(dotp)) {
+    dot_go=list.append(dot_go,image_read_pdf(dotp[i]))
+  }
+  path=read.csv(paste0(out_dir,"/Meta-analysis/Pathway_analysis/pathway_FC1.5_pv0.05.csv"))
+  for (i in 5:7){path[,i]=signif(path[,i],digits=3)}
+  path=path[,c(1,2,3,4,5,6,7,9,8)]
+  dot=image_read_pdf(paste0(out_dir,"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))
 }
-path=read.csv(paste0(out_dir,"/Meta-analysis/Pathway_analysis/pathway_FC1.5_pv0.05.csv"))
-for (i in 5:7){path[,i]=signif(path[,i],digits=3)}
-path=path[,c(1,2,3,4,5,6,7,9,8)]
-dot=image_read_pdf(paste0(out_dir,"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))
-
 
 ## report
 fakeDataProcessing <- function(duration) {
@@ -223,216 +226,220 @@ shinyServer(function(input, output, session) {
   })
   
   ## Gene Ontology
-  output$GO <- renderDataTable({
-    GO
-  },
-  filter = 'top',
-  rownames = FALSE,
-  options = list(pageLength = 5, autoWidth = T)
-  )
-  
-  output$GO_gene <- renderDataTable({
-    GO_gene
-  },
-  filter = 'top',
-  rownames = FALSE,
-  options = list(pageLength = 5, autoWidth = T)
-  )
-  
-  output$network <- renderVisNetwork ({
-    if (length(grep("BP",dotp))>0) {
-      n_cat=input$n_cat
-      GOb=GO[GO$GO_domain=="biological_process",]
-      GOa=as.character(GOb$Description[1:n_cat])
-      GOa=GOa[!is.na(GOa)]
-      gene=c()
-      for (i in 1:length(GOa)) {
-        gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
-      }
-      gene=gene[!is.na(gene)]
-      to=gene
-      gene=unique(gene)
-      g_gene=c()
-      fc=c()
-      for (i in 1:length(gene)) {
-        fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
-        if (fc[i]<0) {g_gene[i]="down"}
-        if (fc[i]>=0) {g_gene[i]="up"}
-      }
-      group=c(rep("GO", length(GOa)), g_gene)
-      value=c(rep(85,length(GOa)),(abs(fc))*10)
-      col=c()
-      for (i in 1:length(group)) {
-        if (group[i]=="GO") {col[i]="bisque"}
-        if (group[i]=="down") {col[i]="dodgerblue"}
-        if (group[i]=="up") {col[i]="red"}
-      }
-      nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
-                       value = value,color=col,font.size = 25)
-      from=c()
-      for (i in 1:length(GOa)) {
-        from=append(from,rep(GOa[i],GOb[GO$Description==GOa[i],"Count"]))
-      }
-      edges=data.frame(from=from,to=to,color="#8DA0CB")
-      
-      visNetwork(nodes,edges,main="GO Biological Process") %>%
-        visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
-        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
-    }
-  })
-  
-  output$network1 <- renderVisNetwork ({
-    if (length(grep("CC",dotp))>0) {
-      n_cat=input$n_cat
-      GOb=GO[GO$GO_domain=="cellular_component",]
-      GOa=as.character(GOb$Description[1:n_cat])
-      GOa=GOa[!is.na(GOa)]
-      gene=c()
-      for (i in 1:length(GOa)) {
-        gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
-      }
-      gene=gene[!is.na(gene)]
-      to=gene
-      gene=unique(gene)
-      g_gene=c()
-      fc=c()
-      for (i in 1:length(gene)) {
-        fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
-        if (fc[i]<0) {g_gene[i]="down"}
-        if (fc[i]>=0) {g_gene[i]="up"}
-      }
-      group=c(rep("GO", length(GOa)), g_gene)
-      value=c(rep(85,length(GOa)),(abs(fc))*10)
-      col=c()
-      for (i in 1:length(group)) {
-        if (group[i]=="GO") {col[i]="bisque"}
-        if (group[i]=="down") {col[i]="dodgerblue"}
-        if (group[i]=="up") {col[i]="red"}
-      }
-      nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
-                       value = value,color=col,font.size = 25)
-      from=c()
-      for (i in 1:length(GOa)) {
-        from=append(from,rep(GOa[i],GOb[GOb$Description==GOa[i],"Count"]))
-      }
-      edges=data.frame(from=from,to=to,color="#8DA0CB")
-      visNetwork(nodes,edges,main="GO Cellular Component") %>%
-        visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
-        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
-    }
-  })
-  
-  output$network2 <- renderVisNetwork ({
-    if (length(grep("MF",dotp))>0) {
-      n_cat=input$n_cat
-      GOb=GO[GO$GO_domain=="molecular_function",]
-      GOa=as.character(GOb$Description[1:n_cat])
-      GOa=GOa[!is.na(GOa)]
-      gene=c()
-      for (i in 1:length(GOa)) {
-        gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
-      }
-      gene=gene[!is.na(gene)]
-      to=gene
-      gene=unique(gene)
-      g_gene=c()
-      fc=c()
-      for (i in 1:length(gene)) {
-        fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
-        if (fc[i]<0) {g_gene[i]="down"}
-        if (fc[i]>=0) {g_gene[i]="up"}
-      }
-      group=c(rep("GO", length(GOa)), g_gene)
-      value=c(rep(85,length(GOa)),(abs(fc))*10)
-      col=c()
-      for (i in 1:length(group)) {
-        if (group[i]=="GO") {col[i]="bisque"}
-        if (group[i]=="down") {col[i]="dodgerblue"}
-        if (group[i]=="up") {col[i]="red"}
-      }
-      nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
-                       value = value,color=col,font.size = 25)
-      from=c()
-      for (i in 1:length(GOa)) {
-        from=append(from,rep(GOa[i],GOb[GOb$Description==GOa[i],"Count"]))
-      }
-      edges=data.frame(from=from,to=to,color="#8DA0CB")
-      visNetwork(nodes,edges,main="GO Molecular Function") %>%
-        visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
-        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
-    }
-  })
-  
-  output$tree <- renderPlot({
-    plot(tree)
-  })
-  
-  output$dot1 <- renderPlot({
-    plot(dot_go[[1]])
-  })
-  
-  output$dot2 <- renderPlot({
-    if (length(dot_go)>1) {
-      plot(dot_go[[2]])
-    }
-  })
-  output$dot3 <- renderPlot({
-    if (length(dot_go)>2) {
-      plot(dot_go[[3]])
-    }
-  })
-  
-  ## Pathway analysis
-  output$path <- renderDataTable({
-    path
-  },
-  filter = 'top',
-  rownames = FALSE,
-  options = list(pageLength = 5, autoWidth = T)
-  )
-  
-  output$network_path <- renderVisNetwork ({
-    n_cat=input$n_cat1
-    patha=as.character(path$Description[1:n_cat])
-    patha=patha[!is.na(patha)]
-    gene=c()
-    for (i in 1:length(patha)) {
-      gene=append(gene,unlist(strsplit(as.character(path[path$Description==patha[i],"geneID"]),"/")))
-    }
-    gene=gene[!is.na(gene)]
-    to=gene
-    gene=unique(gene)
-    g_gene=c()
-    fc=c()
-    for (i in 1:length(gene)) {
-      fc[i]=data_test[data_test$Gene==gene[i],"log2FoldChange"]
-      if (fc[i]<0) {g_gene[i]="down"}
-      if (fc[i]>=0) {g_gene[i]="up"}
-    }
-    group=c(rep("pathway", length(patha)), g_gene)
-    value=c(rep(85,length(patha)),(abs(fc))*10)
-    col=c()
-    for (i in 1:length(group)) {
-      if (group[i]=="pathway") {col[i]="bisque"}
-      if (group[i]=="down") {col[i]="dodgerblue"}
-      if (group[i]=="up") {col[i]="red"}
-    }
-    nodes=data.frame(id = c(patha,gene), group = group,label=c(patha,gene),title=c(patha,gene),
-                     value = value,color=col,font.size = 25)
-    from=c()
-    for (i in 1:length(patha)) {
-      from=append(from,rep(patha[i],path[path$Description==patha[i],"Count"]))
-    }
-    edges=data.frame(from=from,to=to,color="#8DA0CB")
-    visNetwork(nodes,edges,main="Pathway") %>%
-      visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
-      visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+  if (file.exists(paste0(out_dir,"/Meta-analysis"))){
     
-  })
-  
-  output$dot <- renderPlot({
-    plot(dot)
-  })
+    output$GO <- renderDataTable({
+      GO
+    },
+    filter = 'top',
+    rownames = FALSE,
+    options = list(pageLength = 5, autoWidth = T)
+    )
+    
+    output$GO_gene <- renderDataTable({
+      GO_gene
+    },
+    filter = 'top',
+    rownames = FALSE,
+    options = list(pageLength = 5, autoWidth = T)
+    )
+    
+    output$network <- renderVisNetwork ({
+      if (length(grep("BP",dotp))>0) {
+        n_cat=input$n_cat
+        GOb=GO[GO$GO_domain=="biological_process",]
+        GOa=as.character(GOb$Description[1:n_cat])
+        GOa=GOa[!is.na(GOa)]
+        gene=c()
+        for (i in 1:length(GOa)) {
+          gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
+        }
+        gene=gene[!is.na(gene)]
+        to=gene
+        gene=unique(gene)
+        g_gene=c()
+        fc=c()
+        for (i in 1:length(gene)) {
+          fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
+          if (fc[i]<0) {g_gene[i]="down"}
+          if (fc[i]>=0) {g_gene[i]="up"}
+        }
+        group=c(rep("GO", length(GOa)), g_gene)
+        value=c(rep(85,length(GOa)),(abs(fc))*10)
+        col=c()
+        for (i in 1:length(group)) {
+          if (group[i]=="GO") {col[i]="bisque"}
+          if (group[i]=="down") {col[i]="dodgerblue"}
+          if (group[i]=="up") {col[i]="red"}
+        }
+        nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
+                         value = value,color=col,font.size = 25)
+        from=c()
+        for (i in 1:length(GOa)) {
+          from=append(from,rep(GOa[i],GOb[GO$Description==GOa[i],"Count"]))
+        }
+        edges=data.frame(from=from,to=to,color="#8DA0CB")
+        
+        visNetwork(nodes,edges,main="GO Biological Process") %>%
+          visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
+          visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+      }
+    })
+    
+    output$network1 <- renderVisNetwork ({
+      if (length(grep("CC",dotp))>0) {
+        n_cat=input$n_cat
+        GOb=GO[GO$GO_domain=="cellular_component",]
+        GOa=as.character(GOb$Description[1:n_cat])
+        GOa=GOa[!is.na(GOa)]
+        gene=c()
+        for (i in 1:length(GOa)) {
+          gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
+        }
+        gene=gene[!is.na(gene)]
+        to=gene
+        gene=unique(gene)
+        g_gene=c()
+        fc=c()
+        for (i in 1:length(gene)) {
+          fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
+          if (fc[i]<0) {g_gene[i]="down"}
+          if (fc[i]>=0) {g_gene[i]="up"}
+        }
+        group=c(rep("GO", length(GOa)), g_gene)
+        value=c(rep(85,length(GOa)),(abs(fc))*10)
+        col=c()
+        for (i in 1:length(group)) {
+          if (group[i]=="GO") {col[i]="bisque"}
+          if (group[i]=="down") {col[i]="dodgerblue"}
+          if (group[i]=="up") {col[i]="red"}
+        }
+        nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
+                         value = value,color=col,font.size = 25)
+        from=c()
+        for (i in 1:length(GOa)) {
+          from=append(from,rep(GOa[i],GOb[GOb$Description==GOa[i],"Count"]))
+        }
+        edges=data.frame(from=from,to=to,color="#8DA0CB")
+        visNetwork(nodes,edges,main="GO Cellular Component") %>%
+          visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
+          visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+      }
+    })
+    
+    output$network2 <- renderVisNetwork ({
+      if (length(grep("MF",dotp))>0) {
+        n_cat=input$n_cat
+        GOb=GO[GO$GO_domain=="molecular_function",]
+        GOa=as.character(GOb$Description[1:n_cat])
+        GOa=GOa[!is.na(GOa)]
+        gene=c()
+        for (i in 1:length(GOa)) {
+          gene=append(gene,as.character(GO_gene[GO_gene$GO==GOa[i],"Gene"]))
+        }
+        gene=gene[!is.na(gene)]
+        to=gene
+        gene=unique(gene)
+        g_gene=c()
+        fc=c()
+        for (i in 1:length(gene)) {
+          fc[i]=GO_gene[GO_gene==gene[i],"logFC"]
+          if (fc[i]<0) {g_gene[i]="down"}
+          if (fc[i]>=0) {g_gene[i]="up"}
+        }
+        group=c(rep("GO", length(GOa)), g_gene)
+        value=c(rep(85,length(GOa)),(abs(fc))*10)
+        col=c()
+        for (i in 1:length(group)) {
+          if (group[i]=="GO") {col[i]="bisque"}
+          if (group[i]=="down") {col[i]="dodgerblue"}
+          if (group[i]=="up") {col[i]="red"}
+        }
+        nodes=data.frame(id = c(GOa,gene), group = group,label=c(GOa,gene),title=c(GOa,gene),
+                         value = value,color=col,font.size = 25)
+        from=c()
+        for (i in 1:length(GOa)) {
+          from=append(from,rep(GOa[i],GOb[GOb$Description==GOa[i],"Count"]))
+        }
+        edges=data.frame(from=from,to=to,color="#8DA0CB")
+        visNetwork(nodes,edges,main="GO Molecular Function") %>%
+          visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
+          visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+      }
+    })
+    
+    output$tree <- renderPlot({
+      plot(tree)
+    })
+    
+    output$dot1 <- renderPlot({
+      plot(dot_go[[1]])
+    })
+    
+    output$dot2 <- renderPlot({
+      if (length(dot_go)>1) {
+        plot(dot_go[[2]])
+      }
+    })
+    output$dot3 <- renderPlot({
+      if (length(dot_go)>2) {
+        plot(dot_go[[3]])
+      }
+    })
+    
+    ## Pathway analysis
+    output$path <- renderDataTable({
+      path
+    },
+    filter = 'top',
+    rownames = FALSE,
+    options = list(pageLength = 5, autoWidth = T)
+    )
+    
+    output$network_path <- renderVisNetwork ({
+      n_cat=input$n_cat1
+      patha=as.character(path$Description[1:n_cat])
+      patha=patha[!is.na(patha)]
+      gene=c()
+      for (i in 1:length(patha)) {
+        gene=append(gene,unlist(strsplit(as.character(path[path$Description==patha[i],"geneID"]),"/")))
+      }
+      gene=gene[!is.na(gene)]
+      to=gene
+      gene=unique(gene)
+      g_gene=c()
+      fc=c()
+      for (i in 1:length(gene)) {
+        fc[i]=data_test[data_test$Gene==gene[i],"log2FoldChange"]
+        if (fc[i]<0) {g_gene[i]="down"}
+        if (fc[i]>=0) {g_gene[i]="up"}
+      }
+      group=c(rep("pathway", length(patha)), g_gene)
+      value=c(rep(85,length(patha)),(abs(fc))*10)
+      col=c()
+      for (i in 1:length(group)) {
+        if (group[i]=="pathway") {col[i]="bisque"}
+        if (group[i]=="down") {col[i]="dodgerblue"}
+        if (group[i]=="up") {col[i]="red"}
+      }
+      nodes=data.frame(id = c(patha,gene), group = group,label=c(patha,gene),title=c(patha,gene),
+                       value = value,color=col,font.size = 25)
+      from=c()
+      for (i in 1:length(patha)) {
+        from=append(from,rep(patha[i],path[path$Description==patha[i],"Count"]))
+      }
+      edges=data.frame(from=from,to=to,color="#8DA0CB")
+      visNetwork(nodes,edges,main="Pathway") %>%
+        visIgraphLayout(physics = F,smooth = F,type = "full") %>% 
+        visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+      
+    })
+    
+    output$dot <- renderPlot({
+      plot(dot)
+    })
+    
+  }
   
   # Report
   observe({
