@@ -441,6 +441,94 @@ shinyServer(function(input, output, session) {
     
   }
   
+  ## Meta-analysis
+  output$Meta_analysis <- renderUI({
+    panels <- list()
+    if(file.exists(paste0(out_dir,"/Meta-analysis"))) panels[[1]] <- tabPanel("GO analysis",
+                                                                              #                                   if (file.exists(paste0(out_dir,"/Meta-analysis"))){
+                                                                              
+                                                                              fluidRow(
+                                                                                column(12,
+                                                                                       br(),
+                                                                                       DT::dataTableOutput("GO"),
+                                                                                       hr(),
+                                                                                       DT::dataTableOutput("GO_gene"),
+                                                                                       hr()
+                                                                                ),
+                                                                                column(2,offset=0,
+                                                                                       wellPanel(
+                                                                                         numericInput("n_cat", "Number of categories to view:", 5)
+                                                                                       ),
+                                                                                       br(),
+                                                                                       hr(),
+                                                                                       tags$b("Legend"),
+                                                                                       br(),
+                                                                                       br(),
+                                                                                       "Node size is proportional to the absolute Fold Change value.",
+                                                                                       br(),
+                                                                                       br(),
+                                                                                       tags$div(
+                                                                                         HTML(paste0(tags$span(style="color:blue", "Blue")," is for downregulated genes."))
+                                                                                       ),
+                                                                                       br(),
+                                                                                       tags$div(
+                                                                                         HTML(paste0(tags$span(style="color:red", "Red")," is for upregulated genes."))
+                                                                                       ),
+                                                                                       hr()
+                                                                                ),
+                                                                                column(10,
+                                                                                       visNetworkOutput("network",height = "700px"),
+                                                                                       visNetworkOutput("network1",height = "700px"),
+                                                                                       visNetworkOutput("network2",height = "700px")
+                                                                                ),
+                                                                                column(12,
+                                                                                       plotOutput("tree",height = "1000px"),
+                                                                                       plotOutput("dot1",height = "800px"),
+                                                                                       plotOutput("dot2",height = "800px"),
+                                                                                       plotOutput("dot3",height = "800px")
+                                                                                )
+                                                                              )
+    )
+    if(file.exists(paste0(out_dir,"/Meta-analysis"))) panels[[2]] <- tabPanel("Pathway analysis",
+                                                                              fluidRow(
+                                                                                column(12,
+                                                                                       br(),
+                                                                                       DT::dataTableOutput("path"),
+                                                                                       hr()
+                                                                                ),
+                                                                                column(2,offset=0,
+                                                                                       wellPanel(
+                                                                                         numericInput("n_cat1", "Number of categories to view:", 5)
+                                                                                       ),
+                                                                                       br(),
+                                                                                       hr(),
+                                                                                       tags$b("Legend"),
+                                                                                       br(),
+                                                                                       br(),
+                                                                                       "Node size is proportional to the absolute Fold Change value.",
+                                                                                       br(),
+                                                                                       br(),
+                                                                                       tags$div(
+                                                                                         HTML(paste0(tags$span(style="color:blue", "Blue")," is for downregulated genes."))
+                                                                                       ),
+                                                                                       br(),
+                                                                                       tags$div(
+                                                                                         HTML(paste0(tags$span(style="color:red", "Red")," is for upregulated genes."))
+                                                                                       ),
+                                                                                       hr()
+                                                                                ),
+                                                                                column(10,
+                                                                                       visNetworkOutput("network_path",height = "700px")
+                                                                                ),
+                                                                                column(12,align="center",
+                                                                                       plotOutput("dot",height = "700px"))
+                                                                              ))
+    do.call(tabsetPanel, panels)
+  })
+  
+  
+  
+  
   # Report
   observe({
     if (input$start_proc > 0) {

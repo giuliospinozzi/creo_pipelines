@@ -76,7 +76,7 @@ for (i in 1:nrow(resdata)) {
   if (resdata$padj[i]<0.05 & abs(resdata$log2FoldChange[i])>1.5) {resdata$color[i]="both"}
 }
 resdata=resdata[order(resdata$padj,decreasing = T),]
-png("cummeRbund-volcanoplot.png", 1200, 1000, pointsize=20)
+png("cummeRbund-volcanoplot.png", 1200, 1000, pointsize=12)
 print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
         geom_point(aes(color = color)) + 
         scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
@@ -86,11 +86,12 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
           aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=30),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
+              axis.text=element_text(size=14),axis.title=element_text(size=14),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),
+              legend.title = element_blank(),legend.text=element_text(size=14),
               legend.background = element_rect(fill="white",
                                                size=0.25, linetype="solid", 
                                                colour ="black")))
@@ -106,11 +107,12 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
           aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=30),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
+              axis.text=element_text(size=14),axis.title=element_text(size=14),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),
+              legend.title = element_blank(),legend.text=element_text(size=14),
               legend.background = element_rect(fill="white",
                                                size=0.25, linetype="solid", 
                                                colour ="black")))
