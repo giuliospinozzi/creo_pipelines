@@ -9,7 +9,7 @@ Bioinformatics Pipelines
 #### For Graphical User Interface and scripts running:
 *	zenity 3.18.1.1
 *	Python 2.7.12 (modules: os, argparse, sys, csv, pandas)
-*	R 3.4.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, calibrate, genefilter, RColorBrewer, gplots, clusterProfiler, dplyr, org.Hs.eg.db, igraph, scales, treemap, pathview, shiny, DT, magick, rlist, visNetwork, shinyjs)
+*	R 3.4.3 (packages: cummeRbund, edgeR, DESeq2, ggfortify, ggrepel, genefilter, RColorBrewer, gplots, clusterProfiler, dplyr, org.Hs.eg.db, igraph, scales, treemap, pathview, shiny, DT, magick, rlist, visNetwork, shinyjs, knitr)
 * pandoc
 #### For quality control on fastq files and pre-processing:
 *	FastQC 0.11.5
@@ -25,7 +25,7 @@ Bioinformatics Pipelines
 *	featureCounts 1.5.3
 *	Cufflinks 2.2.1
 ### Input files
-*	<p align="justify">Fastq files of the samples. Since this is a differential analysis, at least one case and one control must be present, furthermore it is a paired-end analysis and therefore the files of read 1 and read 2 must be provided for each sample.</p>
+*	<p align="justify">Fastq files of the samples. Since this is a differential analysis, at least one case and one control must be present, furthermore if it is a paired-end analysis files of read 1 and read 2 must be provided for each sample while if it is a single-end analysis only files of read 1 must be provided.</p>
 *	<p align="justify">Reference genome for Bowtie with relative indices, necessary for alignment with TopHat. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/index/bowtie2/hg19.</p>
 *	<p align="justify">Reference genome for Hisat2 with relative indices, necessary for alignment with HISAT2. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/index/hisat2/hg19.</p>
 *	<p align="justify">BED file, necessary for quality control on BAM files. The path in which the file is searched by default is as follows: /opt/genome/human/hg19/annotation/hg19.refseq.bed12.</p>
@@ -39,7 +39,13 @@ Bioinformatics Pipelines
 ### Command line
 #### Usage
 
+#### Paired-end
+
 ```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -r2 <sample_A_read2,sample_B_read2,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -o <output_directory> [options]*```
+
+#### Single-end
+
+```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -o <output_directory> [options]*```
 
 #### Arguments
 | | |
@@ -47,9 +53,9 @@ Bioinformatics Pipelines
 ```-n```	| Project name. No default option. <br>
 ```-pn```	| Pool name. No default option. <br>
 ```-sn```	| Sample names (',' sep). No default option. <br>
-```-r1```	| Read 1 fastq path (',' sep). No default option. The files must appear in the same order as the sample names. <br>
-```-r2```	| Read 2 fastq path (',' sep). No default option. The files must appear in the same order as the sample names. <br>
-```-type```	| Sample types (',' sep, 'cntrl' for control). No default option. The types must appear in the same order as the sample names. <br>
+```-r1```	| Read 1 fastq path (',' sep). No default option. Files must appear in the same order as sample names. <br>
+```-r2```	| Read 2 fastq path (',' sep). Required only for paired-end analysis. Files must appear in the same order as sample names. <br>
+```-type```	| Sample types (',' sep, 'cntrl' for control). No default option. Types must appear in the same order as sample names. <br>
 ```-o``` | Output directory. No default option. <br>
 
 #### Options
@@ -75,7 +81,7 @@ Bioinformatics Pipelines
 ### Graphical User Interface
 #### Usage
 ```GUI_RNAseq_pipeline``` <br>
-A series of windows allow to indicate the input files and to choose between the various options.
+A series of windows allow to indicate input files and to choose between various options.
 
 <p align="center"><img src="/images/GUI_screenshot.png" width="55%"></p>
 
