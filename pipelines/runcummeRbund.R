@@ -59,12 +59,12 @@ diffGenesOutput <- merge(diffGenesNames,diffGenesData,by="row.names")
 rownames(diffGenesOutput) <- diffGenesOutput$Row.names
 diffGenesOutput <- diffGenesOutput[,-1]
 diffGenesOutput1 <- merge(diffGenesOutput,fpkm,by="row.names")
-diffGenesOutput1=diffGenesOutput1[,c(2,8,10,13:18)]
-colnames(diffGenesOutput1)[1:3] <- c("Gene","log2FoldChange","padj")
+diffGenesOutput1=diffGenesOutput1[,c(1,2,8,10,13:18)]
+colnames(diffGenesOutput1)[2:4] <- c("Gene","log2FoldChange","padj")
 diffGenesOutput1 <- diffGenesOutput1[order(diffGenesOutput1$padj), ]
 diffGenesOutput1=na.omit(diffGenesOutput1)
 diffGenesOutput1[diffGenesOutput1$padj==0,c("padj")]=0.1e-320
-write.csv(diffGenesOutput1, file="cummeRbund-diffexpr-results.csv")
+write.csv(diffGenesOutput1[,2:10], file="cummeRbund-diffexpr-results.csv")
 
 # volcano plot
 library(ggrepel)
@@ -137,7 +137,7 @@ dev.off()
 
 pdf("cummeRbund-heatmap-topVarGenes.pdf", w=8, h=8)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
-           scale="row", trace="none", dendrogram="none", main="Top Variance Genes Heatmap",
+           scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
            Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, 
            srtCol=30)
 dev.off()

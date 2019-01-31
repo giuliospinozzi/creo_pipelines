@@ -138,7 +138,7 @@ dev.off()
 
 pdf("deseq2-heatmap-topVarGenes.pdf", w=8, h=8)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
-           scale="row", trace="none", dendrogram="none", main="Top Variance Genes Heatmap",
+           scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
            Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), srtCol=30)
 dev.off()
 
