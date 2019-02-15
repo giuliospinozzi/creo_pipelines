@@ -195,7 +195,7 @@ def checkFile(read1,read2,stype,sample_name):
         if len(read1a)!=len(read2a):
             print ('\033[0;31m' + "\n[AP]\tError while reading files: read1 and read2 must be of the same length.\n\tExit\n" + '\033[0m')
             sys.exit()
-    if len([t for t in stype1 if t == 'cntrl'])==0 or len([t for t in stype1 if t != 'cntrl'])==0:
+    if len(set(stype1))>1:
         print ('\033[0;31m' + "\n[AP]\tError while reading files: there must be at least one case and one control.\n\tExit\n" + '\033[0m')
         sys.exit()
     

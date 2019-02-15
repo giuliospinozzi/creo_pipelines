@@ -102,14 +102,14 @@ def checkArgs(args):
         sys.exit()
 
 
-def checkFile(input_path):
-    """
-    Check case/control
-    """
-    data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
-    if len(data.loc[data['Type']=='cntrl'])==0 or len(data.loc[data['Type']!='cntrl'])==0:
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: there must be at least one case and one control.\n\tExit\n" + '\033[0m')
-        sys.exit()
+##def checkFile(input_path):
+##    """
+##    Check case/control
+##    """
+##    data=pd.DataFrame.from_csv(input_path,sep=',',index_col=None)
+##    if len(data.loc[data['Type']=='cntrl'])==0 or len(data.loc[data['Type']!='cntrl'])==0:
+##        print ('\033[0;31m' + "\n[AP]\tError while reading files: there must be at least one case and one control.\n\tExit\n" + '\033[0m')
+##        sys.exit()
         
 
 def checkOptions(q_method,dea_method):
@@ -162,8 +162,8 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
         cmd3="cuffquant -p "+str(Threads)+" --library-type "+library_type+" --no-update-check -o "+output_dir+"/"+data['sample_name'][i-1]+"/cuffquant "+output_dir+"/merged.gtf "+data['BAM_path'][i-1]
         os.system(cmd3)
 
-    cntrl=data.loc[data['Type']=='cntrl']
-    treat=data.loc[data['Type']!='cntrl']
+    cntrl=data.loc[data['Type']==list(set(data['Type']))[0]]
+    treat=data.loc[data['Type']==list(set(data['Type']))[1]]
     treat = treat.reset_index(drop=True)
     cntrl = cntrl.reset_index(drop=True)
     a=[]
@@ -221,7 +221,7 @@ def main():
     """
     # first check args and file paths
     checkArgs(args)
-    checkFile(args.input_path)
+#    checkFile(args.input_path)
     checkOptions(args.q_method,args.dea_method)
 
     # if quantification method is featureCounts
