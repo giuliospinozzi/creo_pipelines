@@ -33,7 +33,7 @@ Bioinformatics Pipelines
 *	<p align="justify">Ribosomal genome 1 with relative indices, necessary for pre-processing. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/contam/bwa/hum5SrDNA.fa.</p>
 *	<p align="justify">Ribosomal genome 2 with relative indices, necessary for pre-processing. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/contam/bwa/humRibosomal.fa.</p>
 *	<p align="justify">GTF file, necessary for alignment with TopHat and quantification with featureCounts and Cufflinks. The path in which the file is searched by default is as follows: /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf. </p>
-*	<p align="justify">Reference genome with relative indices, necessary for quantificazione with Cufflinks. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/index/hg19.fa. </p>
+*	<p align="justify">Reference genome with relative indices, necessary for quantification with Cufflinks. The path in which the file with its indices is searched by default is as follows: /opt/genome/human/hg19/index/hg19.fa. </p>
 
 ## Running application
 ### Command line
