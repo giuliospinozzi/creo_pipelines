@@ -26,7 +26,7 @@ for (k in 1:ncol(countdata)) {
   type <- c(type,as.character(input_table$Type[grep(colnames(countdata)[k],input_table$sample_name)]))
 }
 DataGroups <- factor(type)
-DataGroups <- relevel(DataGroups,ref=input_table$Type[1])
+DataGroups <- relevel(DataGroups,ref=as.character(input_table$Type[1]))
 
 library(DESeq2)
 
