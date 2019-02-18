@@ -59,7 +59,7 @@ diffGenesOutput <- merge(diffGenesNames,diffGenesData,by="row.names")
 rownames(diffGenesOutput) <- diffGenesOutput$Row.names
 diffGenesOutput <- diffGenesOutput[,-1]
 diffGenesOutput1 <- merge(diffGenesOutput,fpkm,by="row.names")
-diffGenesOutput1=diffGenesOutput1[,c(1,2,8,10,13:18)]
+diffGenesOutput1=diffGenesOutput1[,c(1,2,8,10,13:ncol(diffGenesOutput1))]
 colnames(diffGenesOutput1)[2:4] <- c("Gene","log2FoldChange","padj")
 diffGenesOutput1 <- diffGenesOutput1[order(diffGenesOutput1$padj), ]
 diffGenesOutput1=na.omit(diffGenesOutput1)
