@@ -13,6 +13,7 @@ countdata1 <- read.table(featCounts, header=TRUE, row.names=1,sep = "\t")
 lenth_genes <- countdata1[ ,5,drop=F]
 countdata <- countdata1[ ,6:ncol(countdata1)]
 input_table <- read.csv(input,sep=",")
+input_table$sample_name=gsub("-",".",input_table$sample_name)
 for (i in 1:nrow(input_table)) {
   colnames(countdata)[grep(input_table$sample_name[i],colnames(countdata))] <- as.character(input_table$sample_name[i])
 }
@@ -70,7 +71,7 @@ edgeR_results <- topTags(lrt, n=Inf)
 resdata <- merge(as.data.frame(edgeR_results), as.data.frame(fpkm), by="row.names")
 names(resdata)[1] <- "Gene"
 resdata <- resdata[order(resdata$FDR), ]
-resdata=resdata[,c(1,3,6:13)]
+resdata=resdata[,c(1,3,6:ncol(resdata))]
 resdata=na.omit(resdata)
 resdata[resdata$PValue==0|resdata$FDR==0,c("PValue","FDR")]=0.1e-320
 colnames(resdata)[c(2,4)]=c("log2FoldChange","padj")

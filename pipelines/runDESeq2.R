@@ -12,6 +12,7 @@ countdata1 <- read.table(featCounts, header=TRUE, row.names=1,sep = "\t")
 lenth_genes <- countdata1[ ,5,drop=F]
 countdata <- countdata1[ ,6:ncol(countdata1)]
 input_table <- read.csv(input,sep=",")
+input_table$sample_name=gsub("-",".",input_table$sample_name)
 for (i in 1:nrow(input_table)) {
   colnames(countdata)[grep(input_table$sample_name[i],colnames(countdata))] <- as.character(input_table$sample_name[i])
 }
