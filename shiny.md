@@ -16,7 +16,7 @@
 
 ## BAM quality
 <p align="center"><img src="/images/shiny3_BAMquality.png" width="75%"></p>
-<p align="justify"> The quality of the BAM files was evaluated using RSeQC software. In particular, in the first table are reported statistics related to the reads mapping, in the second table are reported reads fractions mapped on the coding exon part, on the 5'-UTR region, on the 3'-UTR region and on the intronic or intragenic regions, the final image shows the distribution of the internal distance between paired reads. </p>
+<p align="justify"> The quality of the BAM files was evaluated using RSeQC software. In particular, in the first table are reported statistics related to the reads mapping, in the second table are reported reads fractions mapped on the coding exon part, on the 5'-UTR region, on the 3'-UTR region and on the intronic or intragenic regions. The first image shows the distribution of the internal distance between paired reads; the second image shows number of splicing junctions per percent of total reads and splits junctions in all, known and novel; the third and the fourth images show percentage of novel splicing junctions and events. </p>
 
 ## Differential expression analysis
 <p align="center"><img src="/images/shiny4_DEA.png" width="100%"></p>
