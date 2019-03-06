@@ -60,7 +60,7 @@ print header, description, usage_example
 parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ RNA-Seq analysis: from BAM to DEA ] \n", description = description)
 parser.add_argument('-n', '--project-name', dest="project_name", help="Project name. \n No default option. \n", action="store", required=True)
 parser.add_argument('-pn', '--pool-name', dest="pool_name", help="Pool name. \n No default option. \n", action="store", required=True)
-parser.add_argument('-sn', '--sample-name', dest="sample_name", help="Sample names (',' sep). \n No default option. \n", action="store", required=True)
+parser.add_argument('-sn', '--sample-name', dest="sample_name", help="Sample names (',' sep, first the control samples). \n No default option. \n", action="store", required=True)
 parser.add_argument('-r1', '--read1', dest="read1", help="Read 1 fastq path (',' sep). \n No default option. \n", action="store", required=True)
 parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 fastq path (',' sep). \n Default: single-end. \n", action="store", required=False, default="")
 parser.add_argument('-type', '--type', dest="stype", help="Sample types (cntrl,treat). \n No default option. \n", action="store", required=True)
