@@ -46,6 +46,7 @@ INDEX=$(echo "${6}" | tr "," "\n");
 R1_FASTQ1=($R1_FASTQ)
 R2_FASTQ1=($R2_FASTQ)
 INDEX1=($INDEX)
+SCRIPT_DIR="`dirname "$0"`"
 
 for file in $R1_FASTQ
 do
@@ -93,7 +94,7 @@ do
 
 ##### ================ EXTRACT THE UMIs ======================== #####
 
-	python umi.py -r1 ${R1_FASTQ1[$(($file1-1))]} -r2 ${R2_FASTQ1[$(($file1-1))]} -i ${INDEX1[$(($file1-1))]} -o1 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R1_umi.fastq.gz -o2 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R2_umi.fastq.gz;
+	python ${SCRIPT_DIR}/umi.py -r1 ${R1_FASTQ1[$(($file1-1))]} -r2 ${R2_FASTQ1[$(($file1-1))]} -i ${INDEX1[$(($file1-1))]} -o1 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R1_umi.fastq.gz -o2 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R2_umi.fastq.gz;
 
 
 ##### ===================== ALIGNMENT =========================== #####
