@@ -57,16 +57,16 @@ def read2(read2,index,output2):
 ### MAIN
 #########################################################################################
 
-def main():
-    """
-    Main part of the program.
-    """
+##def main():
+##    """
+##    Main part of the program.
+##    """
 #    read1(args.read1,args.index,args.output1)
 #    read2(args.read2,args.index,args.output2)
     
 # sentinel
 if __name__ == "__main__":
-    p1 = mp.Process(name='p1', target=read1(args.read1,args.index,args.output1))
-    p = mp.Process(name='p', target=read2(args.read2,args.index,args.output2))
+    p1 = mp.Process(name='p1', target=read1,args=(args.read1,args.index,args.output1))
+    p = mp.Process(name='p', target=read2,args=(args.read2,args.index,args.output2))
     p1.start()
     p.start()
