@@ -5,18 +5,44 @@ import gzip, argparse
 from Bio import SeqIO
 import multiprocessing as mp
 
-description = ""
+header = """
+  +--------------------------------------------------------+
+  |                                                        |
+  |            Illumina Pipeline: CREO RNAseq              |
+  |                                                        |
+  +--------------------------------------------------------+
+  |  Author:   Giulio Spinozzi, PhD                        |
+  |            Valentina Tini                              |
+  |  Date:     March 2019                                  |
+  |  Contact:  giulio.spinozzi@unipg.it                    |
+  |            valy.tini@hotmail.it                        |
+  |  Version:  1.0 - CREO - UMI read processing            |
+  +--------------------------------------------------------+
+
+  arguments (NO SPACES!!):
+  
+  -r1, --read1
+  -r2, --read2
+  -i, --index
+  -o1, --output1
+  -o2, --output2
+  
+""" 
+
+description = "This application adds the UMI sequence to the read header."
 
 usage_example = """
+Examples of usage:
+    <appname> -r1 <read1.fastq.gz> -r2 <read2.fastq.gz> -i <index.fastq.gz> -o1 <output_read1.fastq.gz> -o2 <output_read2.fastq.gz>
 
 """
 
 parser = argparse.ArgumentParser(usage = usage_example, epilog = "", description = description)
-parser.add_argument('-r1', '--read1', dest="read1", help="", action="store", required=True)
-parser.add_argument('-r2', '--read2', dest="read2", help="", action="store", required=True)
-parser.add_argument('-i', '--index', dest="index", help="", action="store", required=True)
-parser.add_argument('-o1', '--output1', dest="output1", help="", action="store", required=True)
-parser.add_argument('-o2', '--output2', dest="output2", help="", action="store", required=True)
+parser.add_argument('-r1', '--read1', dest="read1", help="Read 1 file in fastq.gz format", action="store", required=True)
+parser.add_argument('-r2', '--read2', dest="read2", help="Read 2 file in fastq.gz format", action="store", required=True)
+parser.add_argument('-i', '--index', dest="index", help="Index file in fastq.gz format", action="store", required=True)
+parser.add_argument('-o1', '--output1', dest="output1", help="Read 1 output file in fastq.gz format", action="store", required=True)
+parser.add_argument('-o2', '--output2', dest="output2", help="Read 2 output file in fastq.gz format", action="store", required=True)
 
 args = parser.parse_args()
 
@@ -57,14 +83,6 @@ def read2(read2,index,output2):
 ### MAIN
 #########################################################################################
 
-##def main():
-##    """
-##    Main part of the program.
-##    """
-#    read1(args.read1,args.index,args.output1)
-#    read2(args.read2,args.index,args.output2)
-    
-# sentinel
 if __name__ == "__main__":
     p1 = mp.Process(name='p1', target=read1,args=(args.read1,args.index,args.output1))
     p = mp.Process(name='p', target=read2,args=(args.read2,args.index,args.output2))
