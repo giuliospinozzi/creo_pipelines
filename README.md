@@ -40,11 +40,11 @@
 
 #### Paired-end
 
-```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -r2 <sample_A_read2,sample_B_read2,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -o <output_directory> [options]*```
+```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -r2 <sample_A_read2,sample_B_read2,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -comp <cntrl_VS_treat> -o <output_directory> [options]*```
 
 #### Single-end
 
-```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -o <output_directory> [options]*```
+```RNAseq_pipeline -n <project_name> -pn <pool_name> -sn <sample_A,sample_B,sample_C,sample_D> -r1 <sample_A_read1,sample_B_read1,sample_C_read1,sample_D_read1> -type <cntrl,cntrl,treat,treat> -comp <cntrl_VS_treat> -o <output_directory> [options]*```
 
 #### Arguments
 | | |
@@ -54,7 +54,8 @@
 ```-sn```	| Sample names (',' sep). No default option. <br>
 ```-r1```	| Read 1 fastq path (',' sep). No default option. Files must appear in the same order as sample names. <br>
 ```-r2```	| Read 2 fastq path (',' sep). Required only for paired-end analysis. Files must appear in the same order as sample names. <br>
-```-type```	| Sample types (',' sep, 'cntrl' for control). No default option. Types must appear in the same order as sample names. <br>
+```-type```	| Sample types (',' sep). No default option. Types must appear in the same order as sample names. <br>
+```-comp``` | Comparisons between samples (allows multiple comparisons comma separated). No default option. <br>
 ```-o``` | Output directory. No default option. <br>
 
 #### Options
