@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, argparse, sys, csv
+import pandas as pd
 
 header = """
   +--------------------------------------------------------+
@@ -42,6 +43,7 @@ header = """
   -o, --output-dir
   -meta, --meta-analysis [full,quant]
   -cat, --max-cat [5]
+  -comp, --comparisons
   
 """ 
 
@@ -82,6 +84,7 @@ parser.add_argument('-r_path', '--r_path', dest="R_path", help="Script directory
 parser.add_argument('-o', '--output-dir', dest="output_dir", help="Output directory. \n No default option. \n", action="store", required=True)
 parser.add_argument('-meta', '--meta-analysis', dest="meta", help="Analysis with or without final meta-analysis. \n Default: full; alternative: quant. \n", action="store", required=False, default="full")
 parser.add_argument('-cat', '--max_cat', dest="max_cat", help="Max number of category showed in R plots for meta-analysis. \n Default: 5. \n", action="store", required=False, default="5")
+parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (cntrl_VS_treat1,cntrl_VS_treat2). \n No default option. \n", action="store", required=True)
 
 args = parser.parse_args()
 
@@ -119,6 +122,7 @@ def checkArgs(args):
     print "DEA method =", args.dea_method, "\n"
     print "Script path =", args.R_path, "\n"
     print "Output directory =", args.output_dir, "\n"
+    print "Comparisons =", args.comp, "\n"
     if not os.path.isfile(args.bed_file):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for BED file.\n\tExit\n" + '\033[0m')
         sys.exit()
@@ -212,7 +216,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
     os.system(cmd2)
     cmd3="mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/reports"
     os.system(cmd3)    
-    with open(output_dir+'/'+project_name+'/'+pool_name+'/input.csv', 'wb') as csvfile:
+    with open(output_dir+'/'+project_name+'/'+pool_name+'/input_all.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',')
         filewriter.writerow(['sample_name','BAM_path','Type'])
         csvfile.close()
@@ -253,13 +257,13 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
             os.system(cmd)
 
 
-def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,Threads,GTF,library_type,ref_gen):
+def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,Threads,GTF,library_type,ref_gen,comp):
     """
     Run quantification script as desired
     """
 #    print ('\033[1;33m' + "\n^^^^^^^^^Quantification script running^^^^^^^^^\n" + '\033[0m')
-    res_dir=output_dir+"/"+project_name+"/"+pool_name
-    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv'+" -o "+res_dir+"/Quantification_and_DEA"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen
+    res_dir=output_dir+"/"+project_name+"/"+pool_name+"/"+comp
+    cmd="python "+R_path+"/quantification.py -i "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv'+" -o "+res_dir+"/Quantification_and_DEA"+" -r_path "+R_path+" -dea "+dea_method+" -q "+q_method+" -t "+str(Threads)+" -g "+GTF+" -l "+library_type+" -r "+ref_gen+" -comp "+comp
     os.system(cmd)
     
     
@@ -270,15 +274,11 @@ def rminput(output_dir,project_name,pool_name):
     os.system("rm "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv')
     
     
-def metaanalysis(output_dir,R_path,project_name,pool_name,dea_method,max_cat):
+def metaanalysis(output_dir,R_path,project_name,pool_name,dea_method,max_cat,comp):
     """
     Run meta-analysis script as desired
     """
-    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis")
-    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Gene_ontology")
-    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Pathway_analysis")
-    os.system("mkdir "+output_dir+"/"+project_name+"/"+pool_name+"/Meta-analysis/Pathway_analysis/pathview")
-    cmd="Rscript --vanilla --verbose "+R_path+"/GO_pathway.R "+output_dir+'/'+project_name+'/'+pool_name+'/Quantification_and_DEA/*-results.csv '+dea_method+" "+output_dir+'/'+project_name+'/'+pool_name+"/Meta-analysis "+max_cat+" "+R_path
+    cmd="Rscript --vanilla --verbose "+R_path+"/GO_pathway.R "+output_dir+'/'+project_name+'/'+pool_name+'/'+comp+'/Quantification_and_DEA/*-results.csv '+dea_method+" "+output_dir+'/'+project_name+'/'+pool_name+'/'+comp+"/Meta-analysis "+max_cat+" "+R_path
     os.system(cmd)
         
 
@@ -298,15 +298,28 @@ def main():
     # alignment
     alignment(args.project_name,args.pool_name,args.sample_name,args.output_dir,args.read1,args.read2,args.Threads,args.ref_bowtie,args.ref_hisat2,args.bed_file,args.phix,args.rib1,args.rib2,args.a_method,args.GTF,args.library_type,args.R_path,args.stype,args.q_method,args.dea_method)
 
-    # quantification
-    quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen)
-    
-    # remove input file
-    rminput(args.output_dir,args.project_name,args.pool_name)
-    
-    # meta-analysis (GO and pathway analysis)
-    if args.meta == 'full':
-        metaanalysis(args.output_dir,args.R_path,args.project_name,args.pool_name,args.dea_method,args.max_cat)
+    comp1=args.comp.split(",")
+    for i in range(0, (len(comp1))):
+        cat_type=comp1[i].split("_VS_")
+        data=pd.DataFrame.from_csv(args.output_dir+'/'+args.project_name+'/'+args.pool_name+'/input_all.csv',sep=',',index_col=None)
+        input_all=data.loc[(data['Type'] == cat_type[0]) | (data['Type'] == cat_type[1])]
+        input_all.to_csv (r''+args.output_dir+'/'+args.project_name+'/'+args.pool_name+'/input.csv', index = None, header=True)
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i])
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Quantification_and_DEA")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Gene_ontology")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis/pathview")
+
+        # quantification
+        quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen,comp1[i])
+
+        # remove input file
+        rminput(args.output_dir,args.project_name,args.pool_name)
+
+        # meta-analysis (GO and pathway analysis)
+        if args.meta == 'full':
+            metaanalysis(args.output_dir,args.R_path,args.project_name,args.pool_name,args.dea_method,args.max_cat,comp1[i])
     
 
 # sentinel

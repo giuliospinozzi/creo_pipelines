@@ -32,6 +32,7 @@ header = """
   -r, --reference-genome [/opt/genome/human/hg19/index/hg19.fa]
   -dea, --dea-method [edgeR,DESeq2,cummeRbund]
   -r_path, --r_path [/opt/applications/src/creo_pipelines/pipelines]
+  -comp, --comparisons
   
 """ 
 
@@ -57,6 +58,7 @@ parser.add_argument('-l', '--library-type', dest="library_type", help="Library t
 parser.add_argument('-r', '--reference-genome', dest="ref_gen", help="Reference genome file path (only for Cufflinks). \n Defaul: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/hg19.fa")
 parser.add_argument('-dea', '--dea-method', dest="dea_method", help="Differential Expression Analysis method. \n Default: edgeR; alternatives: DESeq2, cummeRbund. \n", action="store", required=False, default="edgeR")
 parser.add_argument('-r_path', '--r_path', dest="R_path", help="R script directory. \n Default: creo_pipelines. \n", action="store", required=False, default="/opt/applications/src/creo_pipelines/pipelines")
+parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (cntrl_VS_treat1). \n No default option. \n", action="store", required=True)
 
 args = parser.parse_args()
 
@@ -82,6 +84,7 @@ def checkArgs(args):
     print "reference_genome =", args.ref_gen
     print "DEA method =", args.dea_method
     print "R script path =", args.R_path
+    print "Comparisons =", args.comp
     if not os.path.isfile(args.input_path):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for input file.\n\tExit\n" + '\033[0m')
         sys.exit()
@@ -138,7 +141,7 @@ def runfeatureCounts(Threads,input_path,GTF,output_dir):
     os.system(cmd)
 
 
-def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
+def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen,comp):
     """
     Run Cufflinks as desired
     """
@@ -158,12 +161,12 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
     os.system(cmd2)
 
     print ('\033[0;32m' + "\n############## Cuffquant ###################\n" + '\033[0m')
-    for i in range(1, (len(data)+1)):
-        cmd3="cuffquant -p "+str(Threads)+" --library-type "+library_type+" --no-update-check -o "+output_dir+"/"+data['sample_name'][i-1]+"/cuffquant "+output_dir+"/merged.gtf "+data['BAM_path'][i-1]
+    for j in range(1, (len(data)+1)):
+        cmd3="cuffquant -p "+str(Threads)+" --library-type "+library_type+" --no-update-check -o "+output_dir+"/"+data['sample_name'][j-1]+"/cuffquant "+output_dir+"/merged.gtf "+data['BAM_path'][j-1]
         os.system(cmd3)
 
-    cntrl=data.loc[data['Type']==list(set(data['Type']))[0]]
-    treat=data.loc[data['Type']==list(set(data['Type']))[1]]
+    cntrl=data.loc[data['Type']==comp.split("_VS_")[0]]
+    treat=data.loc[data['Type']==comp.split("_VS_")[1]]
     treat = treat.reset_index(drop=True)
     cntrl = cntrl.reset_index(drop=True)
     a=[]
@@ -184,21 +187,21 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen):
     os.system(cmd4)
 
 
-def runedgeR(input_path,output_dir,R_path):
+def runedgeR(input_path,output_dir,R_path,comp):
     """
     Run edgeR as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^edgeR running^^^^^^^^^\n" + '\033[0m')
-    cmd5="Rscript --vanilla --verbose "+R_path+"/runedgeR.R "+output_dir+"/featureCounts_counts.txt "+input_path+" "+output_dir
+    cmd5="Rscript --vanilla --verbose "+R_path+"/runedgeR.R "+output_dir+"/featureCounts_counts.txt "+input_path+" "+output_dir+" "+comp
     os.system(cmd5)
 
 
-def runDESeq2(input_path,output_dir,R_path):
+def runDESeq2(input_path,output_dir,R_path,comp):
     """
     Run DESeq2 as desired
     """
     print ('\033[1;33m' + "\n^^^^^^^^^DESeq2 running^^^^^^^^^\n" + '\033[0m')
-    cmd6="Rscript --vanilla --verbose "+R_path+"/runDESeq2.R "+output_dir+"/featureCounts_counts.txt "+input_path+" "+output_dir
+    cmd6="Rscript --vanilla --verbose "+R_path+"/runDESeq2.R "+output_dir+"/featureCounts_counts.txt "+input_path+" "+output_dir+" "+comp
     os.system(cmd6)
 
 
@@ -230,15 +233,15 @@ def main():
 
     # if quantification method is Cufflinks
     if args.q_method == 'Cufflinks':
-        runCufflinks(args.Threads,args.input_path,args.GTF,args.output_dir,args.library_type,args.ref_gen)
+        runCufflinks(args.Threads,args.input_path,args.GTF,args.output_dir,args.library_type,args.ref_gen,args.comp)
     
     # if DEA method is edgeR
     if args.dea_method == 'edgeR':
-        runedgeR(args.input_path,args.output_dir,args.R_path)
+        runedgeR(args.input_path,args.output_dir,args.R_path,args.comp)
         
     # if DEA method is DESeq2
     if args.dea_method == 'DESeq2':
-        runDESeq2(args.input_path,args.output_dir,args.R_path)
+        runDESeq2(args.input_path,args.output_dir,args.R_path,args.comp)
 
     # if DEA method is cummeRbund
     if args.dea_method == 'cummeRbund':
