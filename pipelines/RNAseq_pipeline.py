@@ -205,7 +205,7 @@ def checkFile(read1,read2,stype,sample_name):
     
 
 
-def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,ref_bowtie,ref_hisat2,bed_file,phix,rib1,rib2,a_method,GTF,library_type,R_path,stype,q_method,dea_method):
+def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,ref_bowtie,ref_hisat2,bed_file,phix,rib1,rib2,a_method,GTF,library_type,R_path,stype,q_method,dea_method,comp):
     """
     Run alignment script as desired
     """
@@ -228,6 +228,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
         filewriter.writerow(['library_type',library_type])
         filewriter.writerow(['quantification_method',q_method])
         filewriter.writerow(['dea_method',dea_method])
+        filewriter.writerow(['comparisons',comp])
         csvfile.close()
     if read2 == "":
         with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/general_report.csv', 'a') as csvfile:
@@ -241,7 +242,7 @@ def alignment(project_name,pool_name,sample_name,output_dir,read1,read2,Threads,
             csvfile.close()
     with open(output_dir+'/'+project_name+'/'+pool_name+'/reports/sample_report.csv', 'wb') as csvfile:
         filewriter = csv.writer(csvfile, delimiter='\t')
-        filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads'])
+        filewriter.writerow(['sample_name','sample_type','number_raw_reads','number_phix_reads','number_ribosomal_reads','number_mapped_reads'])
         csvfile.close()
     read1a=read1.split(",")
     sample_name1=sample_name.split(",")
@@ -296,7 +297,7 @@ def main():
     checkFile(args.read1,args.read2,args.stype,args.sample_name)
 
     # alignment
-    alignment(args.project_name,args.pool_name,args.sample_name,args.output_dir,args.read1,args.read2,args.Threads,args.ref_bowtie,args.ref_hisat2,args.bed_file,args.phix,args.rib1,args.rib2,args.a_method,args.GTF,args.library_type,args.R_path,args.stype,args.q_method,args.dea_method)
+    alignment(args.project_name,args.pool_name,args.sample_name,args.output_dir,args.read1,args.read2,args.Threads,args.ref_bowtie,args.ref_hisat2,args.bed_file,args.phix,args.rib1,args.rib2,args.a_method,args.GTF,args.library_type,args.R_path,args.stype,args.q_method,args.dea_method,args.comp)
 
     comp1=args.comp.split(",")
     for i in range(0, (len(comp1))):

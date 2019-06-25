@@ -1,13 +1,16 @@
 
 description=$(zenity --forms --title="RNA-Seq project" --text="Assign experiment code (no spaces!)" --add-entry="PROJECT NAME" --add-entry="POOL NAME" --add-entry="SAMPLE NAMES 
-(first the controls,sep by ',')
+(sep by ',')
 [cntrl7,cntrl8,actd10,actd11]" --add-entry="SAMPLE TYPES (sep by ',')
-[cntrl,cntrl,actd,actd]" --add-entry="LOG NAME")
+[cntrl,cntrl,actd,actd]" --add-entry="LOG NAME" --add-entry="COMPARISONS 
+(sep by '_VS_' and ',' for multiple comparisons)
+[cntrl_VS_treat1,cntrl_VS_treat2]")
 pname=$(echo $description | cut -d'|' -f1)
 poolname=$(echo $description | cut -d'|' -f2)
 snames=$(echo $description | cut -d'|' -f3)
 stype=$(echo $description | cut -d'|' -f4)
 LOG=$(echo $description | cut -d'|' -f5)
+comp=$(echo $description | cut -d'|' -f6)
 
 array=$(echo $snames | tr "," "\n")
 arr=($array)
@@ -18,14 +21,14 @@ se_pe=$(zenity --list --text="" --radiolist --column "" --column "" --hide-heade
 
 for sample in `seq 1 "${#arr[@]}"`; do
 	zenity --info --title="READ-1" --text="Select read-1 file for "${arr[$(($sample-1))]} --ok-label="OK";
-	READ1a=$(zenity --file-selection --title="***READ-1***"  --text="Select read-1 file");
+	READ1a=$(zenity --file-selection --filename /opt/ngs/raw_data/ --title="***READ-1***"  --text="Select read-1 file");
 	READ1b+=( ${READ1a} )
 done
 
 if [ ${se_pe} = "Paired_end" ]; then
 	for sample in `seq 1 "${#arr[@]}"`; do
 		zenity --info --title="READ-2" --text="Select read-2 file for "${arr[$(($sample-1))]} --ok-label="OK";
-		READ2a=$(zenity --file-selection --title="***READ-2***"  --text="Select read-2 file");
+		READ2a=$(zenity --file-selection --filename /opt/ngs/raw_data/ --title="***READ-2***"  --text="Select read-2 file");
 		READ2b+=( ${READ2a} )
 	done
 fi
@@ -101,6 +104,8 @@ sample_names = "$snames"
 
 sample_types = "$stype"
 
+comparisons = "$comp"
+
 log = "$LOG"
 
 reads_1 = "$READ1"
@@ -136,14 +141,14 @@ threads = "$threads | zenity --text-info --title="Summary" --width=700 --height=
 if [ ${se_pe} = "Paired_end" ]; then
 	if [ "$?" -eq "0" ]; then
 		cd ${OUT}
-		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
+		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -r2 $READ2 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat -comp $comp 2>&1 >> ${LOGF}/${LOG}.log
 	fi
 fi
 
 if [ ${se_pe} = "Single_end" ]; then
 	if [ "$?" -eq "0" ]; then
 		cd ${OUT}
-		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat 2>&1 >> ${LOGF}/${LOG}.log
+		python $R/RNAseq_pipeline.py -n $pname -pn $poolname -sn $snames -r1 $READ1 -type $stype -rb $REF_BOWTIE -rh $REF_HISAT -bed $BED -ph $PHIX -rib1 $RIB1 -rib2 $RIB2 -t $threads -g $GTF -a $alignment -l $library -q $quant -r $REF -dea $dea -r_path $R -o $OUT -meta $meta -cat $max_cat -comp $comp 2>&1 >> ${LOGF}/${LOG}.log
 	fi
 fi
 
