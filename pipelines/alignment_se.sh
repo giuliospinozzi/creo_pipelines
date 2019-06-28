@@ -173,7 +173,7 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 	if [ ${LIBRARY_TYPE} = "fr-firststrand" ]; then
 		printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}##### Mapping Reads to the Genome #####${NC}\n"
 		printf "${GREEN}@@@@ Splicing read mapping --> HISAT2${NC}\n"
-		hisat2 -p ${MAXTHREADS} --dta --summary-file ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/stats.txt --rna-strandness R -x ${REFERENCE_GENOME_HISAT2} -U ${R1_FASTQ} -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam;
+		hisat2 -p ${MAXTHREADS} --dta --new-summary --rna-strandness R -x ${REFERENCE_GENOME_HISAT2} -U ${R1_FASTQ} -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam 2> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.txt;
 		samtools view -@ ${MAXTHREADS} -b -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam;
 		rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam; 
 		samtools sort -@ ${MAXTHREADS} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
@@ -183,7 +183,7 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 	elif [ ${LIBRARY_TYPE} = "fr-secondstrand" ]; then
 		printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${YELLOW}##### Mapping Reads to the Genome #####${NC}\n"
 		printf "${GREEN}@@@@ Splicing read mapping --> HISAT2${NC}\n"
-		hisat2 -p ${MAXTHREADS} --dta --summary-file ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/stats.txt --rna-strandness F -x ${REFERENCE_GENOME_HISAT2} -U ${R1_FASTQ} -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam;
+		hisat2 -p ${MAXTHREADS} --dta --new-summary --rna-strandness F -x ${REFERENCE_GENOME_HISAT2} -U ${R1_FASTQ} -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam 2> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.txt;
 		samtools view -@ ${MAXTHREADS} -b -S ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam;
 		rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sam; 
 		samtools sort -@ ${MAXTHREADS} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
@@ -191,8 +191,8 @@ elif [ ${ANALYSIS_PROTOCOL} = "hisat"  ]; then
 		samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam;
 		BAM="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.sorted.bam";
 	fi
-	READS_MAPPED_1=$((`cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/stats.txt | grep 'aligned exactly 1' | cut -d' ' -f5`)) ;
-	READS_MAPPED_2=$((`cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/stats.txt | grep 'aligned >1' | cut -d' ' -f5`)) ;
+	READS_MAPPED_1=$((`cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.txt | grep 'Aligned 1 time' | cut -d' ' -f4`)) ;
+	READS_MAPPED_2=$((`cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/HISAT2/${LIBRARY_NAME}/${LIBRARY_NAME}.txt | grep 'Aligned >1 times' | cut -d' ' -f4`)) ;
 	READS_MAPPED=$(($READS_MAPPED_1 + $READS_MAPPED_2));
 	printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${RED}##### READS MAPPED: ${READS_MAPPED} #####${NC}\n"
 	cat ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input_all.csv && echo "${LIBRARY_NAME},${BAM},${SAMPLE_TYPE}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/input_all.csv

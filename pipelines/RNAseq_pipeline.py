@@ -281,6 +281,14 @@ def metaanalysis(output_dir,R_path,project_name,pool_name,dea_method,max_cat,com
     """
     cmd="Rscript --vanilla --verbose "+R_path+"/GO_pathway.R "+output_dir+'/'+project_name+'/'+pool_name+'/'+comp+'/Quantification_and_DEA/*-results.csv '+dea_method+" "+output_dir+'/'+project_name+'/'+pool_name+'/'+comp+"/Meta-analysis "+max_cat+" "+R_path
     os.system(cmd)
+
+
+def report(output_dir,project_name,pool_name):
+    """
+    Generate multiqc report
+    """
+    cmd="multiqc --exclude bowtie2 -o "+output_dir+'/'+project_name+'/'+pool_name+"/reports/ "+output_dir+'/'+project_name+'/'+pool_name+"/"
+    os.system(cmd)
         
 
 #########################################################################################
@@ -321,6 +329,9 @@ def main():
         # meta-analysis (GO and pathway analysis)
         if args.meta == 'full':
             metaanalysis(args.output_dir,args.R_path,args.project_name,args.pool_name,args.dea_method,args.max_cat,comp1[i])
+
+        # final report
+        report(args.output_dir,args.project_name,args.pool_name)
     
 
 # sentinel
