@@ -138,11 +138,16 @@ def checkArgs(args):
     if not os.path.isdir(args.output_dir):
         print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid path for output dir.\n\tExit\n" + '\033[0m')
         sys.exit()
-    b=args.ref_bowtie+".fa"
-    h=args.ref_hisat2+".fa"
-    if not os.path.isfile(b) or not os.path.isfile(h):
-        print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for index genome (hisat or bowtie).\n\tExit\n" + '\033[0m')
-        sys.exit()
+    if args.a_method == "hisat":
+        h=args.ref_hisat2+".fa"
+        if not os.path.isfile(h):
+            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for index genome (hisat).\n\tExit\n" + '\033[0m')
+            sys.exit()
+    if args.a_method == "tophat":
+        b=args.ref_bowtie+".fa"
+        if not os.path.isfile(b):
+            print ('\033[0;31m' + "\n[AP]\tError while reading files: no valid paths for index genome (bowtie).\n\tExit\n" + '\033[0m')
+            sys.exit()
     r1=args.read1.split(",")
     for i in range(0, (len(r1))):
         if not os.path.isfile(r1[i]):
@@ -167,10 +172,10 @@ def checkOptions(a_method,q_method,dea_method):
     """
     Check quantification and DEA method options
     """
-    if a_method == 'HISAT2' and q_method == 'Cufflinks':
+    if a_method == 'hisat' and q_method == 'Cufflinks':
         print ('\033[0;31m' + "\n[AP]\tError: alignment method HISAT2 requires quantification method featureCounts\n\tExit\n" + '\033[0m')
         sys.exit()
-    if a_method == 'Tophat' and q_method == 'featureCounts':
+    if a_method == 'tophat' and q_method == 'featureCounts':
         print ('\033[0;31m' + "\n[AP]\tError: alignment method Tophat requires quantification method Cufflinks\n\tExit\n" + '\033[0m')
         sys.exit()
     if q_method == 'Cufflinks' and dea_method == 'edgeR':
