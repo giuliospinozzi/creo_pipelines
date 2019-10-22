@@ -1,5 +1,4 @@
-
-
+# Replace the variables with paths and options of interest.
 
 # Project name.
 PROJECT_NAME="Project_01";
