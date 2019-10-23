@@ -47,15 +47,15 @@ res_all=list()
 if (nrow(GO_BP@result)!=0) {
   GO_BP@result$GO_domain="biological_process"
   res_all=list.append(res_all,GO_BP@result)
-  }
+}
 if (nrow(GO_CC@result)!=0) {
   GO_CC@result$GO_domain="cellular_component"
   res_all=list.append(res_all,GO_CC@result)
-  }
+}
 if (nrow(GO_MF@result)!=0) {
   GO_MF@result$GO_domain="molecular_function"
   res_all=list.append(res_all,GO_MF@result)
-  }
+}
 GO=rbind(GO_BP@result,GO_CC@result,GO_MF@result)
 write.csv(GO,paste0(output_dir,"/Gene_ontology/GO_fc1.5_pv0.05.csv"),row.names = F)
 
@@ -147,8 +147,8 @@ max=round(((max(abs(geneList))+1)+1),1)
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.pdf"),10,8)
   cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                      col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05",
-                      cex.main=1)
+                        col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05",
+                        cex.main=1)
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20)
   cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
@@ -159,7 +159,7 @@ if (nrow(GO_BP@result)!=0) {
 if (nrow(GO_CC@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.pdf"),10,8)
   cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                      col.bin=seq(min, max, by = 1), main="GO Cellular Component FC>1.5 pV<.05")
+                        col.bin=seq(min, max, by = 1), main="GO Cellular Component FC>1.5 pV<.05")
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.png"),1000, 800, pointsize=20)
   cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
@@ -170,11 +170,11 @@ if (nrow(GO_CC@result)!=0) {
 if (nrow(GO_MF@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.pdf"),10,8)
   cnetplot.enrichResult(GO_MF,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                      col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
+                        col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.png"),1000, 800, pointsize=20)
   cnetplot.enrichResult(GO_MF,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                      col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
+                        col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
   dev.off()
 }
 
@@ -220,8 +220,8 @@ new_data=new_data[!is.na(new_data$entrez), ]
 rownames(new_data)=new_data$entrez
 new_data=new_data[,-2,drop=F]
 setwd(paste0(output_dir,"/Pathway_analysis/pathview"))
-tmp = sapply(kk@result$ID, function(pid) pathview(gene.data=new_data, pathway.id=pid, species="hsa",
-                                                low="dodgerblue",high="firebrick1",mid="gray88"))
+tmp = sapply(kk@result$ID, function(pid) tryCatch(pathview(gene.data=new_data, pathway.id=pid, species="hsa",
+                                                           low="dodgerblue",high="firebrick1",mid="gray88"),error=function(e) NULL))
 
 
 # histogram go
