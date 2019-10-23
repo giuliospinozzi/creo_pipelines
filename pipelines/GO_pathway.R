@@ -14,6 +14,8 @@ max_c = as.numeric(max_c)
 ######## Gene Ontology enrichment analysis ##########
 #####################################################
 
+print("######### Gene Ontology #########")
+
 if (dea == "edgeR"|dea == "DESeq2") {
   table=read.csv(table_path,row.names = 1)
   table1=table[,c(1,2,4)]
@@ -60,6 +62,7 @@ GO=rbind(GO_BP@result,GO_CC@result,GO_MF@result)
 write.csv(GO,paste0(output_dir,"/Gene_ontology/GO_fc1.5_pv0.05.csv"),row.names = F)
 
 # treemap
+print("#### Treemap ####")
 library(treemap)
 tree_all=list()
 for (i in 1:length(res_all)) {
@@ -84,6 +87,7 @@ treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categori
 dev.off()
 
 # GO tables for genes
+print("#### GO tables for genes ####")
 GO_gene=list()
 for (j in 1:length(res_all)) {
   gene=c()
@@ -105,6 +109,7 @@ tab_all=do.call("rbind", GO_gene)
 write.csv(tab_all,paste0(output_dir,"/Gene_ontology/tab_GO_genes.csv"),row.names = F)
 
 # dotplot
+print("#### Dotplot ####")
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.pdf"),10,8)
   print(dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process"))
@@ -133,6 +138,7 @@ if (nrow(GO_MF@result)!=0) {
 }
 
 #cnetplot
+print("#### Cnetplot ####")
 prov=y[order(y$logFC,decreasing = T),]
 prov=prov[!duplicated(prov$Gene), ]
 prov=prov[!is.na(prov$Gene), ]
@@ -183,6 +189,8 @@ if (nrow(GO_MF@result)!=0) {
 ######## Pathway enrichment analysis #########
 ##############################################
 
+print("########### Pathway enrichment analysis  ###########")
+
 gene=table1[abs(table1$logFC)>1.5 & table1$FDR<0.05,"entrez"]
 tmp=table1[order(table1$logFC,decreasing = T),]
 genelist=tmp$logFC
@@ -194,6 +202,7 @@ kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keytype = "ENTREZID")
 write.csv(kk@result,paste0(output_dir,"/Pathway_analysis/pathway_FC1.5_pv0.05.csv"),row.names = F)
 
 #dotplot
+print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/dotplot_pathways.pdf"),10,8)
 dotplot(kk,showCategory=max_c, title = "Enriched pathways")
 dev.off()
@@ -202,6 +211,7 @@ dotplot(kk,showCategory=max_c, title = "Enriched pathways")
 dev.off()
 
 #cnetplot
+print("#### Cnetplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/cnetplot_pathways.pdf"),10,8)
 par(cex.main=1)
 cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
@@ -213,6 +223,7 @@ cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCatego
 dev.off()
 
 #pathview
+print("#### Pathview ####")
 library(pathview)
 new_data=table1[,c("logFC","entrez")]
 new_data=new_data[!duplicated(new_data$entrez), ]
@@ -225,6 +236,7 @@ tmp = sapply(kk@result$ID, function(pid) tryCatch(pathview(gene.data=new_data, p
 
 
 # histogram go
+print("#### Histogram ####")
 library(dplyr)
 library(ggplot2)
 
