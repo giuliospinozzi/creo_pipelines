@@ -33,7 +33,7 @@ shinyServer(function(input, output, session) {
       fastqc1=list.append(fastqc1,img3)
     }
     
-    if (gen_sum[7,1]=="Paired_end") {
+    if (gen_sum[8,1]=="Paired_end") {
       for (i in 1:length(sam)) {
         img2=image_read(list.files(path=paste0(out_dir,"/Quality/",sam[i]),pattern="_screen.png$",full.names = T)[2])
         screen2=list.append(screen2,img2)
@@ -63,7 +63,7 @@ shinyServer(function(input, output, session) {
       spli_jun=list.append(spli_jun,image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_junction.pdf",full.names = T)))
     }
     
-    if (gen_sum[7,1]=="Paired_end") {
+    if (gen_sum[8,1]=="Paired_end") {
       for (i in 1:length(sam)) {
         img=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
         img=image_annotate(img,"Inner distance plot",gravity = "North",size = 70)
@@ -125,7 +125,7 @@ shinyServer(function(input, output, session) {
     hist_go_a=list()
     hist_path=list()
     for (j in 1:length(comp)) {
-      if (file.exists(paste0(out_dir,"/",comp[j],"/Meta-analysis"))){
+      if (file.exists(paste0(out_dir,"/",comp[j],"/Meta-analysis/Gene_ontology/tab_GO_genes.csv"))){
         GO=read.csv(paste0(out_dir,"/",comp[j],"/Meta-analysis/Gene_ontology/GO_fc1.5_pv0.05.csv"))
         if(nrow(GO)>0) {
           GO=GO[,c(1,2,3,4,5,6,7,9,10,8)]
@@ -152,6 +152,8 @@ shinyServer(function(input, output, session) {
           hist_go1=list.append(hist_go1,image_read(hist_go[[j]][i]))
         }
         hist_go_a=list.append(hist_go_a,hist_go1)
+      }
+      if (file.exists(paste0(out_dir,"/",comp[j],"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))){
         path=read.csv(paste0(out_dir,"/",comp[j],"/Meta-analysis/Pathway_analysis/pathway_FC1.5_pv0.05.csv"))
         if(nrow(path)>0) {
           for (i in 5:7){path[,i]=signif(path[,i],digits=3)}
@@ -292,7 +294,7 @@ shinyServer(function(input, output, session) {
   })
   
   ## Gene Ontology
-  if (file.exists(paste0(out_dir,"/",comp[1],"/Meta-analysis"))){
+  if (file.exists(paste0(out_dir,"/",comp[1],"/Meta-analysis/Gene_ontology/tab_GO_genes.csv"))){
     
     for (i in 1:length(comp)) {
       local({
@@ -442,9 +444,10 @@ shinyServer(function(input, output, session) {
         }
       }
     })
-    
+  }
     ## Pathway analysis
-    
+    if (file.exists(paste0(out_dir,"/",comp[1],"/Meta-analysis/Pathway_analysis/dotplot_pathways.pdf"))){
+      
     for (i in 1:length(comp)) {
       local({
         i <- i
