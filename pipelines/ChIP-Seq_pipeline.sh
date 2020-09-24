@@ -59,17 +59,24 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq
 #mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
 
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
 NUMBER_RAW_READS=$((`zcat ${R1_FASTQ} | wc -l`/4)) ;
 ##### ==================== End SETTINGS ======================== #####
 
+cp -rf ${R1_FASTQ} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
+# identify base names
+BNAME_R1="`basename ${R1_FASTQ}`";
+R1_FASTQ=${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}/${BNAME_R1};
 
 
 ##### ================== RAW DATA QUALITY ====================== #####
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### FastQC Report #######\n"
-mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME}
 fastqc --nogroup --extract -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME} -t ${MAXTHREADS} -f fastq ${R1_FASTQ}
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### FastQ Screen Report #######\n"
