@@ -21,8 +21,8 @@ echo "
 	3. LIBRARY_NAME [library290817A1]
 	4. RESULTS_DIR [/opt/ngs/results]
 	5. MAXTHREADS [12]
-	6. REFERENCE_GENOME [/opt/genome/human/hg19/index/bwa/hg19.fa]
-	7. PHIX_GENOME [/opt/genome/control/phix174/bwa/phiX174.fa]
+	6. REFERENCE_GENOME [/opt/genome/human/hg19/index/bwa/hg19.fa, /opt/genome/human/hg19/index/bowtie2/hg19]
+	7. PHIX_GENOME [/opt/genome/control/phix174/bwa/phiX174.fa, /opt/genome/control/phix174/bowtie2/phiX174.fa]
 	8. READ1 [R1.fastq.gz]
 	
   NOTES:
@@ -52,7 +52,7 @@ PHIX_GENOME="${7}";
 R1_FASTQ="${8}";
 
 printf "Folder creation --> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}\n"
-
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq
