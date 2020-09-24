@@ -53,6 +53,7 @@ R1_FASTQ="${8}";
 
 printf "Folder creation --> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}\n"
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq
