@@ -104,7 +104,7 @@ BNAME_R1=`basename ${R1_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 
 
 ##### ================= Ref Genome Alignment =================== #####
-bowtie2 -p ${MAXTHREADS} -x ${GENOME} -U <(zcat ${R1_FASTQ} ) --no-unal | samtools view -bS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam;
+bowtie2 -p ${MAXTHREADS} -x ${REFERENCE_GENOME} -U <(zcat ${R1_FASTQ} ) --no-unal | samtools view -bS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam;
 #bwa mem -k 16 -r 1 -M -T 15 -R "@RG\tID:$j\tSM:${b}.${k}\tCN:CREO-UniPG.${RUN_NAME}" -t ${MAXTHREADS} -v 1 ${REFERENCE_GENOME} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam;
 samtools sort ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam
 samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam
