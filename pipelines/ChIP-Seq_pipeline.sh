@@ -63,6 +63,7 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports
 
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
@@ -108,7 +109,7 @@ bowtie2 -p ${MAXTHREADS} -x ${REFERENCE_GENOME} -U <(zcat ${R1_FASTQ} ) --no-una
 #bwa mem -k 16 -r 1 -M -T 15 -R "@RG\tID:$j\tSM:${b}.${k}\tCN:CREO-UniPG.${RUN_NAME}" -t ${MAXTHREADS} -v 1 ${REFERENCE_GENOME} <(zcat ${R1_FASTQ} ) | samtools view -F 2308 -q 25 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam;
 samtools sort ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam
 samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam
-READS_MAPPED=$((`samtools view -F 0x04 -c actd10_S4_R1.bam`)) ;
+READS_MAPPED=$((`samtools view -F 0x04 -c ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam`)) ;
 bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bed
 bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam --outFileFormat bigwig -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bw
 bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam --outFileFormat bedgraph -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bedgraph
@@ -119,7 +120,8 @@ bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/
 ##### ================== Alignment Filtering =================== #####
 bamtools filter -in ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam -isMapped true -isPrimaryAlignment true -mapQuality ">=25" -out ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam
 samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam
-bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam | grep '/1' > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
+#bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam | grep '/1' > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
+bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
 READS_AFTER_FILTERS=`wc -l ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed | cut -d' ' -f1 ` ;
 bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam --outFileFormat bigwig -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bw
 bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam --outFileFormat bedgraph -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bedgraph
@@ -129,7 +131,7 @@ bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/
 
 ##### ========================= Stats ========================== #####
 if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv" ]; then
-		echo -e "RUN_NAME\tNUMBER_RAW_READS\tMAPPED_READS\tREADS_AFTER_FILTERS" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
+		echo -e "RUN_NAME\tNUMBER_RAW_READS\tMAPPED_READS\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
 	fi
 echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${READS_MAPPED}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/reports/sample_report.csv
 ##### ========================================================== #####
