@@ -59,7 +59,7 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq
-#mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}
@@ -72,7 +72,7 @@ RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
 NUMBER_RAW_READS=$((`zcat ${R1_FASTQ} | wc -l`/4)) ;
 ##### ==================== End SETTINGS ======================== #####
 
-cp -rf ${R1_FASTQ} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
+cp -rf ${R1_FASTQ} ${R2_FASTQ} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
 # identify base names
 BNAME_R1="`basename ${R1_FASTQ}`";
 BNAME_R2="`basename ${R2_FASTQ}`";
@@ -90,6 +90,25 @@ BNAME_R1=`basename ${R1_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 BNAME_R2=`basename ${R2_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 ##### ========================================================== #####
 
+
+#### ==================== PhiX Alignment ====================== #####
+printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### PhiX Alignment #######\n"
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
+bwa mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} -v 1 ${PHIX_GENOME} <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.bam;
+samtools view ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.bam | cut -f 1 > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.list
+sort --parallel=5 ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.list > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list;
+rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.list;
+zcat ${R1_FASTQ} | fqreverseextract.pureheader ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | pigz --best -f -c > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BNAME_R1}_nophix.fastq.gz &
+zcat ${R2_FASTQ} | fqreverseextract.pureheader ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/PhiX/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | pigz --best -f -c > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BNAME_R2}_nophix.fastq.gz &
+wait
+NUMBER_PHIX_READS=`wc -l ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | cut -d' ' -f1 `;
+printf "<`date +'%Y-%m-%d %H:%M:%S'`> ##### PhiX READS: ${NUMBER_PHIX_READS} #####\n"
+pigz -f ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list;
+rm ${R1_FASTQ} ${R2_FASTQ}
+R1_FASTQ="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}/${BNAME_R1}_nophix.fastq.gz";
+R2_FASTQ="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}/${BNAME_R2}_nophix.fastq.gz";
+#### ========================================================== #####
 
 
 ##### ================= Ref Genome Alignment =================== #####
@@ -125,9 +144,9 @@ wait
 
 ##### ========================= Stats ========================== #####
 if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv" ]; then
-		echo -e "RUN_NAME\tNUMBER_RAW_READS\tMAPPED_READS\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
+		echo -e "RUN_NAME\tNUMBER_RAW_READS\tNUMBER_PHIX_READS\tMAPPED_READS\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 	fi
-echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${READS_MAPPED}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
+echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 ##### ========================================================== #####
 
 
