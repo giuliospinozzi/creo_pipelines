@@ -69,7 +69,7 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats
 
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
-NUMBER_RAW_READS=$((`zcat ${R1_FASTQ} | wc -l`/4)) ;
+NUMBER_RAW_READS=$((`zcat ${R1_FASTQ} | wc -l`/2)) ;
 ##### ==================== End SETTINGS ======================== #####
 
 cp -rf ${R1_FASTQ} ${R2_FASTQ} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
@@ -102,7 +102,7 @@ rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.
 zcat ${R1_FASTQ} | fqreverseextract.pureheader ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | pigz --best -f -c > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}/${BNAME_R1}_nophix.fastq.gz &
 zcat ${R2_FASTQ} | fqreverseextract.pureheader ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | pigz --best -f -c > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}/${BNAME_R2}_nophix.fastq.gz &
 wait
-NUMBER_PHIX_READS=`wc -l ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | cut -d' ' -f1 `;
+NUMBER_PHIX_READS=$((`wc -l ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list | cut -d' ' -f1 `*2)) ;
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ##### PhiX READS: ${NUMBER_PHIX_READS} #####\n"
 pigz -f ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/phix/${LIBRARY_NAME}/${BNAME_R1}.PhiX.header.sorted.list;
 rm ${R1_FASTQ} ${R2_FASTQ}
@@ -118,10 +118,13 @@ samtools sort -@ ${MAXTHREADS} ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/$
 samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam
 rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.bam;
 READS_MAPPED=$((`samtools view -F 0x04 -c ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam`)) ;
-bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bed
+picard-tools MarkDuplicates I=${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam O=${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam M=${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}_duplicates.txt REMOVE_DUPLICATES=true
+samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam;
+READS_MAPPED_NODUPLICATES=$((`samtools view -F 0x04 -c ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam`)) ;
+bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bed
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### After Alignment: Coverage Analysis #######\n"
-bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam --outFileFormat bigwig -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bw &
-bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam --outFileFormat bedgraph -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bedgraph &
+bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam --outFileFormat bigwig -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bw &
+bamCoverage -p ${MAXTHREADS} -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam --outFileFormat bedgraph -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.bedgraph &
 wait
 ##### ========================================================== #####
 
@@ -129,7 +132,7 @@ wait
 
 ##### ================== Alignment Filtering =================== #####
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### Filtering #######\n"
-bamtools filter -in ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.bam -isMapped true -isPrimaryAlignment true -mapQuality ">=25" -out ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam
+bamtools filter -in ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.noDuplicates.bam -isMapped true -isPrimaryAlignment true -mapQuality ">=25" -out ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam
 samtools index ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam
 #bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam | grep '/1' > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
 bedtools bamtobed -cigar -i ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
@@ -144,9 +147,9 @@ wait
 
 ##### ========================= Stats ========================== #####
 if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv" ]; then
-		echo -e "RUN_NAME\tNUMBER_RAW_READS\tNUMBER_PHIX_READS\tMAPPED_READS\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
+		echo -e "RUN_NAME\tNUMBER_RAW_READS\tNUMBER_PHIX_READS\tMAPPED_READS\tREADS_MAPPED_NODUPLICATES\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 	fi
-echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
+echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_MAPPED_NODUPLICATE}S\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 ##### ========================================================== #####
 
 
