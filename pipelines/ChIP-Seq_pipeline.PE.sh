@@ -85,7 +85,7 @@ printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### FastQC Report #######\n"
 fastqc --nogroup --extract -o ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME} -t ${MAXTHREADS} -f fastq ${R1_FASTQ} ${R2_FASTQ}
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### FastQ Screen Report #######\n"
-fastq_screen --threads ${MAXTHREADS} ${R1_FASTQ} ${R2_FASTQ} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME}
+fastq_screen --threads ${MAXTHREADS} ${R1_FASTQ} ${R2_FASTQ} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/quality/${LIBRARY_NAME} --subset 0
 BNAME_R1=`basename ${R1_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 BNAME_R2=`basename ${R2_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 ##### ========================================================== #####
