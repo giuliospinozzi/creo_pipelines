@@ -66,6 +66,7 @@ mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/${LIBRARY_NAME}
 mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats
+mkdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/peaks
 
 
 RUN_NAME="${PROJECT_NAME}|${POOL_NAME}|${LIBRARY_NAME}"
@@ -147,7 +148,9 @@ rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.s
 bamPEFragmentSize -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam -hist ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.histLengths.png -p ${MAXTHREADS} -T ${BNAME_R1} -bs 1000 --samplesLabel ${BNAME_R1}
 ##### ========================================================== #####
 
-
+##### ==================== Peak Detection ====================== #####
+macs2 callpeak -t ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam -f BAM -n ${BNAME_R1} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/peaks
+##### ========================================================== #####
 
 ##### ========================= Stats ========================== #####
 if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv" ]; then
