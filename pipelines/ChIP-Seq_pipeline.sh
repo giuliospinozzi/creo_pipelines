@@ -152,7 +152,7 @@ macs2 callpeak -t ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME
 if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv" ]; then
     echo -e "RUN_NAME\tNUMBER_RAW_READS\tNUMBER_PHIX_READS\tMAPPED_READS\tREADS_MAPPED_NODUPLICATES\tREADS_AFTER_FILTERS" > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
   fi
-echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_MAPPED_NODUPLICATE}S\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
+echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_MAPPED_NODUPLICATES}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 ##### ========================================================== #####
 
 
