@@ -1,4 +1,4 @@
-#23!/bin/bash
+#!/bin/bash
 source /etc/environment
 source /etc/profile
 
