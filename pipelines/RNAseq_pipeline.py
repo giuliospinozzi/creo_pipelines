@@ -273,13 +273,6 @@ def quantification(output_dir,project_name,pool_name,R_path,dea_method,q_method,
     os.system(cmd)
     
     
-def rminput(output_dir,project_name,pool_name):
-    """
-    Remove input file
-    """
-    os.system("rm "+output_dir+'/'+project_name+'/'+pool_name+'/input.csv')
-    
-    
 def metaanalysis(output_dir,R_path,project_name,pool_name,dea_method,max_cat,comp):
     """
     Run meta-analysis script as desired
@@ -327,9 +320,6 @@ def main():
 
         # quantification
         quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen,comp1[i])
-
-        # remove input file
-        rminput(args.output_dir,args.project_name,args.pool_name)
 
         # meta-analysis (GO and pathway analysis)
         if args.meta == 'full':
