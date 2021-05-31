@@ -58,7 +58,7 @@ parser.add_argument('-l', '--library-type', dest="library_type", help="Library t
 parser.add_argument('-r', '--reference-genome', dest="ref_gen", help="Reference genome file path (only for Cufflinks). \n Defaul: human hg19. \n", action="store", required=False, default="/opt/genome/human/hg19/index/hg19.fa")
 parser.add_argument('-dea', '--dea-method', dest="dea_method", help="Differential Expression Analysis method. \n Default: edgeR; alternatives: DESeq2, cummeRbund. \n", action="store", required=False, default="edgeR")
 parser.add_argument('-r_path', '--r_path', dest="R_path", help="R script directory. \n Default: creo_pipelines. \n", action="store", required=False, default="/opt/applications/src/creo_pipelines/pipelines")
-parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (cntrl_VS_treat1). \n No default option. \n", action="store", required=True)
+parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (treat1_VS_cntrl). \n No default option. \n", action="store", required=True)
 
 args = parser.parse_args()
 
@@ -165,8 +165,8 @@ def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen,comp):
         cmd3="cuffquant -p "+str(Threads)+" --library-type "+library_type+" --no-update-check -o "+output_dir+"/"+data['sample_name'][j-1]+"/cuffquant "+output_dir+"/merged.gtf "+data['BAM_path'][j-1]
         os.system(cmd3)
 
-    cntrl=data.loc[data['Type']==comp.split("_VS_")[0]]
-    treat=data.loc[data['Type']==comp.split("_VS_")[1]]
+    treat=data.loc[data['Type']==comp.split("_VS_")[0]]
+    cntrl=data.loc[data['Type']==comp.split("_VS_")[1]]
     treat = treat.reset_index(drop=True)
     cntrl = cntrl.reset_index(drop=True)
     a=[]

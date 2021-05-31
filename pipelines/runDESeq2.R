@@ -22,7 +22,7 @@ countdata <- as.matrix(countdata)
 # experimental design
 type <- as.character(input_table$Type)
 DataGroups <- factor(type)
-DataGroups <- relevel(DataGroups,ref=as.character(strsplit(comp,"_VS_")[[1]][1]))
+DataGroups <- relevel(DataGroups,ref=as.character(strsplit(comp,"_VS_")[[1]][2]))
 
 library(DESeq2)
 
