@@ -4,7 +4,7 @@ description=$(zenity --forms --title="RNA-Seq project" --text="Assign experiment
 [cntrl7,cntrl8,actd10,actd11]" --add-entry="SAMPLE TYPES (sep by ',')
 [cntrl,cntrl,actd,actd]" --add-entry="LOG NAME" --add-entry="COMPARISONS 
 (sep by '_VS_' and ',' for multiple comparisons)
-[cntrl_VS_treat1,cntrl_VS_treat2]")
+[treat1_VS_cntrl,treat2_VS_cntrl]")
 pname=$(echo $description | cut -d'|' -f1)
 poolname=$(echo $description | cut -d'|' -f2)
 snames=$(echo $description | cut -d'|' -f3)

@@ -20,7 +20,7 @@ colnames(countdata) <- as.character(input_table$sample_name)
 # experimental design
 type <- as.character(input_table$Type)
 DataGroups <- factor(type)
-DataGroups <- relevel(DataGroups,ref=as.character(strsplit(comp,"_VS_")[[1]][1]))
+DataGroups <- relevel(DataGroups,ref=as.character(strsplit(comp,"_VS_")[[1]][2]))
 
 # create DGE object of edgeR
 dgList <- DGEList(counts=countdata,group=factor(DataGroups),genes = lenth_genes)

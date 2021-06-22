@@ -84,7 +84,7 @@ parser.add_argument('-r_path', '--r_path', dest="R_path", help="Script directory
 parser.add_argument('-o', '--output-dir', dest="output_dir", help="Output directory. \n No default option. \n", action="store", required=True)
 parser.add_argument('-meta', '--meta-analysis', dest="meta", help="Analysis with or without final meta-analysis. \n Default: full; alternative: quant. \n", action="store", required=False, default="full")
 parser.add_argument('-cat', '--max_cat', dest="max_cat", help="Max number of category showed in R plots for meta-analysis. \n Default: 5. \n", action="store", required=False, default="5")
-parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (cntrl_VS_treat1,cntrl_VS_treat2). \n No default option. \n", action="store", required=True)
+parser.add_argument('-comp', '--comparisons', dest="comp", help="Comparisons (treat1_VS_cntrl,treat2_VS_cntrl). \n No default option. \n", action="store", required=True)
 
 args = parser.parse_args()
 
