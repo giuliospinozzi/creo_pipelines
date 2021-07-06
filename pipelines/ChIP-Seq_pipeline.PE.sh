@@ -149,7 +149,7 @@ bamPEFragmentSize -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_N
 ##### ========================================================== #####
 
 ##### ==================== Peak Detection ====================== #####
-macs2 callpeak -t ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam -f BAM -n ${BNAME_R1} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/peaks
+macs2 callpeak -t ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam -f BAMPE -n ${BNAME_R1} --outdir ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/peaks
 ##### ========================================================== #####
 
 ##### ========================= Stats ========================== #####
