@@ -140,6 +140,8 @@ R2_FASTQ="${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BN
 NUMBER_RIBOSOMAL_READS=`wc -l ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/Ribosomal.header.sorted.list | cut -d' ' -f1 `;
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ${RED}##### Ribosomal READS: ${NUMBER_RIBOSOMAL_READS} #####${NC}\n"
 pigz -f ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/RibosomalRNA/${LIBRARY_NAME}/Ribosomal.header.sorted.list;
+rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BNAME_R1}.fastq.gz;
+rm ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/FastQ/${LIBRARY_NAME}/${BNAME_R2}.fastq.gz;
 
 
 if [ ${ANALYSIS_PROTOCOL} = "tophat" ]; then
