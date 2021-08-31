@@ -156,4 +156,9 @@ echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}
 ##### ========================================================== #####
 
 
+##### ========================= Reducing File size ========================== #####
+pigz -f ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
+rm -rf ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/
+##### ======================================================================= #####
+
 

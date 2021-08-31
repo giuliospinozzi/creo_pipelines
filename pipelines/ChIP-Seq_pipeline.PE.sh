@@ -159,5 +159,10 @@ if [ ! -r "${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv" 
 echo -e "${RUN_NAME}\t${NUMBER_RAW_READS}\t${NUMBER_PHIX_READS}\t${READS_MAPPED}\t${READS_MAPPED_NODUPLICATES}\t${READS_AFTER_FILTERS}" >> ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/stats/sample_report.csv
 ##### ========================================================== #####
 
+##### ========================= Reducing File size ========================== #####
+pigz -f ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bed/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bed
+rm -rf ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/fastq/
+##### ======================================================================= #####
+
 
 
