@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 args <- commandArgs(trailingOnly=TRUE)
 
-table_path <- args[1]
-dea <- args[2]
-output_dir <- args[3]
-max_c <- args[4]
-script <- args[5]
+table_path <- "/Users/shadow/Desktop/Project_01/Simulation/treat_VS_cntrl/Quantification_and_DEA/edgeR-diffexpr-results.csv"
+dea <- "edgeR"
+output_dir <- "/Users/shadow/Desktop/Project_01/"
+max_c <- "5"
+script <- "/Users/shadow/Workspace/creo_pipelines/pipelines/"
 
 setwd(output_dir)
 max_c = as.numeric(max_c)
@@ -75,20 +75,23 @@ colnames(all) <- colnames(tree_all[[1]])
 for (i in 1:length(tree_all)) {all=merge(all,tree_all[[i]],all.x=T,all.y=T)}
 pdf(paste0(output_dir,"/Gene_ontology/treemap_GO_fc1.5_pv0.05.pdf"),12,10)
 treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categorical",
-        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,0.9),
+        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,10),
         title="GO |Fold-Change|> 1.5 and pvalue<.05",title.legend = "Legend",
+        lowerbound.cex.labels =0,
         palette=c("lightpink","skyblue","lightgreen"))
 dev.off()
 png(paste0(output_dir,"/Gene_ontology/treemap_GO_fc1.5_pv0.05.png"),1200, 1000, pointsize=20)
 treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categorical",
-        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,0.9),
+        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,10),
         title="GO |Fold-Change|> 1.5 and pvalue<.05",title.legend = "Legend",
+        lowerbound.cex.labels =0,
         palette=c("lightpink","skyblue","lightgreen"))
 dev.off()
 svg(paste0(output_dir,"/Gene_ontology/treemap_GO_fc1.5_pv0.05.svg"),12, 10)
 treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categorical",
-        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,0.9),
+        inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,10),
         title="GO |Fold-Change|> 1.5 and pvalue<.05",title.legend = "Legend",
+        lowerbound.cex.labels =0,
         palette=c("lightpink","skyblue","lightgreen"))
 dev.off()
 
