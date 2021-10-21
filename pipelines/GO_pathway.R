@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 args <- commandArgs(trailingOnly=TRUE)
 
-table_path <- "/Users/shadow/Desktop/Project_01/Simulation/treat_VS_cntrl/Quantification_and_DEA/edgeR-diffexpr-results.csv"
-dea <- "edgeR"
-output_dir <- "/Users/shadow/Desktop/Project_01/"
-max_c <- "5"
-script <- "/Users/shadow/Workspace/creo_pipelines/pipelines/"
+table_path <- args[1]
+dea <- args[2]
+output_dir <- args[3]
+max_c <- args[4]
+script <- args[5]
 
 setwd(output_dir)
 max_c = as.numeric(max_c)
