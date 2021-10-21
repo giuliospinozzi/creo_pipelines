@@ -36,7 +36,7 @@ autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=1
         axis.title=element_text(size=30)) +geom_text(aes(label=colnames(fpkm)),size=6)
 dev.off()
 
-png("deseq2-pca.png", w=1000, h=1000, pointsize=30)
+png("edgeR-pca.png", w=1000, h=1000, pointsize=30)
 autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca), colour="type", main="PCA",size=10)+ 
   theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=30),
         legend.title=element_blank(),axis.text = element_text(size=30),
@@ -110,7 +110,7 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
                                                colour ="black")))
 dev.off()
 
-png("deseq2-volcanoplot.png", 1200, 1000, pointsize=12)
+png("edgeR-volcanoplot.png", 1200, 1000, pointsize=12)
 print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
         geom_point(aes(color = color)) + 
         scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
@@ -164,7 +164,7 @@ heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetC
            Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), srtCol=30)
 dev.off()
 
-png("deseq2-heatmap-topVarGenes.png", w=8, h=9, pointsize=20, res=300, units = "in")
+png("edgeR-heatmap-topVarGenes.png", w=8, h=9, pointsize=20, res=300, units = "in")
 par(cex.main=0.8)
 heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
            scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
@@ -187,7 +187,7 @@ heatmap.2(as.matrix(sampleDists), key=F, trace="none",
           margin=c(10, 10), main="Sample Distance Matrix")
 dev.off()
 
-png("deseq2-heatmap-samples.png", w=1000, h=1000, pointsize=20)
+png("edgeR-heatmap-samples.png", w=1000, h=1000, pointsize=20)
 heatmap.2(as.matrix(sampleDists), key=F, trace="none",
           col=colorpanel(100, "black", "white"),
           ColSideColors=mycols[DataGroups], RowSideColors=mycols[DataGroups],
