@@ -45,6 +45,9 @@ GO_CC=enrichGO(table1[abs(table1$logFC)>1.5 & table1$FDR<0.05,"entrez"], ont="CC
                pAdjustMethod = "fdr", universe = table1$entrez, OrgDb = org.Hs.eg.db, readable = T)
 GO_MF=enrichGO(table1[abs(table1$logFC)>1.5 & table1$FDR<0.05,"entrez"], ont="MF", pvalueCutoff= 0.05, 
                pAdjustMethod = "fdr", universe = table1$entrez, OrgDb = org.Hs.eg.db, readable = T)
+GO_BP = GO_BP[GO_BP@result$p.adjust < 0.05, asis=T]
+GO_CC = GO_CC[GO_CC@result$p.adjust < 0.05, asis=T]
+GO_MF = GO_MF[GO_MF@result$p.adjust < 0.05, asis=T]
 res_all=list()
 if (nrow(GO_BP@result)!=0) {
   GO_BP@result$GO_domain="biological_process"
@@ -228,7 +231,8 @@ names(genelist)=tmp$Gene
 
 kk=enrichKEGG(gene=gene, organism='hsa', pvalueCutoff = 0.05, pAdjustMethod = "fdr", 
               universe=table1$entrez)
-kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keytype = "ENTREZID")
+kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
+kk = kk[kk@result$p.adjust < 0.05, asis=T]
 write.csv(kk@result,paste0(output_dir,"/Pathway_analysis/pathway_FC1.5_pv0.05.csv"),row.names = F)
 
 #dotplot
