@@ -35,3 +35,35 @@ ChIP-Seq_pipeline.PE Chip-Tasselli L428 L428-Rep2-NT-pSTAT6 /opt/ngs/results_tia
 ChIP-Seq_pipeline.PE Chip-Tasselli L428 L428-Rep2-KO-INPUT /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_INPUT/Clean_L428_R2_KO_INPUT_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_INPUT/Clean_L428_R2_KO_INPUT_2.fq.gz
 ChIP-Seq_pipeline.PE Chip-Tasselli L428 L428-Rep2-KO-STAT6 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_STAT6/Clean_L428_R2_KO_STAT6_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_STAT6/Clean_L428_R2_KO_STAT6_2.fq.gz
 ChIP-Seq_pipeline.PE Chip-Tasselli L428 L428-Rep2-KO-pSTAT6 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_pSTAT6/Clean_L428_R2_KO_pSTAT6_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F21FTSEUHT0938_HUMxofiC_8_30/Fq/L428_R2_KO_pSTAT6/Clean_L428_R2_KO_pSTAT6_2.fq.gz
+
+
+
+cd /opt/ngs/results_tiacci/Chip-Tasselli/L428/peaks
+closest-features --closest Clean_L428_R1_KO_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_KO_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L428_R1_KO_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_KO_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R1_KO_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_KO_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R1_NT_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_NT_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L428_R1_NT_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_NT_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R1_NT_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R1_NT_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_KO_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_KO_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_KO_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_KO_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_KO_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_KO_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_NT_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_NT_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_NT_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_NT_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L428_R2_NT_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L428_R2_NT_pSTAT6_1_summits.annotated.bed
+
+
+cd /opt/ngs/results_tiacci/Chip-Tasselli/L1236/peaks
+closest-features --closest Clean_L1236_R1_KO_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_KO_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_KO_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_KO_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R1_KO_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_KO_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_KO_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_KO_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R1_KO_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_KO_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_KO_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_KO_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R1_NT_INPUT_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_NT_INPUT_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_NT_INPUTa_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_NT_INPUTa_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_NT_INPUTb_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_NT_INPUTb_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R1_NT_STAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_NT_STAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_NT_STAT6a_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_NT_STAT6a_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R1_NT_pSTAT6_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R1_NT_pSTAT6_1_summits.annotated.bed
+closest-features --closest Clean_L1236_R2_NT_pSTAT6b_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > Clean_L1236_R2_NT_pSTAT6b_1_summits.annotated.bed
