@@ -99,7 +99,7 @@ do
 
 ##### ===================== ALIGNMENT =========================== #####
 
-	bwa mem -k 16 -r 1 -M -T 15 -t 10 -v 1 /opt/genome/human/hg19/index/bwa/hg19.fa <(zcat ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R1_umi.fastq.gz ) <(zcat ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R2_umi.fastq.gz ) > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam;
+	bwa mem -k 16 -r 1 -M -T 15 -t 10 -v 1 /opt/genome/human/hg19/index/bwa/hg19.filtered.fa <(zcat ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R1_umi.fastq.gz ) <(zcat ${NGSWORKINGPATH}/${PROJECT}/${POOL}/FastQ/${BNAME}_R2_umi.fastq.gz ) > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam;
 	samtools view -F 2308 -q 25 -f 35 -uS -@ 5 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.filtered.bam;
 
 	samtools sort ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.filtered.bam > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sorted.bam;
@@ -115,7 +115,7 @@ do
 
 ##### ===================== ANNOTATION =========================== #####
 
-	bcftools mpileup -f /opt/genome/human/hg19/index/hg19.fa --annotate DP,AD -Oz ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.deduplicated.bam | bcftools call -mv -Oz -o ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Output/${BNAME}.vcf.gz;
+	bcftools mpileup -f /opt/genome/human/hg19/index/hg19.filtered.fa --annotate DP,AD -Oz ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.deduplicated.bam | bcftools call -mv -Oz -o ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Output/${BNAME}.vcf.gz;
 	bcftools filter -Oz ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Output/${BNAME}.vcf.gz -o ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Output/${BNAME}.filtered.vcf.gz;
 
 done

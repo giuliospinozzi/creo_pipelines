@@ -68,7 +68,7 @@ mkdir ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Output
 ##### ===================== ALIGNMENT =========================== #####
 
 BNAME=`basename ${R1_FASTQ} | sed 's/.gz//g' | cut -d'_' -f1`;
-bwa mem -k 16 -r 1 -M -T 15 -t 10 -v 1 /opt/genome/human/hg19/index/bwa/hg19.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam
+bwa mem -k 16 -r 1 -M -T 15 -t 10 -v 1 /opt/genome/human/hg19/index/bwa/hg19.filtered.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam
 
 samtools view -F 2308 -q 25 -f 35 -uS -@ 5 ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.sam > ${NGSWORKINGPATH}/${PROJECT}/${POOL}/Alignments/${BNAME}.filtered.bam
 

@@ -57,7 +57,7 @@ shinyServer(function(input, output, session) {
       stat=list.append(stat,list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="bam_stat.txt",full.names = T))
       read_d=list.append(read_d,list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="read_distribution.txt",full.names = T))
       img1=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="junctionSaturation_plot.pdf",full.names = T))
-      img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 70)
+      img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 15)
       jun=list.append(jun,img1)
       spli_ev=list.append(spli_ev,image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_events.pdf",full.names = T)))
       spli_jun=list.append(spli_jun,image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_junction.pdf",full.names = T)))
@@ -66,7 +66,7 @@ shinyServer(function(input, output, session) {
     if (gen_sum[8,1]=="Paired_end") {
       for (i in 1:length(sam)) {
         img=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
-        img=image_annotate(img,"Inner distance plot",gravity = "North",size = 70)
+        img=image_annotate(img,"Inner distance plot",gravity = "North",size = 15)
         inn_d=list.append(inn_d,img)
       }
     }

@@ -153,7 +153,7 @@ bamPEFragmentSize -b ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_N
 
 ##### ==================== Variant Calling ==================== #####
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### Generating mpileup File #######\n"
-samtools mpileup -E -uf /opt/genome/human/hg19/index/hg19.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.mpileup
+samtools mpileup -E -uf /opt/genome/human/hg19/index/hg19.filtered.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.mpileup
 # Germline variants
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### Variant Calling: Germline variants #######\n"
 varscan mpileup2snp ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.mpileup > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.VarScan.snp
@@ -167,10 +167,10 @@ varscan filter ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NA
 varscan readcounts ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.mpileup > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.mpileup.readcounts
 
 printf "<`date +'%Y-%m-%d %H:%M:%S'`> ####### Variant Calling: Generating output files #######\n"
-samtools mpileup -uf /opt/genome/human/hg19/index/hg19.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam | bcftools view - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.var.raw.bcf
+samtools mpileup -uf /opt/genome/human/hg19/index/hg19.filtered.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam | bcftools view - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.var.raw.bcf
 bcftools view ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.var.raw.bcf | vcfutils.pl varFilter -D100 > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.var.flt.vcf
-samtools calmd -Abr ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam /opt/genome/human/hg19/index/hg19.fa > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.baq.bam
-samtools mpileup -uf /opt/genome/human/hg19/index/hg19.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.baq.bam | bcftools view - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.baq.var.raw.bcf
+samtools calmd -Abr ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.sorted.filtered.bam /opt/genome/human/hg19/index/hg19.filtered.fa > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.baq.bam
+samtools mpileup -uf /opt/genome/human/hg19/index/hg19.filtered.fa ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/bam/${LIBRARY_NAME}/${BNAME_R1}.baq.bam | bcftools view - > ${RESULTS_DIR}/${PROJECT_NAME}/${POOL_NAME}/variants/${LIBRARY_NAME}/${BNAME_R1}.baq.var.raw.bcf
 #verifyBamID --vcf [input.vcf] --bam [input.bam] --out [output.prefix] --verbose --ignoreRG
 ##### ========================================================= #####
 

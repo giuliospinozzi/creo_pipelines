@@ -146,11 +146,11 @@ for (i in 1:length(sam)) {
   cat("\n\n")
   if (gen_sum$V2[7]=="Paired_end") {
     img_inn=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="inner_distance_plot.pdf",full.names = T))
-    img_inn=image_annotate(img_inn, paste0("Inner distance plot ",sam[i]),gravity = "North",size = 70)
+    img_inn=image_annotate(img_inn, paste0("Inner distance plot ",sam[i]),gravity = "North",size = 15)
     plot(img_inn)
   }
   img1=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="junctionSaturation_plot.pdf",full.names = T))
-  img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 70)
+  img1=image_annotate(img1,"Junction Saturation plot",gravity = "North",size = 15)
   plot(img1)
   spli_ev=image_read_pdf(list.files(path=paste0(out_dir,dir_a,sam[i],"/RSeQC"),patter="splice_events.pdf",full.names = T))
   plot(spli_ev)

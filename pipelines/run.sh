@@ -25,10 +25,10 @@ TYPE="cntrl,cntrl,cntrl,treat,treat,treat";
 OUTPUT_DIR="/home/valentina";
 
 # Reference genome file path for bowtie.
-BOWTIE_DNA="/opt/genome/human/hg19/index/bowtie2/hg19";
+BOWTIE_DNA="/opt/genome/human/hg19/index/bowtie2/hg19.filtered";
 
 # Reference genome file path for hisat2.
-HISAT_DNA="/opt/genome/human/hg19/index/hisat2/hg19";
+HISAT_DNA="/opt/genome/human/hg19/index/hisat2/hg19.filtered";
 
 # Reference genome annotation file path.
 BED_FILE="/opt/genome/human/hg19/annotation/hg19.refseq.bed12";
@@ -58,7 +58,7 @@ LIBRARY="fr-firststrand";
 QUANTIFICATION="featureCounts";
 
 # Reference genome file path.
-REFERENCE_DNA="/opt/genome/human/hg19/index/hg19.fa";
+REFERENCE_DNA="/opt/genome/human/hg19/index/hg19.filtered.fa";
 
 # Differential Expression Analysis method. Options: edgeR, DESeq2, cummeRbund.
 DEA="edgeR";

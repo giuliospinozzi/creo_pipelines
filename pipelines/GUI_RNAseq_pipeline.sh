@@ -38,11 +38,11 @@ READ1=$(join , ${READ1b[@]})
 READ2=$(join , ${READ2b[@]})
 
 zenity --info --title="Reference genome Bowtie" --text="Select reference genome for Bowtie" --ok-label="OK" 
-REF_BOWTIE=$(zenity --file-selection --filename /opt/genome/human/hg19/index/bowtie2/hg19.fa --title="***Reference genome Bowtie***"  --text="Select reference genome for Bowtie")
+REF_BOWTIE=$(zenity --file-selection --filename /opt/genome/human/hg19/index/bowtie2/hg19.filtered.fa --title="***Reference genome Bowtie***"  --text="Select reference genome for Bowtie")
 REF_BOWTIE=$(echo $REF_BOWTIE | sed s/.fa//g)
 
 zenity --info --title="Reference genome Hisat2" --text="Select reference genome for Hisat2" --ok-label="OK" 
-REF_HISAT=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hisat2/hg19.fa --title="***Reference genome Hisat2***"  --text="Select reference genome for Hisat2")
+REF_HISAT=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hisat2/hg19.filtered.fa --title="***Reference genome Hisat2***"  --text="Select reference genome for Hisat2")
 REF_HISAT=$(echo $REF_HISAT | sed s/.fa//g)
 
 zenity --info --title="BED file" --text="Select BED file" --ok-label="OK" 
@@ -61,7 +61,7 @@ zenity --info --title="GTF file" --text="Select GTF file" --ok-label="OK"
 GTF=$(zenity --file-selection --filename /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf --title="***GTF file***"  --text="Select GTF file")
 
 zenity --info --title="Reference genome" --text="Select reference genome" --ok-label="OK" 
-REF=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hg19.fa --title="***Reference genome***"  --text="Select reference genome")
+REF=$(zenity --file-selection --filename /opt/genome/human/hg19/index/hg19.filtered.fa --title="***Reference genome***"  --text="Select reference genome")
 
 zenity --info --title="Script path" --text="Select script directory" --ok-label="OK" 
 R=$(zenity --file-selection --directory --filename /opt/applications/src/creo_pipelines/pipelines --title="***Script path***"  --text="Select script directory")
