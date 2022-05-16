@@ -34,7 +34,7 @@ closest-features --closest KO-pSTAT6-INPUT-B_summits.bed <(gtf2bed < /opt/genome
 closest-features --closest NT-STAT6-INPUT-A_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-STAT6-INPUT-A_summits.annotated.bed
 closest-features --closest NT-STAT6-INPUT-B_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-STAT6-INPUT-B_summits.annotated.bed
 closest-features --closest NT-pSTAT6-INPUT-A_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-pSTAT6-INPUT-A_summits.annotated.bed
-closest-features --closest NT-pSTAT6-INPUT->B_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-pSTAT6-INPUT-B_summits.annotated.bed
+closest-features --closest NT-pSTAT6-INPUT-B_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-pSTAT6-INPUT-B_summits.annotated.bed
 
 
 
