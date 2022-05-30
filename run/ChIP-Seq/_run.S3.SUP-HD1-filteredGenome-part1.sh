@@ -30,14 +30,14 @@ ChIP-Seq_pipeline.PE Chip-Tasselli SUP-HD1 2-B-S-NT-STAT6 /opt/ngs/results_tiacc
 
 cd /opt/ngs/results_tiacci/Chip-Tasselli/SUP-HD1/peaks
 closest-features --closest 4-A-S-KO-INPUT_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 4-A-S-KO-INPUT_L1_1_summits.annotated.bed
-closest-features --closest 4-B-S-KO-INPUT_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 4-B-S-KO-INPUT_L1_1_summits.annotated.bed
+closest-features --closest 4-B-S-KO-INPUT_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 4-B-S-KO-INPUT_L2_1_summits.annotated.bed
 closest-features --closest 6-A-S-KO-pSTAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 6-A-S-KO-pSTAT6_L1_1_summits.annotated.bed
-closest-features --closest 6-B-S-KO-pSTAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 6-B-S-KO-pSTAT6_L1_1_summits.annotated.bed
+closest-features --closest 6-B-S-KO-pSTAT_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 6-B-S-KO-pSTAT_L2_1_summits.annotated.bed
 closest-features --closest 5-A-S-KO-STAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 5-A-S-KO-STAT6_L1_1_summits.annotated.bed
-closest-features --closest 5-B-S-KO-STAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 5-B-S-KO-STAT6_L1_1_summits.annotated.bed
+closest-features --closest 5-B-S-KO-STAT6_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 5-B-S-KO-STAT6_L2_1_summits.annotated.bed
 closest-features --closest 1-A-S-NT-INPUT_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 1-A-S-NT-INPUT_L1_1_summits.annotated.bed
-closest-features --closest 1-B-S-NT-INPUT_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 1-B-S-NT-INPUT_L1_1_summits.annotated.bed
+closest-features --closest 1-B-S-NT-INPUT_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 1-B-S-NT-INPUT_L2_1_summits.annotated.bed
 closest-features --closest 3-A-S-NT-pSTAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 3-A-S-NT-pSTAT6_L1_1_summits.annotated.bed
-closest-features --closest 3-B-S-NT-pSTAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 3-B-S-NT-pSTAT6_L1_1_summits.annotated.bed
+closest-features --closest 3-B-S-NT-pSTAT6_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 3-B-S-NT-pSTAT6_L2_1_summits.annotated.bed
 closest-features --closest 2-A-S-NT-STAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 2-A-S-NT-STAT6_L1_1_summits.annotated.bed
-closest-features --closest 2-B-S-NT-STAT6_L1_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 2-B-S-NT-STAT6_L1_1_summits.annotated.bed
+closest-features --closest 2-B-S-NT-STAT6_L2_1_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > 2-B-S-NT-STAT6_L2_1_summits.annotated.bed
