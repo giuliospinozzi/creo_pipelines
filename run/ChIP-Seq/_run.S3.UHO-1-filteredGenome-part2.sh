@@ -5,27 +5,27 @@ source /etc/profile
 
 #UHO-1 splitted
 mkdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations
-mkdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+mkdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepA/UHO1-KO-STAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepA/UHO1-KO-STAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepB/UHO1-KO-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepB/UHO1-KO-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepA/UHO1-KO-pSTAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepA/UHO1-KO-pSTAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepB/UHO1-KO-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
-
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepA/UHO1-NT-STAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepB/UHO1-NT-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepA/UHO1-NT-pSTAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepB/UHO1-NT-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepB/UHO1-KO-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
 
-cd /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepA/UHO1-NT-STAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
+
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepB/UHO1-NT-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
+
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepA/UHO1-NT-pSTAT6-RepA_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT-A --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
+
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepB/UHO1-NT-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT-B --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
+
+
+cd /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered
 
 closest-features --closest KO-STAT6-INPUT-A_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > KO-STAT6-INPUT-A_summits.annotated.bed
 closest-features --closest KO-STAT6-INPUT-B_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > KO-STAT6-INPUT-B_summits.annotated.bed
@@ -39,20 +39,20 @@ closest-features --closest NT-pSTAT6-INPUT-B_summits.bed <(gtf2bed < /opt/genome
 
 
 #UHO-1 merged
-mkdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
+mkdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepA/UHO1-KO-STAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepB/UHO1-KO-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepA/UHO1-KO-STAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-STAT6-RepB/UHO1-KO-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-STAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
 
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepA/UHO1-KO-pSTAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepB/UHO1-KO-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
-
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepA/UHO1-NT-STAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepB/UHO1-NT-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
-
-macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepA/UHO1-NT-pSTAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepB/UHO1-NT-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepA/UHO1-KO-pSTAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-pSTAT6-RepB/UHO1-KO-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepA/UHO1-KO-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-KO-INPUT-RepB/UHO1-KO-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n KO-pSTAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
 
 
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepA/UHO1-NT-STAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-STAT6-RepB/UHO1-NT-STAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-STAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
 
-cd /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/unfiltered/merged
+macs2 callpeak --pvalue 0.0001 -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepA/UHO1-NT-pSTAT6-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-pSTAT6-RepB/UHO1-NT-pSTAT6-RepB_L1_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepA/UHO1-NT-INPUT-RepA_L1_1.sorted.filtered.bam /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/bam/UHO1-NT-INPUT-RepB/UHO1-NT-INPUT-RepB_L1_1.sorted.filtered.bam -f BAMPE -n NT-pSTAT6-INPUT --outdir /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
+
+
+
+cd /opt/ngs/results_tiacci/Chip-Tasselli/UHO-1/peaks/combinations/filtered/merged
 closest-features --closest KO-STAT6-INPUT_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > KO-STAT6-INPUT_summits.annotated.bed
 closest-features --closest KO-pSTAT6-INPUT_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > KO-pSTAT6-INPUT_summits.annotated.bed
 closest-features --closest NT-STAT6-INPUT_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > NT-STAT6-INPUT_summits.annotated.bed
