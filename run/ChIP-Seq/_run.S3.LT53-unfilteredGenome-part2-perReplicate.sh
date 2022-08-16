@@ -7,7 +7,7 @@ source /etc/profile
 mkdir /opt/ngs/results_tiacci/Chip-Tasselli/LT53/peaks/combinations
 mkdir /opt/ngs/results_tiacci/Chip-Tasselli/LT53/peaks/combinations/unfiltered
 
-macs2 callpeak -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/Empty-1/Empty_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/INPUT_Empty-1/INPUT_Empty_1.sorted.filtered.bam -f BAMPE -n INPUT-Empty-1 --outdir /opt/ngs/results_tiacci/Chip-Tasselli/LT53/peaks/combinations/unfiltered
+macs2 callpeak -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/Empty-1/Empty_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/INPUT-Empty-1/INPUT_Empty_1.sorted.filtered.bam -f BAMPE -n INPUT-Empty-1 --outdir /opt/ngs/results_tiacci/Chip-Tasselli/LT53/peaks/combinations/unfiltered
 
 macs2 callpeak -B -g hs -t /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/WT-1/WT_1.sorted.filtered.bam -c /opt/ngs/results_tiacci/Chip-Tasselli/LT53/bam/INPUT-WT-1/INPUT_WT_1.sorted.filtered.bam -f BAMPE -n INPUT-WT-1 --outdir /opt/ngs/results_tiacci/Chip-Tasselli/LT53/peaks/combinations/unfiltered
 
