@@ -9,7 +9,7 @@ ChIP-Seq_pipeline.PE Chip-Tasselli LT53 INPUT-WT-1 /opt/ngs/results_tiacci 12 /o
 
 ChIP-Seq_pipeline.PE Chip-Tasselli LT53 INPUT-N417Y-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_N417Y/INPUT_N417Y_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_N417Y/INPUT_N417Y_2.fq.gz 
 
-ChIP-Seq_pipeline.PE Chip-Tasselli LT53 INPUT-D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_D419N/INPUT_D419N_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_D419N/INPUT_D419N_2.fq.gz 
+ChIP-Seq_pipeline.PE Chip-Tasselli LT53 INPUT-D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_D419G/INPUT_D419G_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_D419G/INPUT_D419G_2.fq.gz 
 
 ChIP-Seq_pipeline.PE Chip-Tasselli LT53 INPUT-N417Y-D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_N417Y_D419G/INPUT_N417Y_D419G_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/INPUT_N417Y_D419G/INPUT_N417Y_D419G_2.fq.gz 
 
@@ -23,7 +23,7 @@ ChIP-Seq_pipeline.PE Chip-Tasselli LT53 WT-1 /opt/ngs/results_tiacci 12 /opt/gen
 
 ChIP-Seq_pipeline.PE Chip-Tasselli LT53 N417Y-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/N417Y/N417Y_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/N417Y/N417Y_2.fq.gz 
 
-ChIP-Seq_pipeline.PE Chip-Tasselli LT53 D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/D419N/D419N_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/D419N/D419N_2.fq.gz 
+ChIP-Seq_pipeline.PE Chip-Tasselli LT53 D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/D419G/D419G_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/D419G/D419G_2.fq.gz 
 
 ChIP-Seq_pipeline.PE Chip-Tasselli LT53 N417Y-D419G-1 /opt/ngs/results_tiacci 12 /opt/genome/human/hg19/index/bowtie2/hg19.filtered /opt/genome/control/phix174/bwa/phiX174.fa /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/N417Y_D419G/N417Y_D419G_1.fq.gz /mnt/Martelli_Collaborations/Tiacci/Chip-Tasselli-Amazon/F22FTSEUHT0912_HUMlzdjR/N417Y_D419G/N417Y_D419G_2.fq.gz 
 
