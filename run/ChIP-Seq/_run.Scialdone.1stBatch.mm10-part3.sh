@@ -49,38 +49,28 @@ macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/D
 
 cd /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/peaks/combinations
 
-closest-features --closest A1-A2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-A2_summits.annotated.bed
+closest-features --closest A1-WTinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-WTinput_summits.annotated.bed
 
-closest-features --closest A1-A3_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-A3_summits.annotated.bed
+closest-features --closest A2-WTinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-WTinput_summits.annotated.bed
 
-closest-features --closest A1-A4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-A4_summits.annotated.bed
+closest-features --closest A3-WTinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A3-WTinput_summits.annotated.bed
 
-closest-features --closest A2-A3_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-A3_summits.annotated.bed
+closest-features --closest A4-WTinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A4-WTinput_summits.annotated.bed
 
-closest-features --closest A2-A4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-A4_summits.annotated.bed
+closest-features --closest B2-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > B2-BCinput_summits.annotated.bed
 
-closest-features --closest A2-B4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-B4_summits.annotated.bed
+closest-features --closest B3-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > B3-BCinput_summits.annotated.bed
 
-closest-features --closest B2-B4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > B2-B4_summits.annotated.bed
+closest-features --closest B4-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > B4-BCinput_summits.annotated.bed
 
-closest-features --closest C1-C3_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > C1-C3_summits.annotated.bed
+closest-features --closest C1-DNinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > C1-DNinput_summits.annotated.bed
 
-closest-features --closest C1-C4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > C1-C4_summits.annotated.bed
+closest-features --closest C3-DNinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > C3-DNinput_summits.annotated.bed
 
-closest-features --closest D3-D4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D3-D4_summits.annotated.bed
+closest-features --closest C4-DNinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > C4-DNinput_summits.annotated.bed
 
-closest-features --closest A1-D2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-D2_summits.annotated.bed
+closest-features --closest D2-DN-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D2-DN-BCinput_summits.annotated.bed
 
-closest-features --closest A2-D2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-D2_summits.annotated.bed
+closest-features --closest D3-DN-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D3-DN-BCinput_summits.annotated.bed
 
-closest-features --closest D3-D2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D3-D2_summits.annotated.bed
-
-closest-features --closest D4-D2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D4-D2_summits.annotated.bed
-
-closest-features --closest A2-B2_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A2-B2_summits.annotated.bed
-
-closest-features --closest A1-C1_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A1-C1_summits.annotated.bed
-
-closest-features --closest A3-D3_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A3-D3_summits.annotated.bed
-
-closest-features --closest A4-D4_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > A4-D4_summits.annotated.bed
+closest-features --closest D4-DN-BCinput_summits.bed <(gtf2bed < /opt/genome/mouse/mm10/annotation/mm10.sorted.gtf) > D4-DN-BCinput_summits.annotated.bed
