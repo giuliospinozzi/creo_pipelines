@@ -22,7 +22,7 @@ macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/A
 macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/B2-1/B2-27422_R1_001.sorted.filtered.bam -c /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/BCinput-1/BCinput_R1_001.sorted.filtered.bam -f BAMPE -n B2-BCinput --outdir /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/peaks/combinations
 
 #B3-BCinput
-macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/Br-1/B3-27422_R1_001.sorted.filtered.bam -c /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/BCinput-1/BCinput_R1_001.sorted.filtered.bam -f BAMPE -n B3-BCinput --outdir /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/peaks/combinations
+macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/B3-1/B3-27422_R1_001.sorted.filtered.bam -c /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/BCinput-1/BCinput_R1_001.sorted.filtered.bam -f BAMPE -n B3-BCinput --outdir /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/peaks/combinations
 
 #B4-BCinput
 macs2 callpeak -B -g hs -t /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/B4-1/B4-27422_R1_001.sorted.filtered.bam -c /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/bam/BCinput-1/BCinput_R1_001.sorted.filtered.bam -f BAMPE -n B4-BCinput --outdir /opt/ngs/results_falini/Scialdone/ChIP-1stBatch/peaks/combinations
