@@ -32,6 +32,7 @@ macs2 callpeak -B -g hs -t /opt/ngs/results/ATAC-Seq/run488/bam/IDH2_C_WT/IDH2_C
 
 #Annotation
 cd /opt/ngs/results/ATAC-Seq/run488/peaks/combinations
+pigz *.bdg
 
 closest-features --closest IDH2_A_MUT_EMPTY_summits.bed <(gtf2bed < /opt/genome/human/hg19/annotation/hg19.refgene.sorted.gtf) > IDH2_A_MUT_EMPTY_summits.annotated.bed
 
