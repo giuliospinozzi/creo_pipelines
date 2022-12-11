@@ -7,7 +7,7 @@ PROJECT_NAME="results";
 POOL_NAME="RNA-Seq_OPBG_Vinci";
 
 # Sample names (',' sep).
-SAMPLE_NAMES="1-L-NT-A-D3,2-L-KO-A-D3,3-L-NT-B-D3,4-L-KO-B-D3,5-L-NT-C-D3,6-L-KO-C-D3,7-S-NT-A-D3,8-S-KO-A-D3,9-S-NT-B-D3,10-S-KO-B-D3,11-S-NT-C-D3,12-S-KO-C-D3,13-L-NT-A-D4,14-L-KO-A-D4,15-L-NT-B-D4,16-L-KO-B-D4,17-L-NT-C-D4,18-L-KO-C-D4,19-S-NT-A-D4,20-S-KO-A-D4,21-S-NT-B-D4,22-S-KO-B-D4,23-S-NT-C-D4,24-S-KO-C-D4";
+SAMPLE_NAMES="SL-AD-1,SL-AD-2,SL-NS-SU-1,SL-NS-SU-2,SL-NS-SU-3,SL-IN-1,SL-IN-2,SL-IN-3,FBS-AD-1,FBS-AD-2,FBS-NS-SU-1,FBS-NS-SU-2,FBS-NS-SU-3,FBS-IN-1,FBS-IN-2,FBS-IN-3";
 
 # Read 1 fastq path (',' sep). Files must appear in the same order as sample names.
 READ_1="/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S5_S5_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S6_S6_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S2_S2_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S3_S3_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S4_S4_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S8_S8_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S1_S1_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S15_S15_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S16_S16_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S12_S12_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S13_S13_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S14_S14_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S9_S9_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S10_S10_R1_001.fastq.gz,/home/giulio/projects/OPBG/RNA-Seq_Vinci_16112022/S11_S11_R1_001.fastq.gz";
