@@ -13,7 +13,7 @@ SAMPLE_NAMES="DIPG002-NS-1,DIPG008A-NS-2,DIPG010-NS-3,DIPG002-IA-1,DIPG008A-IA-2
 READ_1="/home/giulio/projects/OPBG/Fastq/3_S3_R1_001.fastq-012.gz,/home/giulio/projects/OPBG/Fastq/4_S4_R1_001.fastq-003.gz,/home/giulio/projects/OPBG/Fastq/5_S5_R1_001.fastq-018.gz,/home/giulio/projects/OPBG/Fastq/8_S8_R1_001.fastq-017.gz,/home/giulio/projects/OPBG/Fastq/9_S9_R1_001.fastq-007.gz,/home/giulio/projects/OPBG/Fastq/10_S10_R1_001.fastq-013.gz";
 
 # Read 2 fastq path (',' sep). Required only for paired-end analysis. Files must appear in the same order as sample names.
-READ_2="/home/giulio/projects/OPBG/Fastq/3_S3_R2_001.fastq-012.gz,/home/giulio/projects/OPBG/Fastq/4_S4_R2_001.fastq-003.gz,/home/giulio/projects/OPBG/Fastq/5_S5_R2_001.fastq-018.gz,/home/giulio/projects/OPBG/Fastq/8_S8_R2_001.fastq-017.gz,/home/giulio/projects/OPBG/Fastq/9_S9_R2_001.fastq-007.gz,/home/giulio/projects/OPBG/Fastq/10_S10_R2_001.fastq-013.gz";
+READ_2="/home/giulio/projects/OPBG/Fastq/3_S3_R2_001.fastq-005.gz,/home/giulio/projects/OPBG/Fastq/4_S4_R2_001.fastq-011.gz,/home/giulio/projects/OPBG/Fastq/5_S5_R2_001.fastq-001.gz,/home/giulio/projects/OPBG/Fastq/8_S8_R2_001.fastq-002.gz,/home/giulio/projects/OPBG/Fastq/9_S9_R2_001.fastq-019.gz,/home/giulio/projects/OPBG/Fastq/10_S10_R2_001.fastq-004.gz";
 
 # Sample types (',' sep). Types must appear in the same order as sample names.
 TYPE="NS,NS,NS,IA,IA,IA";
