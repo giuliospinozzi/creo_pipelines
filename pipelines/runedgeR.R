@@ -158,22 +158,26 @@ library(RColorBrewer)
 library(genefilter)
 library(pheatmap)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 100 )
+paletteLength <- 100
+myColor <- colorRampPalette(c("blue", "white", "red"))(paletteLength)
+myBreaks <- c(seq(min(fpkm), 0, length.out=ceiling(paletteLength/2) + 1), 
+              seq(max(fpkm)/paletteLength, max(fpkm), length.out=floor(paletteLength/2)))
 svg("edgeR-heatmap-topVarGenes.svg", w=8, h=9)
-pheatmap(fpkm[ topVarGenes, ],scale = "row",cluster_rows = F, cluster_cols = F, 
+pheatmap(fpkm[ topVarGenes, ],cluster_rows = F, cluster_cols = F, breaks=myBreaks,
          main="Top 100 Variance Genes Heatmap", legend = T, fontsize_row = 4,
-         color = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
+         color = myColor)
 dev.off()
 
 png("edgeR-heatmap-topVarGenes.png", w=8, h=9, pointsize=20, res=300, units = "in")
-pheatmap(fpkm[ topVarGenes, ],scale = "row",cluster_rows = F, cluster_cols = F, 
+pheatmap(fpkm[ topVarGenes, ],cluster_rows = F, cluster_cols = F, breaks=myBreaks,
          main="Top 100 Variance Genes Heatmap", legend = T, fontsize_row = 4,
-         color = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
+         color = myColor)
 dev.off()
 
 pdf("edgeR-heatmap-topVarGenes.pdf", w=8, h=9)
-pheatmap(fpkm[ topVarGenes, ],scale = "row",cluster_rows = F, cluster_cols = F, 
+pheatmap(fpkm[ topVarGenes, ],cluster_rows = F, cluster_cols = F, breaks=myBreaks,
          main="Top 100 Variance Genes Heatmap", legend = T, fontsize_row = 4,
-         color = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
+         color = myColor)
 dev.off()
 
 # Sample distance heatmap
