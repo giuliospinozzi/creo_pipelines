@@ -165,26 +165,26 @@ rownames(diffGenesOutput1)=diffGenesOutput1$Row.names
 lab <- as.character(diffGenesOutput1[rownames(fpkm[ topVarGenes, ]),"Gene"])
 svg("cummeRbund-heatmap-topVarGenes.svg", w=8, h=9)
 par(cex.main=0.8)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.3, offsetRow=-0.2, offsetCol=-0.1, 
            scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, 
-           srtCol=30)
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, srtCol=30)
 dev.off()
 
 png("cummeRbund-heatmap-topVarGenes.png", w=8, h=9, pointsize=20, res=300, units = "in")
 par(cex.main=0.8)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.2, offsetCol=-0.1, 
            scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, 
-           srtCol=30)
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, srtCol=30)
 dev.off()
 
 pdf("cummeRbund-heatmap-topVarGenes.pdf", w=8, h=9)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.4, offsetCol=-0.4, 
-           scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, 
-           srtCol=30)
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.4, offsetRow=-0.2, offsetCol=-0.1, 
+          scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), labRow = lab, srtCol=30)
 dev.off()
+
+
+
 
 # Sample distance heatmap
 mycols <- brewer.pal(8, "Dark2")[1:length(unique(DataGroups))]
