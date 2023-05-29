@@ -72,7 +72,7 @@ CATEGORY_NUMBER="5";
 
 # LOG file.
 #LOG="/opt/ngs/logs/simulation.log";
-LOG="/opt/ngs/logs/221211_rna_seq_opbg_vinci.log";
+LOG="/opt/ngs/logs/230529_rna_seq_opbg_shauna_1.log";
 
 #Comparisons (treat1_VS_cntrl,treat2_VS_cntrl).
 COMPARISONS="IN_VS_NS";
