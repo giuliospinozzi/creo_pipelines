@@ -75,6 +75,6 @@ CATEGORY_NUMBER="5";
 LOG="/opt/ngs/logs/230529_rna_seq_opbg_shauna_2-3.log";
 
 #Comparisons (treat1_VS_cntrl,treat2_VS_cntrl).
-COMPARISONS="IN-GC_VS_IN-NM, IN-GC_VS_IN-NOGC";
+COMPARISONS="IN-GC_VS_IN-NM,IN-GC_VS_IN-NOGC";
 
 nohup python ${SCRIPT_DIR}/RNAseq_pipeline.py -n ${PROJECT_NAME} -pn ${POOL_NAME} -sn ${SAMPLE_NAMES} -r1 ${READ_1} -r2 ${READ_2} -type ${TYPE} -o ${OUTPUT_DIR} -rb ${BOWTIE_DNA} -rh ${HISAT_DNA} -bed ${BED_FILE} -ph ${PHIX_DNA} -rib1 ${RIBOSOMAL_DNA_1} -rib2 ${RIBOSOMAL_DNA_2} -t ${THREADS} -g ${GFT_FILE} -a ${ALIGNMENT} -l ${LIBRARY} -q ${QUANTIFICATION} -r_path ${SCRIPT_DIR} -r ${REFERENCE_DNA} -dea ${DEA} -comp ${COMPARISONS} -meta ${META_ANALYSIS} -cat ${CATEGORY_NUMBER} 2>&1 > ${LOG} &
