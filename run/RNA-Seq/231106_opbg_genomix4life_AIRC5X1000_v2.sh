@@ -4,10 +4,10 @@
 PROJECT_NAME="results";
 
 # Pool name.
-POOL_NAME="RNA-Seq_AIRC5X1000";
+POOL_NAME="RNA-Seq_AIRC5X1000_v2";
 
 # Sample names (',' sep).
-SAMPLE_NAMES="HCT116-bulk-pellet-1,HCT116-bulk-pellet-2,HCT116-bulk-mig-1,HCT116-bulk-mig-2,HCT116-4G7-pellet-1,HCT116-4G7-pellet-2,HCT116-4G7-mig-1,HCT116-4G7-mig-2,HCT116-4G3-pellet-1,HCT116-4G3-pellet-2,HCT116-4G3-mig-1,HCT116-4G3-mig-2,HCT116-4E6-pellet-1,HCT116-4E6-pellet-2,HCT116-4E6-mig-1,HCT116-4E6-mig-2,HCT116-2B3-pellet-1,HCT116-2B3-pellet-2,HCT116-2B3-mig-1,HCT116-2B3-mig-2,CFPAC-bulk-pellet-1,CFPAC-bulk-pellet-2,CFPAC-bulk-mig-1,CFPAC-bulk-mig-2";
+SAMPLE_NAMES="HCT116-bulk-pellet-1,HCT116-bulk-pellet-2,HCT116-bulk-mig-1,HCT116-bulk-mig-2,HCT116-4G7-pellet-1,HCT116-4G7-pellet-2,HCT116-4G7-mig-1,HCT116-4G7-mig-2,HCT116-4G3-pellet-1,HCT116-4G3-pellet-2,HCT116-4G3-mig-1,HCT116-4G3-mig-2,HCT116-4E6-pellet-1,HCT116-4E6-pellet-2,HCT116-4E6-mig-1,HCT116-4E6-mig-2,HCT116-2B3-pellet-1,HCT116-2B3-pellet-2,HCT116-2B3-mig-1,HCT116-2B3-mig-2";
 
 # Read 1 fastq path (',' sep). Files must appear in the same order as sample names.
 READ_1="/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/1_S1_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/2_S2_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/3_S3_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/4_S4_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/5_S5_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/6_S6_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/7_S7_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/8_S8_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/9_S9_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/10_S10_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/11_S11_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/12_S12_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/13_S13_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/14_S14_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/15_S15_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/16_S16_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/17_S17_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/18_S18_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/19_S19_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/20_S20_R1_001.fastq.gz";
@@ -72,7 +72,7 @@ CATEGORY_NUMBER="5";
 
 # LOG file.
 #LOG="/opt/ngs/logs/simulation.log";
-LOG="/opt/ngs/logs/230529_rna_seq_opbg_shauna_2-3.log";
+LOG="/opt/ngs/logs/231107_rna_seq_AIRC5X1000_v2.log";
 
 #Comparisons (treat1_VS_cntrl,treat2_VS_cntrl).
 COMPARISONS="HCT116-pellet_VS_HCT116-bulk-pellet,HCT116-mig_VS_HCT116-bulk-mig";
