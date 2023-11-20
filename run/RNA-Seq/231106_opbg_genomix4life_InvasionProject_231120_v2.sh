@@ -1,5 +1,5 @@
 # Replace the variables with paths and options of interest.
-
+TODAY=`date +"%Y%m%d%H%M%S"`
 # Project name.
 PROJECT_NAME="results";
 
@@ -72,7 +72,7 @@ CATEGORY_NUMBER="5";
 
 # LOG file.
 #LOG="/opt/ngs/logs/simulation.log";
-LOG="/opt/ngs/logs/230529_rna_seq_opbg_shauna_2-3.log";
+LOG="/opt/ngs/logs/${TODAY}_rna_seq_opbg_${POOL_NAME}.log";
 
 #Comparisons (treat1_VS_cntrl,treat2_VS_cntrl).
 COMPARISONS="DIPG002-INV_VS_OPBG-DIPG002";
