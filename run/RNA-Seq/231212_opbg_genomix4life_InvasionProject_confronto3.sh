@@ -1,13 +1,13 @@
 # Replace the variables with paths and options of interest.
 TODAY=`date +"%Y%m%d%H%M%S"`
 # Project name.
-PROJECT_NAME="results";
+PROJECT_NAME="results_opbg";
 
 # Pool name.
 POOL_NAME="InvasionProject_231120_comparison3";
 
 # Sample names (',' sep).
-SAMPLE_NAMES="WT-INV-1,WT-INV-2,WT-INV-3,WT-INV-4,WT-INV-5,WT-INV-6,Wt-Pellet-1,WT-Pellet-2,WT-Pellet-3,WT-Pellet-4,WT-Pellet-5,WT-Pellet-6";
+SAMPLE_NAMES="INV-17,INV-18,INV-23,INV-24,INV-15,INV-16,NS-17,NS-18,NS-23,NS-24,NS-15,NS-16";
 
 # Read 1 fastq path (',' sep). Files must appear in the same order as sample names.
 READ_1="/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/35_S63_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/36_S64_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/45_S26_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/47_S29_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/30_S24_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/31_S44_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/33_S61_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/34_S62_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/46_S28_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/48_S30_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/29_S23_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/32_S60_R1_001.fastq.gz";
@@ -16,7 +16,7 @@ READ_1="/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/35_S63_R1_001.fas
 READ_2="/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/35_S63_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/36_S64_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/45_S26_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/47_S29_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/30_S24_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/31_S44_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/33_S61_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/34_S62_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/46_S28_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/48_S30_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/29_S23_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_luglio2023/1_FASTQ/32_S60_R2_001.fastq.gz";
 
 # Sample types (',' sep). Types must appear in the same order as sample names.
-TYPE="WT-INV,WT-INV,WT-INV,WT-INV,WT-INV,WT-INV,WT-Pellet,WT-Pellet,WT-Pellet,WT-Pellet,WT-Pellet,WT-Pellet"
+TYPE="INV,INV,INV,INV,INV,INV,NS,NS,NS,NS,NS,NS"
 
 # Output directory.
 OUTPUT_DIR="/opt/ngs";
@@ -75,6 +75,8 @@ CATEGORY_NUMBER="5";
 LOG="/opt/ngs/logs/${TODAY}_rna_seq_opbg_${POOL_NAME}.log";
 
 #Comparisons (treat1_VS_cntrl,treat2_VS_cntrl).
-COMPARISONS="WT-INV_VS_WT-Pellet";
+COMPARISONS="INV_VS_NS";
 
 nohup python ${SCRIPT_DIR}/RNAseq_pipeline.py -n ${PROJECT_NAME} -pn ${POOL_NAME} -sn ${SAMPLE_NAMES} -r1 ${READ_1} -r2 ${READ_2} -type ${TYPE} -o ${OUTPUT_DIR} -rb ${BOWTIE_DNA} -rh ${HISAT_DNA} -bed ${BED_FILE} -ph ${PHIX_DNA} -rib1 ${RIBOSOMAL_DNA_1} -rib2 ${RIBOSOMAL_DNA_2} -t ${THREADS} -g ${GFT_FILE} -a ${ALIGNMENT} -l ${LIBRARY} -q ${QUANTIFICATION} -r_path ${SCRIPT_DIR} -r ${REFERENCE_DNA} -dea ${DEA} -comp ${COMPARISONS} -meta ${META_ANALYSIS} -cat ${CATEGORY_NUMBER} 2>&1 > ${LOG} &
+
+rm -rf /opt/ngs/results_opbg/InvasionProject_231120_comparison3/FastQ
