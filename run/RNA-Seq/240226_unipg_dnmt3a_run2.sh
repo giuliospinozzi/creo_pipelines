@@ -78,5 +78,3 @@ LOG="/opt/ngs/logs/${TODAY}_rna_seq_unipg_${POOL_NAME}.log";
 COMPARISONS="OCI-AML2-dnmt3a_VS_OCI-AML2-VUOTO,IMS-M2_P4_VS_IMS-M2_P0";
 
 nohup python ${SCRIPT_DIR}/RNAseq_pipeline.py -n ${PROJECT_NAME} -pn ${POOL_NAME} -sn ${SAMPLE_NAMES} -r1 ${READ_1} -r2 ${READ_2} -type ${TYPE} -o ${OUTPUT_DIR} -rb ${BOWTIE_DNA} -rh ${HISAT_DNA} -bed ${BED_FILE} -ph ${PHIX_DNA} -rib1 ${RIBOSOMAL_DNA_1} -rib2 ${RIBOSOMAL_DNA_2} -t ${THREADS} -g ${GFT_FILE} -a ${ALIGNMENT} -l ${LIBRARY} -q ${QUANTIFICATION} -r_path ${SCRIPT_DIR} -r ${REFERENCE_DNA} -dea ${DEA} -comp ${COMPARISONS} -meta ${META_ANALYSIS} -cat ${CATEGORY_NUMBER} 2>&1 > ${LOG} &
-
-rm -rf /opt/ngs/results/AML2-IMS-M2_DNMT3A/FastQ
