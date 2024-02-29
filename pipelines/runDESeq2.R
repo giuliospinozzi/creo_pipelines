@@ -36,21 +36,21 @@ mcols(dds)$basepairs <- as.matrix(lenth_genes)
 fpkm <- fpkm(dds)
 pca_des <- rbind(fpkm,type=as.character(DataGroups))
 svg("deseq2-pca.svg", 10,10)
-autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+ 
+autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+
   theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=30),
         legend.title=element_blank(),axis.text = element_text(size=30),
         axis.title=element_text(size=30))+geom_text(aes(label=colnames(fpkm)),size=6)
 dev.off()
 
 png("deseq2-pca.png", w=1000, h=1000, pointsize=30)
-autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+ 
+autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+
   theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=30),
         legend.title=element_blank(),axis.text = element_text(size=30),
         axis.title=element_text(size=30))+geom_text(aes(label=colnames(fpkm)),size=6)
 dev.off()
 
 pdf("deseq2-pca.pdf",10,10)
-autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+ 
+autoplot(prcomp(log2((t(fpkm))+1)),data=t(pca_des), colour="type", main="PCA",size=10)+
   theme(plot.title = element_text(face="bold",hjust=0.5,size=50),legend.text=element_text(size=20),
         legend.title=element_blank(),axis.text = element_text(size=20),
         axis.title=element_text(size=20))+geom_text(aes(label=colnames(fpkm)),size=6)
@@ -86,64 +86,64 @@ for (i in 1:nrow(resdata)) {
 resdata=resdata[order(resdata$padj,decreasing = T),]
 svg("deseq2-volcanoplot.svg", 15,10)
 print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
-        geom_point(aes(color = color)) + 
+        geom_point(aes(color = color)) +
         scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
                            breaks=c("F","FDR<0.05", "|LogFC|>1.5","both"), name="",
                            labels=c("F","FDR<0.05", "|LogFC|>1.5","both"),
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+          aes(label = Gene), size=4, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
-                                               size=0.25, linetype="solid", 
+                                               size=0.25, linetype="solid",
                                                colour ="black")))
 dev.off()
 
 png("deseq2-volcanoplot.png", 1200, 1000, pointsize=12)
 print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
-        geom_point(aes(color = color)) + 
+        geom_point(aes(color = color)) +
         scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
                            breaks=c("F","FDR<0.05", "|LogFC|>1.5","both"), name="",
                            labels=c("F","FDR<0.05", "|LogFC|>1.5","both"),
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+          aes(label = Gene), size=4, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
-                                               size=0.25, linetype="solid", 
+                                               size=0.25, linetype="solid",
                                                colour ="black")))
 dev.off()
 
 pdf("deseq2-volcanoplot.pdf", 15,10)
 print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
-        geom_point(aes(color = color)) + 
+        geom_point(aes(color = color)) +
         scale_color_manual(values = c("F"="black","FDR<0.05"="red","|LogFC|>1.5"="orange","both"="green"),
                            breaks=c("F","FDR<0.05", "|LogFC|>1.5","both"), name="",
                            labels=c("F","FDR<0.05", "|LogFC|>1.5","both"),
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=20),
+          aes(label = Gene), size=4, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
-                                               size=0.25, linetype="solid", 
+                                               size=0.25, linetype="solid",
                                                colour ="black")))
 dev.off()
 
@@ -155,22 +155,22 @@ library(gplots)
 topVarGenes <- head( order( rowVars( fpkm ), decreasing=TRUE ), 100 )
 svg("deseq2-heatmap-topVarGenes.svg", w=8, h=9)
 par(cex.main=0.8)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.3, offsetRow=-0.2, offsetCol=-0.1, 
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.3, offsetRow=-0.2, offsetCol=-0.1,
            scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), srtCol=30)
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
 dev.off()
 
 png("deseq2-heatmap-topVarGenes.png", w=8, h=9, pointsize=20, res=300, units = "in")
 par(cex.main=0.8)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.9, cexRow=0.5, offsetRow=-0.2, offsetCol=-0.1, 
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.4, cexRow=0.2, offsetRow=-0.2, offsetCol=-0.1,
            scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), srtCol=30)
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
 dev.off()
 
 pdf("deseq2-heatmap-topVarGenes.pdf", w=8, h=9)
-heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.4, offsetRow=-0.2, offsetCol=-0.1, 
+heatmap.2( fpkm[ topVarGenes, ], cexCol=0.6, cexRow=0.4, offsetRow=-0.2, offsetCol=-0.1,
           scale="row", trace="none", dendrogram="none", main="Top 100 Variance Genes Heatmap",
-           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255), srtCol=30)
+           Colv=FALSE, col = colorRampPalette( rev(brewer.pal(9, "RdBu")) )(255))
 dev.off()
 
 # Sample distance heatmap
