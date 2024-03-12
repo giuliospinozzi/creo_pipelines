@@ -100,13 +100,13 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=30),
+          aes(label = Gene), size=5, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
                                                size=0.25, linetype="solid", 
                                                colour ="black")))
@@ -121,13 +121,13 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=30),
+          aes(label = Gene), size=5, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
                                                size=0.25, linetype="solid", 
                                                colour ="black")))
@@ -143,13 +143,13 @@ print(ggplot(resdata, aes(log2FoldChange, -log10(padj)))+
                            limits=c("FDR<0.05", "|LogFC|>1.5","both")) +
         geom_text_repel(
           data = subset(resdata, abs(log2FoldChange)>3 & padj <.05),
-          aes(label = Gene), size=2, segment.size=0.2) + ggtitle("Volcano Plot") +
-        theme(plot.title = element_text(hjust = 0.5,face="bold",size=30),
+          aes(label = Gene), size=5, segment.size=0.2) + ggtitle("Volcano Plot") +
+        theme(plot.title = element_text(hjust = 0.5,face="bold",size=28),
               panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              axis.text=element_text(size=14),axis.title=element_text(size=14),
+              axis.text=element_text(size=18),axis.title=element_text(size=18),
               legend.key = element_rect(colour = NA, fill = NA),
-              legend.title = element_blank(),legend.text=element_text(size=14),
+              legend.title = element_blank(),legend.text=element_text(size=18),
               legend.background = element_rect(fill="white",
                                                size=0.25, linetype="solid", 
                                                colour ="black")))
