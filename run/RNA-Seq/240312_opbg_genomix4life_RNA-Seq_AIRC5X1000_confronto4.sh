@@ -7,14 +7,14 @@ PROJECT_NAME="results_opbg";
 POOL_NAME="RNA-Seq_AIRC5X1000_comparison4";
 
 # Sample names (',' sep).
-SAMPLE_NAMES="HCT116-Bulk-P1,HCT116-Bulk-P2,HCT116-Bulk-MIG1,HCT116-Bulk-MIG2,HCT116-Bulk-MIG3";
+SAMPLE_NAMES="HCT116-Bulk-P1,HCT116-Bulk-P2,HCT116-Bulk-MIG2,HCT116-Bulk-MIG3";
 
 # Read 1 fastq path (',' sep). Files must appear in the same order as sample names.
-READ_1="/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/1_S1_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/2_S2_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/3_S3_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/4_S4_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Gennaio2024/1_Fastq/1_S11_R1_001.fastq.gz"
+READ_1="/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/1_S1_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/2_S2_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/4_S4_R1_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Gennaio2024/1_Fastq/1_S11_R1_001.fastq.gz"
 # Read 2 fastq path (',' sep). Required only for paired-end analysis. Files must appear in the same order as sample names.
-READ_2="/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/1_S1_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/2_S2_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/3_S3_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/4_S4_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Gennaio2024/1_Fastq/1_S11_R2_001.fastq.gz"
+READ_2="/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/1_S1_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/2_S2_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Ottobre_2023/1_Fastq/4_S4_R2_001.fastq.gz,/home/giulio/projects/OPBG/Pericoli_Gennaio2024/1_Fastq/1_S11_R2_001.fastq.gz"
 # Sample types (',' sep). Types must appear in the same order as sample names.
-TYPE="Pellet,Pellet,MIG,MIG,MIG"
+TYPE="Pellet,Pellet,MIG,MIG"
 
 # Output directory.
 OUTPUT_DIR="/opt/ngs";
