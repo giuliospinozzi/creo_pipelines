@@ -229,7 +229,7 @@ tmp=table1[order(table1$logFC,decreasing = T),]
 genelist=tmp$logFC
 names(genelist)=tmp$Gene
 
-kk=enrichKEGG(gene=gene, organism='hsa', pvalueCutoff = 0.05, pAdjustMethod = "fdr", 
+kk=enrichMKEGG(gene=gene, organism='hsa', pvalueCutoff = 0.05, pAdjustMethod = "fdr", 
               universe=table1$entrez)
 kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
 kk = kk[kk@result$p.adjust < 0.05, asis=T]
