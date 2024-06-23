@@ -278,6 +278,7 @@ dev.off()
 
 
 # histogram go
+if (nrow(kk@result)>1) {
 print("#### Histogram ####")
 library(dplyr)
 library(ggplot2)
@@ -336,7 +337,7 @@ if (nrow(kk@result)>=30) {
 }
 p=list()
 for (i in 1:length(names)) {
-  p=list.append(p,table1[table1$entrez %in% 
+  p=list.append(p,table1[table1$Gene %in% 
                            strsplit(as.character(
                              kk@result$geneID[kk@result$Description==names[i]]),"/")[[1]],])
 }
@@ -377,7 +378,7 @@ dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/kegg/hist_pathway.svg"),10, 6)
 print(q)
 dev.off()
-
+}
 
 
 
@@ -442,16 +443,16 @@ dev.off()
 
 
 # histogram path
-if (nrow(kk@result)>=30) {
-  names=as.character(kk@result$Description[1:30])
+if (nrow(ep@result)>=30) {
+  names=as.character(ep@result$Description[1:30])
 } else {
-  names=as.character(kk@result$Description[1:nrow(kk@result)])
+  names=as.character(ep@result$Description[1:nrow(ep@result)])
 }
 p=list()
 for (i in 1:length(names)) {
   p=list.append(p,table1[table1$Gene %in% 
                            strsplit(as.character(
-                             kk@result$geneID[kk@result$Description==names[i]]),"/")[[1]],])
+                             ep@result$geneID[ep@result$Description==names[i]]),"/")[[1]],])
 }
 for (i in 1:length(p)) {p[[i]]$path=names[i]}
 p1=data.frame()
