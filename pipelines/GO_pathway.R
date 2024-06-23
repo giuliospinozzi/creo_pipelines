@@ -263,17 +263,17 @@ cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCatego
                       main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
 dev.off()
 
-#pathview
-print("#### Pathview ####")
-library(pathview)
-new_data=table1[,c("logFC","entrez")]
-new_data=new_data[!duplicated(new_data$entrez), ]
-new_data=new_data[!is.na(new_data$entrez), ]
-rownames(new_data)=new_data$entrez
-new_data=new_data[,-2,drop=F]
-setwd(paste0(output_dir,"/Pathway_analysis/pathview"))
-tmp = sapply(kk@result$ID, function(pid) tryCatch(pathview(gene.data=new_data, pathway.id=pid, species="hsa",
-                                                           low="dodgerblue",high="firebrick1",mid="gray88"),error=function(e) NULL))
+# #pathview
+# print("#### Pathview ####")
+# library(pathview)
+# new_data=table1[,c("logFC","entrez")]
+# new_data=new_data[!duplicated(new_data$entrez), ]
+# new_data=new_data[!is.na(new_data$entrez), ]
+# rownames(new_data)=new_data$entrez
+# new_data=new_data[,-2,drop=F]
+# setwd(paste0(output_dir,"/Pathway_analysis/pathview"))
+# tmp = sapply(kk@result$ID, function(pid) tryCatch(pathview(gene.data=new_data, pathway.id=pid, species="hsa",
+#                                                            low="dodgerblue",high="firebrick1",mid="gray88"),error=function(e) NULL))
 
 
 # histogram go
@@ -335,7 +335,7 @@ if (nrow(kk@result)>=30) {
 }
 p=list()
 for (i in 1:length(names)) {
-  p=list.append(p,table1[table1$Gene %in% 
+  p=list.append(p,table1[table1$entrez %in% 
                            strsplit(as.character(
                              kk@result$geneID[kk@result$Description==names[i]]),"/")[[1]],])
 }
