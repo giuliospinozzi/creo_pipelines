@@ -405,7 +405,7 @@ genelist=tmp2$logFC
 names(genelist)=tmp2$entrez
 rm(tmp2)
 
-for (i in nrow(ep@result)) {
+for (i in 1:nrow(ep@result)) {
   png(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20)
   p <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
   print(p)
