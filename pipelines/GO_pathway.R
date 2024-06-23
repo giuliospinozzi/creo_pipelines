@@ -278,10 +278,10 @@ dev.off()
 
 
 # histogram go
-if (nrow(kk@result)>1) {
-print("#### Histogram ####")
 library(dplyr)
 library(ggplot2)
+if (nrow(kk@result)>1) {
+print("#### Histogram ####")
 
 for (j in 1:length(unique(tab_all$GO_domain))) {
   if (nrow(GO[GO$GO_domain==unique(tab_all$GO_domain)[j],])>=30) {
