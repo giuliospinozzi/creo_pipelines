@@ -406,11 +406,11 @@ names(genelist)=tmp2$entrez
 rm(tmp2)
 
 for (i in nrow(ep@result)) {
-  png(paste(output_dir,"/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20)
+  png(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20)
   p <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
   print(p)
   dev.off()
-  pdf(paste(output_dir,"/",ep@result$ID[i], ".pdf", sep=""),10,8)
+  pdf(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".pdf", sep=""),10,8)
   q <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
   print(q)
   dev.off()
