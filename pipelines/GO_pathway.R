@@ -229,36 +229,37 @@ tmp=table1[order(table1$logFC,decreasing = T),]
 genelist=tmp$logFC
 names(genelist)=tmp$Gene
 
+#################################### KEGG ####################################
 kk=enrichMKEGG(gene=gene, organism='hsa', pvalueCutoff = 0.05, pAdjustMethod = "fdr", 
               universe=table1$entrez)
 kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
 kk = kk[kk@result$p.adjust < 0.05, asis=T]
-write.csv(kk@result,paste0(output_dir,"/Pathway_analysis/pathway_FC1.5_pv0.05.csv"),row.names = F)
+write.csv(kk@result,paste0(output_dir,"/Pathway_analysis/kegg/pathway_FC1.5_pv0.05.csv"),row.names = T)
 
 #dotplot
 print("#### Dotplot ####")
-pdf(paste0(output_dir,"/Pathway_analysis/dotplot_pathways.pdf"),10,8)
+pdf(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.pdf"),10,8)
 dotplot(kk,showCategory=max_c, title = "Enriched pathways")
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/dotplot_pathways.png"),1000, 800, pointsize=20)
+png(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.png"),1000, 800, pointsize=20)
 dotplot(kk,showCategory=max_c, title = "Enriched pathways")
 dev.off()
-svg(paste0(output_dir,"/Pathway_analysis/dotplot_pathways.svg"),10, 8)
+svg(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.svg"),10, 8)
 dotplot(kk,showCategory=max_c, title = "Enriched pathways")
 dev.off()
 
 #cnetplot
 print("#### Cnetplot ####")
-pdf(paste0(output_dir,"/Pathway_analysis/cnetplot_pathways.pdf"),10,8)
+pdf(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.pdf"),10,8)
 par(cex.main=1)
 cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
                       main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/cnetplot_pathways.png"),1000, 800, pointsize=20)
+png(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.png"),1000, 800, pointsize=20)
 cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
                       main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
 dev.off()
-svg(paste0(output_dir,"/Pathway_analysis/cnetplot_pathways.svg"),10, 8)
+svg(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.svg"),10, 8)
 cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
                       main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
 dev.off()
@@ -366,13 +367,126 @@ q <-
         panel.background = element_rect(fill =  "grey90")) +
   scale_fill_manual(values = c("down-regulated"="dodgerblue1", "up-regulated"="firebrick2"))
 
-pdf(paste0(output_dir,"/Pathway_analysis/hist_pathway.pdf"),10,6)
+pdf(paste0(output_dir,"/Pathway_analysis/kegg/hist_pathway.pdf"),10,6)
 print(q)
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/hist_pathway.png"),width = 10, height = 6, 
+png(paste0(output_dir,"/Pathway_analysis/kegg/hist_pathway.png"),width = 10, height = 6, 
     units = 'in', res = 300)
 print(q)
 dev.off()
-svg(paste0(output_dir,"/Pathway_analysis/hist_pathway.svg"),10, 6)
+svg(paste0(output_dir,"/Pathway_analysis/kegg/hist_pathway.svg"),10, 6)
+print(q)
+dev.off()
+
+
+
+
+#################################### REACTOME ####################################
+library(ReactomePA)
+ep <- enrichPathway(
+  gene,
+  organism = "human",
+  pvalueCutoff = 0.05,
+  pAdjustMethod = "BH",
+  qvalueCutoff = 0.2,
+  universe = table1$entrez,
+  minGSSize = 10,
+  maxGSSize = 500,
+  readable = FALSE
+)
+
+ep <- setReadable(ep, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
+ep = ep[ep@result$p.adjust < 0.05, asis=T]
+write.csv(ep@result,paste0(output_dir,"/Pathway_analysis/reactome/pathway_FC1.5_pv0.05.csv"),row.names = T)
+
+#dotplot
+print("#### Dotplot ####")
+pdf(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.pdf"),10,8)
+dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+dev.off()
+png(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.png"),1000, 800, pointsize=20)
+dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+dev.off()
+svg(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.svg"),10, 8)
+dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+dev.off()
+
+#cnetplot
+print("#### Cnetplot ####")
+pdf(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.pdf"),10,8)
+par(cex.main=1)
+cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
+                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+dev.off()
+png(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.png"),1000, 800, pointsize=20)
+cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
+                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+dev.off()
+svg(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.svg"),10, 8)
+cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
+                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+dev.off()
+
+# #pathview
+# print("#### Pathview ####")
+# library(pathview)
+# new_data=table1[,c("logFC","entrez")]
+# new_data=new_data[!duplicated(new_data$entrez), ]
+# new_data=new_data[!is.na(new_data$entrez), ]
+# rownames(new_data)=new_data$entrez
+# new_data=new_data[,-2,drop=F]
+# setwd(paste0(output_dir,"/Pathway_analysis/pathview"))
+# tmp = sapply(kk@result$ID, function(pid) tryCatch(pathview(gene.data=new_data, pathway.id=pid, species="hsa",
+#                                                            low="dodgerblue",high="firebrick1",mid="gray88"),error=function(e) NULL))
+
+
+
+# histogram path
+if (nrow(kk@result)>=30) {
+  names=as.character(kk@result$Description[1:30])
+} else {
+  names=as.character(kk@result$Description[1:nrow(kk@result)])
+}
+p=list()
+for (i in 1:length(names)) {
+  p=list.append(p,table1[table1$Gene %in% 
+                           strsplit(as.character(
+                             kk@result$geneID[kk@result$Description==names[i]]),"/")[[1]],])
+}
+for (i in 1:length(p)) {p[[i]]$path=names[i]}
+p1=data.frame()
+for (i in 1:length(p)) {p1=rbind(p1,p[[i]])}
+p_go=p1[p1$FDR<0.05 & abs(p1$logFC)>1.5,]
+p_go$fc=ifelse(p_go$logFC>=0,"up-regulated","down-regulated")
+p_go=p_go[!is.na(p_go$Gene),c("Gene","path","fc","logFC")]
+plotting_df <-
+  p_go %>% 
+  group_by(path, fc) %>% 
+  summarise(Freq = n()) %>% 
+  mutate(Freq = if_else(fc == "down-regulated", -Freq, Freq))
+the_order <- names
+if (max(abs(plotting_df$Freq))>10) {by_step=5} else {by_step=2}
+q <- 
+  plotting_df %>% 
+  ggplot(aes(x = path, y = Freq, fill= fc)) +
+  geom_bar(stat = "identity", width = 0.75) +
+  coord_flip() +
+  scale_x_discrete(limits = rev(the_order)) +
+  scale_y_continuous(breaks = seq(-300, 300, by_step), 
+                     labels = abs(seq(-300, 300, by_step))) +
+  labs(x = "Pathway", y = "Gene count", title = "\nPathways\n", fill="") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5,face = "bold", size = 16),
+        panel.background = element_rect(fill =  "grey90")) +
+  scale_fill_manual(values = c("down-regulated"="dodgerblue1", "up-regulated"="firebrick2"))
+
+pdf(paste0(output_dir,"/Pathway_analysis/reactome/hist_pathway.pdf"),10,6)
+print(q)
+dev.off()
+png(paste0(output_dir,"/Pathway_analysis/reactome/hist_pathway.png"),width = 10, height = 6, 
+    units = 'in', res = 300)
+print(q)
+dev.off()
+svg(paste0(output_dir,"/Pathway_analysis/reactome/hist_pathway.svg"),10, 6)
 print(q)
 dev.off()

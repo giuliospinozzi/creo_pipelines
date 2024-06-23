@@ -317,6 +317,8 @@ def main():
         os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Gene_ontology")
         os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis")
         #os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis/pathview")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis/kegg")
+        os.system("mkdir "+args.output_dir+"/"+args.project_name+"/"+args.pool_name+"/"+comp1[i]+"/Meta-analysis/Pathway_analysis/reactome")
 
         # quantification
         quantification(args.output_dir,args.project_name,args.pool_name,args.R_path,args.dea_method,args.q_method,args.Threads,args.GTF,args.library_type,args.ref_gen,comp1[i])
