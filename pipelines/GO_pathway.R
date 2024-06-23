@@ -400,6 +400,23 @@ ep <- setReadable(ep, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
 ep = ep[ep@result$p.adjust < 0.05, asis=T]
 write.csv(ep@result,paste0(output_dir,"/Pathway_analysis/reactome/pathway_FC1.5_pv0.05.csv"),row.names = T)
 
+tmp2<-tmp[!duplicated(tmp[,"entrez"]),]
+genelist=tmp2$logFC
+names(genelist)=tmp2$entrez
+rm(tmp2)
+
+for (i in nrow(ep@result)) {
+  png(paste(output_dir,"/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20)
+  p <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
+  print(p)
+  dev.off()
+  pdf(paste(output_dir,"/",ep@result$ID[i], ".pdf", sep=""),10,8)
+  q <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
+  print(q)
+  dev.off()
+}
+rm(p,q)
+
 #dotplot
 print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.pdf"),10,8)
