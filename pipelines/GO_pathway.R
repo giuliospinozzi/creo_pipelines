@@ -272,13 +272,13 @@ rm(p,q)
 #dotplot
 print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.pdf"),10,8)
-dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(ep,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 png(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.png"),1000, 800, pointsize=20)
-dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(ep,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.svg"),10, 8)
-dotplot(ep,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(ep,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 
 #cnetplot
@@ -375,13 +375,13 @@ if (nrow(kk@result)>1) {
 #dotplot
 print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.pdf"),10,8)
-dotplot(kk,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(kk,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 png(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.png"),1000, 800, pointsize=20)
-dotplot(kk,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(kk,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.svg"),10, 8)
-dotplot(kk,showCategory=max_c, title = "Enriched pathways")
+print(dotplot(kk,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 
 #cnetplot
