@@ -248,16 +248,10 @@ names(genelist)=tmp2$entrez
 rm(tmp2)
 
 for (i in 1:nrow(ep@result)) {
-  png(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20,res=120)
-  p <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
-  print(p)
-  dev.off()
   pdf(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".pdf", sep=""),10,8)
-  q <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
-  print(q)
+  print(viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist))
   dev.off()
 }
-rm(p,q)
 
 #dotplot
 print("#### Dotplot ####")
