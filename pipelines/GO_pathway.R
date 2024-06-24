@@ -35,6 +35,8 @@ library(org.Hs.eg.db)
 library(igraph)
 library(scales)
 source(paste0(script,"/CNETPLOT_FUNCTION.R"))
+library(dplyr)
+library(ggplot2)
 
 # GO tables
 table1$entrez = mapIds(org.Hs.eg.db, keys=as.character(table1$Gene), column="ENTREZID",
@@ -236,6 +238,8 @@ kk <- setReadable(kk, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
 kk = kk[kk@result$p.adjust < 0.05, asis=T]
 write.csv(kk@result,paste0(output_dir,"/Pathway_analysis/kegg/pathway_FC1.5_pv0.05.csv"),row.names = T)
 
+
+if (nrow(kk@result)>1) {
 #dotplot
 print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.pdf"),10,8)
@@ -278,9 +282,6 @@ dev.off()
 
 
 # histogram go
-library(dplyr)
-library(ggplot2)
-if (nrow(kk@result)>1) {
 print("#### Histogram ####")
 
 for (j in 1:length(unique(tab_all$GO_domain))) {
@@ -400,6 +401,8 @@ ep <- setReadable(ep, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
 ep = ep[ep@result$p.adjust < 0.05, asis=T]
 write.csv(ep@result,paste0(output_dir,"/Pathway_analysis/reactome/pathway_FC1.5_pv0.05.csv"),row.names = T)
 
+
+if (nrow(ep@result)>1) {
 tmp2<-tmp[!duplicated(tmp[,"entrez"]),]
 genelist=tmp2$logFC
 names(genelist)=tmp2$entrez
@@ -508,3 +511,4 @@ dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/reactome/hist_pathway.svg"),10, 6)
 print(q)
 dev.off()
+}
