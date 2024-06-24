@@ -175,37 +175,37 @@ max=round(((max(abs(geneList))+1)+1),1)
 
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.pdf"),10,8)
-  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20,res=120)
-  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20,res=120))
+  print(cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.svg"),10, 8)
-  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
 }
 
 if (nrow(GO_CC@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.pdf"),10,8)
-  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.png"),1000, 800, pointsize=20,res=120)
-  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.svg"),10, 8)
-  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
 }
 
 if (nrow(GO_MF@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.pdf"),10,8)
-  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
   png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.png"),1000, 800, pointsize=20,res=120)
-  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.svg"),10, 8)
-  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+  print(cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
   dev.off()
 }
 
@@ -274,13 +274,13 @@ dev.off()
 #cnetplot
 print("#### Cnetplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.pdf"),10,8)
-cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 png(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.png"),1000, 800, pointsize=20,res=100)
-cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.svg"),10, 8)
-cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 
 # #pathview
@@ -373,13 +373,13 @@ dev.off()
 #cnetplot
 print("#### Cnetplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.pdf"),10,8)
-cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 png(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.png"),1000, 800, pointsize=20,res=100)
-cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.svg"),10, 8)
-cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
+print(cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue"))
 dev.off()
 
 # #pathview
