@@ -85,7 +85,7 @@ treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categori
         lowerbound.cex.labels =0,
         palette=c("lightpink","skyblue","lightgreen"))
 dev.off()
-png(paste0(output_dir,"/Gene_ontology/treemap_GO_fc1.5_pv0.05.png"),1200, 1000, pointsize=20)
+png(paste0(output_dir,"/Gene_ontology/treemap_GO_fc1.5_pv0.05.png"),1200, 1000, pointsize=20,res=120)
 treemap(all,index=c("namespace_1003","Description"),vSize="Count",type="categorical",
         inflate.labels = TRUE,vColor = "namespace_1003",fontsize.labels = c(0,10),
         title="GO |Fold-Change|> 1.5 and pvalue<.05",title.legend = "Legend",
@@ -128,7 +128,7 @@ if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.pdf"),10,8)
   print(dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process"))
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.png"),1000, 800, pointsize=20)
+  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.png"),1000, 800, pointsize=20,res=120)
   print(dotplot(GO_BP, showCategory=max_c, title = "Enriched GO for Biological Process"))
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/dotplot_GO_BP.svg"),10, 8)
@@ -140,7 +140,7 @@ if (nrow(GO_CC@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.pdf"),10,8)
   print(dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component"))
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.png"),1000, 800, pointsize=20)
+  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.png"),1000, 800, pointsize=20,res=120)
   print(dotplot(GO_CC, showCategory=max_c, title = "Enriched GO for Cellular Component"))
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/dotplot_GO_CC.svg"),10, 8)
@@ -152,7 +152,7 @@ if (nrow(GO_MF@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.pdf"),10,8)
   print(dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function"))
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.png"),1000, 800, pointsize=20)
+  png(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.png"),1000, 800, pointsize=20,res=120)
   print(dotplot(GO_MF, showCategory=max_c, title = "Enriched GO for Molecular Function"))
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/dotplot_GO_MF.svg"),10, 8)
@@ -175,47 +175,37 @@ max=round(((max(abs(geneList))+1)+1),1)
 
 if (nrow(GO_BP@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.pdf"),10,8)
-  cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05",
-                        cex.main=1)
+  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20)
-  cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05")
+  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.png"),1000, 800, pointsize=20,res=120)
+  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_BP.svg"),10, 8)
-  cnetplot.enrichResult(GO_BP,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Biological Process FC>1.5 pV<.05")
+  cnetplot(GO_BP,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
 }
 
 if (nrow(GO_CC@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.pdf"),10,8)
-  cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Cellular Component FC>1.5 pV<.05")
+  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.png"),1000, 800, pointsize=20)
-  cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Cellular Component FC>1.5 pV<.05")
+  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.png"),1000, 800, pointsize=20,res=120)
+  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_CC.svg"),10, 8)
-  cnetplot.enrichResult(GO_CC,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Cellular Component FC>1.5 pV<.05")
+  cnetplot(GO_CC,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
 }
 
 if (nrow(GO_MF@result)!=0) {
   pdf(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.pdf"),10,8)
-  cnetplot.enrichResult(GO_MF,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
+  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
-  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.png"),1000, 800, pointsize=20)
-  cnetplot.enrichResult(GO_MF,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
+  png(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.png"),1000, 800, pointsize=20,res=120)
+  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
   svg(paste0(output_dir,"/Gene_ontology/cnetplot_GO_MF.svg"),10, 8)
-  cnetplot.enrichResult(GO_MF,categorySize="pvalue", foldChange=geneList, showCategory = max_c,
-                        col.bin=seq(min, max, by = 1), main="GO Molecular Function FC>1.5 pV<.05")
+  cnetplot(GO_MF,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
   dev.off()
 }
 
@@ -258,7 +248,7 @@ names(genelist)=tmp2$entrez
 rm(tmp2)
 
 for (i in 1:nrow(ep@result)) {
-  png(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20)
+  png(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".png", sep=""),1200, 1000, pointsize=20,res=120)
   p <- viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist)
   print(p)
   dev.off()
@@ -274,7 +264,7 @@ print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.pdf"),10,8)
 print(dotplot(ep,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.png"),1000, 800, pointsize=20)
+png(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.png"),1000, 800, pointsize=20,res=120)
 print(dotplot(ep,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/reactome/dotplot_pathways.svg"),10, 8)
@@ -284,17 +274,13 @@ dev.off()
 #cnetplot
 print("#### Cnetplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.pdf"),10,8)
-par(cex.main=1)
-cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.png"),1000, 800, pointsize=20)
-cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+png(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.png"),1000, 800, pointsize=20,res=100)
+cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/reactome/cnetplot_pathways.svg"),10, 8)
-cnetplot.enrichResult(ep, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+cnetplot(ep,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
 
 # #pathview
@@ -377,7 +363,7 @@ print("#### Dotplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.pdf"),10,8)
 print(dotplot(kk,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.png"),1000, 800, pointsize=20)
+png(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.png"),1000, 800, pointsize=20,res=120)
 print(dotplot(kk,showCategory=max_c, title = "Enriched pathways"))
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/kegg/dotplot_pathways.svg"),10, 8)
@@ -387,17 +373,13 @@ dev.off()
 #cnetplot
 print("#### Cnetplot ####")
 pdf(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.pdf"),10,8)
-par(cex.main=1)
-cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
-png(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.png"),1000, 800, pointsize=20)
-cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+png(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.png"),1000, 800, pointsize=20,res=100)
+cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
 svg(paste0(output_dir,"/Pathway_analysis/kegg/cnetplot_pathways.svg"),10, 8)
-cnetplot.enrichResult(kk, categorySize="pvalue", foldChange=genelist, showCategory = max_c,
-                      main="Enriched pathways FC>1.5 & pV<.05", col.bin=seq(min, max, by = 1))
+cnetplot(kk,foldChange = geneList,showCategory = max_c,categorySize="pvalue")
 dev.off()
 
 # #pathview
