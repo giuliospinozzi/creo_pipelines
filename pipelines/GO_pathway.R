@@ -230,10 +230,9 @@ ep <- enrichPathway(
   pvalueCutoff = 0.05,
   pAdjustMethod = "BH",
   qvalueCutoff = 0.2,
-  universe = table1$entrez,
   minGSSize = 10,
   maxGSSize = 500,
-  readable = FALSE
+  readable = TRUE
 )
 
 ep <- setReadable(ep, OrgDb = org.Hs.eg.db,keyType = "ENTREZID")
