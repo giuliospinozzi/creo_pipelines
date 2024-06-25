@@ -251,6 +251,7 @@ for (i in 1:10) {
   pdf(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".pdf", sep=""),10,8)
   print(viewPathway(ep@result$Description[i], readable = TRUE, foldChange = genelist))
   dev.off()
+}
 } else {
 for (i in nrow(ep@result)) {
   pdf(paste(output_dir,"/Pathway_analysis/reactome/",ep@result$ID[i], ".pdf", sep=""),10,8)
@@ -258,7 +259,7 @@ for (i in nrow(ep@result)) {
   dev.off()
 }
 }
-}
+
 
 #dotplot
 print("#### Dotplot ####")
