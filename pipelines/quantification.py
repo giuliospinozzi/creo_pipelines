@@ -1,8 +1,9 @@
-#!/usr/bin/env python2
+#!/home/gspinozzi/arpir/bin/python2
 # -*- coding: utf-8 -*-
 
 import os, argparse, sys
 import pandas as pd
+
 
 header = """
   +--------------------------------------------------------+
@@ -139,6 +140,55 @@ def runfeatureCounts(Threads,input_path,GTF,output_dir):
     BAM=" ".join((data['BAM_path']))
     cmd="featureCounts -T "+str(Threads)+" -p -a "+GTF+" -o "+output_dir+"/featureCounts_counts.txt "+BAM
     os.system(cmd)
+    featurecounts_path=output_dir+"/featureCounts_counts.txt"
+    totals_path=output_dir+"/featureCounts_gene_total_counts.tsv"
+    if os.path.isfile(featurecounts_path):
+        createFeatureCountsGeneTotals(featurecounts_path,totals_path)
+    else:
+        print ('\033[0;31m' + "\n[AP]\tError: featureCounts output file not found, skipping totals generation.\n" + '\033[0m')
+
+
+def createFeatureCountsGeneTotals(featurecounts_path,output_path):
+    """
+    Create a simple TSV with gene and total_count from featureCounts output.
+    """
+    print ('\033[1;33m' + "\n^^^^^^^^^featureCounts totals generation^^^^^^^^^\n" + '\033[0m')
+    with open(featurecounts_path, 'r') as fin, open(output_path, 'w') as fout:
+        header_fields = None
+        for line in fin:
+            if not line.strip():
+                continue
+            if line.startswith("#"):
+                continue
+            header_fields = line.rstrip("\n").split("\t")
+            break
+
+        if header_fields is None:
+            print ('\033[0;31m' + "\n[AP]\tError: invalid featureCounts file, missing header.\n\tExit\n" + '\033[0m')
+            sys.exit()
+
+        if "Length" not in header_fields:
+            print ('\033[0;31m' + "\n[AP]\tError: column Length not found in featureCounts header.\n\tExit\n" + '\033[0m')
+            sys.exit()
+
+        length_idx = header_fields.index("Length")
+        fout.write("gene\ttotal_count\n")
+
+        for line in fin:
+            if not line.strip() or line.startswith("#"):
+                continue
+            fields = line.rstrip("\n").split("\t")
+            if len(fields) <= length_idx:
+                continue
+            gene = fields[0]
+            total = 0
+            for value in fields[length_idx+1:]:
+                if value == "":
+                    continue
+                total += int(float(value))
+            fout.write(gene + "\t" + str(total) + "\n")
+
+    print ('\033[0;32m' + "\n[AP]\tfeatureCounts gene totals written to: " + output_path + "\n" + '\033[0m')
 
 
 def runCufflinks(Threads,input_path,GTF,output_dir,library_type,ref_gen,comp):
